@@ -1,0 +1,36 @@
+# core latex
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+
+# documents
+*.dvi
+*.pdf
+
+# bibtex
+*.bbl
+*.blg
+
+# makeidx
+*.idx
+*.ilg
+*.ind
+*.ist
+
+# glossaries
+*.acn
+*.acr
+*.glg
+*.glo
+*.gls
+
+# hyperref
+*.brf
+
+# listings
+*.lol
+

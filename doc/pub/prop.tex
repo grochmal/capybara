@@ -1,0 +1,266 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+
+\title{Feature Evaluation for Artwork Image Retrieval}
+\author{Michal Grochmal
+  $<$\href{mailto:grochmal@member.fsf.org}{grochmal@member.fsf.org}$>$
+}
+\date{\today}
+
+\usepackage[pdftex,colorlinks=true]{hyperref}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+Content Based Information Retrieval systems for images or simply Content Based
+Image Retrieval systems (CBIR systems) retrieve from large collections images
+similar to a query image.  Yet, what "similar" means in this context vary,
+similarity depends on the nature of the collection and on what meaning
+(semantic) contained in the query image we want to search for.  A specific
+query image may contain more than one meaning.  e.g. we might query a
+collection of personal photos using a picture of our cousin holding a carnival
+mask in Venice.  For this query image we might want to ask: whether there are
+photos of our cousin in the collection, or whether there are photos of venetian
+carnival masks, or photos with a specific building or location in Venice in the
+background.
+
+Each type of collection of images needs a different set of features that allows
+searching for similar images within a semantic context.  In this work we will
+evaluate features for CBIR in the retrieval of art images in the contexts of
+similar style of illustrations, drawings and paintings.  Aesthetics are deeply
+related to the concept of art \cite{rmc12ajs} therefore similar style will be
+discussed by the evaluation of aesthetics of the images, while ignoring the
+content of the image.  Back to the example of the query image with our cousin
+holding a carnival mask in Venice we would try to evaluate the quality of the
+framing of the photo, and ignoring the presence of our cousin, the mask and the
+location.
+
+Although completely ignoring the content of an image is probably impossible,
+features that are independent of the objects in the image exist.  Such features
+are more relevant in works of art \cite{zirnhelt07art} as the meaning of how
+objects are drawn is important for how humans see the piece of art
+\cite{mach10clas}.  In this work we will use aesthetic features tried on
+collections of drawn artwork (illustration, drawing and painting) and on
+collections of photography and apply them for retrieval of artwork with the
+meaning of identifying the author of the artwork.  Further, we will try to
+extrapolate the meaning of these features and try to identify and retrieve
+images of the same art school and same art period.
+
+\section{Current work}
+
+Production CBIR systems for art, two of which are described in \cite{cfsp12air}
+and in \cite{ymvz03tree}, use colour, colour disposition and texture as
+features to retrieve drawings, illustrations and/or paintings.  These features
+capture the style of the image better than corner detection or interest points
+(as in SIFT or MSER) used in object recognition and duplicate detection
+\cite{szel11book}, as the former describe the content of the image.
+
+On research ground works explore richer sets of features, yet these works focus
+on photography rather than drawn art.  Estimates of image complexity based on
+lossy compression errors, standard deviation and average over components of HSV
+representation are used by Romeo and Correia in
+\cite{jma12clas,cmrc13fs,rmc12ajs}.  Itten colour harmony over components of
+the HSL representation and line estimates drawn from edges detected in the
+image are used in \cite{mach10clas}.  All these features are added to colour
+and texture to produce features for image classification.  Ivanova
+\cite{isv12mpeg} uses MPEG-7 descriptors as features, yet MPEG-7 descriptors
+are just the same features encoded in a different way.  The MPEG-7 features
+used are: colour histograms, colour distribution, dominant colour, edge
+histogram, and texture.  We can argue that the features explored are consistent
+among all these works.
+
+A closely related field to CBIR in art is Affective Image Retrieval (AIR)
+summed by Machajdik in \cite{mach10ua,mach10clas}.  In this field both the
+style and the content of the image is important, yet it is important that the
+style and the content are separately evaluated.  Although in the project at
+hand we are not interested in the content of the images the features used in
+AIR to capture the style of the image may prove useful.  In AIR, features from
+art theory based on Itten colours can classify an image into emotions.  Itten
+colours deal with colour harmony and warmth or coldness of colours.  Also,
+Itten colours are well defined in mathematical terms which make them image
+features that are simple to compute.
+
+All features above are scale dependent \cite{rmc12ajs,mach10clas} therefore
+normalisation of the size and colour space of the image must be performed.  The
+HSV/HSL colour spaces are used instead of RGB because features extracted from
+those colour spaces can be linked to human perception.  Even better, we can
+link a feature extracted from only one component of HSV or HSL to human
+perception (e.g. how bright the image is), this is not possible in the RGB
+colour space \cite{rmc12ajs}.
+
+The major datasets used in \cite{jma12clas,mach10clas} are of photography
+(because of the wide availability of such datasets) therefore some of the
+features have not yet been tried on drawn art.  On the other hand small
+datasets of art were tried in \cite{mach10clas} and in \cite{rmc12ajs};  also,
+in \cite{rmc12ajs} a task of author identification was successful.  A bigger
+dataset of drawn art was tried in \cite{zirnhelt07art} but using a very limited
+set of features.  Finally, a task of artistic period and art school
+identification is proposed in \cite{zirnhelt07art} and \cite{rmc12ajs} based on
+the features used in the author identification task.  In this work we plan to
+fill the gap of applying the features that have not yet been tried on drawn art
+to a dataset of this kind of images.
+
+\section{Proposed methodology}
+
+Although it is not possible to fully separate the content of the image from
+it's style, there are good approximations by using features general to the
+image.  We will reproduce the features used by Romeo in \cite{rmc12ajs} and by
+Machajdik in \cite{mach10clas} and apply these features to the task of author,
+period and art school classification.  To perform this task we will need
+software for programmatic image processing and for classification tasks.
+
+The OpenCV\footnote{available at \href{http://opencv.org/}{opencv.org} under
+the BSD license} library provides a big set of functions that can be used to
+extract features from images, and it is well integrated with many programming
+languages.  Yet, OpenCV is not very good at quickly prototyping because it must
+be called as a library from a programming language.  For prototyping the
+feature extraction the ImageMagick\footnote{available at
+\href{http://www.imagemagick.org/}{www.imagemagick.org} under the Apache 2.0
+license} set of command line tools will be used.  For a third option, if one of
+the tools miss needed functionality, the python imaging library
+(PIL)\footnote{available at
+\href{http://pythonware.com/products/pil/}{pythonware.com/products/pil} under a
+generic open source license} (or it's fork Pillow) can be used as described by
+Solem in \cite{solem12book}.  The most complex image transformations for
+feature extraction will be the Sobel and Canny filters for edge detection,
+these techniques are available from OpenCV or can be simulated with PIL and
+scipy \cite{oliphant06numpy}.
+
+For the classification task Support Vector Machines (SVMs) will be used, as
+this technique was previously used for the author identification task by Romeo
+in \cite{rmc12ajs}.  SVMs are available from OpenCV.  Yet, for prototyping,
+LIBSVM\footnote{available at \href{http://www.csie.ntu.edu.tw/~cjlin/libsvm/}
+{www.csie.ntu.edu.tw/~cjlin/libsvm} under a generic open source license}
+command line tools will be used, as described in \cite{hcl03svm}.  This tool
+set shall be enough to replicate previous experiments and to extrapolate the
+experiments onto new datasets.
+
+\subsection{Datasets}
+
+Comparison between works can only be achieved if the datasets used for the
+classification are published for the research community \cite{mach10clas}.  And
+the datasets used in \cite{mach10clas} and in \cite{jma12clas} are published.
+Yet, these two datasets are mostly of photographs, whilst the artist
+identification task is to be performed over drawn art.  These two datasets are
+useful to test to which level the work can be replicated and then it needs to
+be applied over new, more suitable, datasets.
+
+Online art collections are available from galleries and museums.  One such
+collection originating from the Birkbeck College\footnote{
+\href{http://www.bbk.ac.uk}{bbk.ac.uk}} through the CACHe project\footnote{
+\href{http://www.bbk.ac.uk/hosted/cache/}{www.bbk.ac.uk/hosted/cache}} is the
+NICE paintings (NIRP) collection.  This collection is currently available from
+the Visual Arts Data Service (VADS)\footnote{
+\href{http://vads.ac.uk/}{vads.ac.uk}} project, and is tagged with metadata
+about the author and period of the items.  Another suitable dataset is the
+collection of the Victoria and Albert Museum (VAM)\footnote{
+\href{http://www.vam.ac.uk/}{www.vam.ac.uk}} and it's vast API leading to well
+described art items in it's collections.  Both NIRP and VAM collections use the
+Dublin Core Metadata Initiative\footnote{
+\href{http://dublincore.org/}{dublincore.org}} as a standard description form
+for the items in the collections, therefore the items from both collections can
+be identified in the same way.  The use of a careful selection of items from
+the NIRP and VAM collections as datasets allows for space to extrapolate the
+features proposed for author identification.
+
+\subsection{Milestones}
+
+First of all, we will need to replicate the work by Romeo in \cite{rmc12ajs}.
+The major task for this replication is the construction of the estimate of the
+Koglomorov complexity by JPEG and fractal image compression, as described in
+Romeo's work. Once the replication of the features used by Romeo is complete we
+will add some of the features described by Machajdik in \cite{mach10clas}.  In
+the second set of features the majority of work will be in the implementation
+of features related to Itten colours.
+
+We will crawl the NIRP and VAM collections for illustrations, drawings and
+paintings with complete metadata.  The VAM collection contains photographies of
+sculptures, porcelain and/or other non-drawn art and the NIRP collection
+contains items with missing metadata; such images would add extra complexity
+not envisioned for the classification task and will be removed from the
+datasets.  The resulting datasets will contain only paintings, illustrations
+and drawings classified by the author and period of the item.
+
+We will extrapolate the feature extraction and classification procedure
+previously replicated to the datasets from NIRP and VAM collections.  For each
+task of author identification and school/period identification the datasets
+will be tried as two separate dataset and as one combined dataset.  In each
+case the dataset will be divided into training and testing sets and evaluated.
+
+\subsection{Testing}
+
+Replication of Romeo's work and of features from Machajdik's work shall be
+evaluated towards achieving similar performance on the same dataset.  The
+performance measure used by Romeo in \cite{rmc12ajs} is the percentage of
+correctly classified images for each class (or author).  The dataset from
+Romeo's work is published and be used in a classification task that shall
+replicate the previous performance.  With the addition of features from
+\cite{mach10clas} the classification performance shall not deplete.  If the
+performance of the classifier depletes with the new features these shall be
+removed.
+
+Author identification task over the NIRP and VAM datasets will be then
+performed using the same features and measured in the same way.  Romeo's work
+on author identification contained only 6 authors (Goya, Monet, Gauguin, Van
+Gogh, Kandinsky and Picasso) and from a limited time period (19th and early
+20th century), yet NIRP and VAM collections contain items from many more
+authors and periods.  This difference may produce different results, proving
+the set of features good or insufficient for author identification in a more
+heterogeneous collection.
+
+%Fallback
+
+If the features prove insufficient we will perform Principal Component Analysis
+(PCA) of the NIRP and VAM datasets against the dataset used in Romeo's work
+using the features as components.  The difference of the disposition of
+features in the datasets shall be visible in the PCA.
+
+Finally, if time permits, we will extrapolate the author identification task
+towards art period/school identification.  Although this task is not much
+different from author identification the extra complexity lies in the fact that
+different collections are not consistent about this classification.  As argued
+by DiMaggio in \cite{dimaggio87art} classification of art cannot be unified as
+it is part of the behaviour of social groups, which always changes.  Therefore
+the art period classification will need to allow an item to be classified into
+many classes at once.  And the classification of items will use different
+classes depending on the collection the it is made against.
+
+\subsection{Limitations and out of scope issues}
+
+One of the most important features proposed is the colour histogram.  The
+reason for this is that before the second half of the 20th century artists made
+their pigments themselves.  Yet in the second half of the 20th century
+industrialised paints standardised colours and art from this period is harder
+to distinguish by this feature.  Moreover, with digital enhancements to
+illustrations starting from the '90s of the previous century, the entire colour
+spectrum was made available to all artists making the colour an even less
+important feature for these images.  Classifying art from this period using the
+same features will probably render worse results, this issue is not covered in
+the project.
+
+Other flat art items (flat sculpture, porcelain or some forms of modern art)
+could be classified in similar fashion as illustration, drawing and painting.
+Yet, here we do not consider any of the complications that might arise from
+classifying this kind of art using the same features.  Such art items are out
+of the scope of this project.
+
+\bibliographystyle{plain}
+\bibliography{capybara}
+
+\end{document}
+
+emotional response to colour [mach10clas]
+
+Using dataset from VADS, VA museus, BBK collections, CACHe, (ref to CHARt)
+
+No architecture or sculpture, the photo of it have style in itself.
+
