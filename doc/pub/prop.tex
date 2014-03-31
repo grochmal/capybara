@@ -24,7 +24,7 @@
 Content Based Information Retrieval systems for images or simply Content Based
 Image Retrieval systems (CBIR systems) retrieve images from large collections
 similar to a query image.  Yet, what \emph{"similar"} means in this context
-varies, similarity depends on the nature of the collection and on what
+varies;  similarity depends on the nature of the collection and on what
 \emph{meaning} (semantics) contained in the query image we want to search for.
 A specific query image may contain more than one meaning.  e.g. we might query
 a collection of personal photos using a picture of our cousin holding a
@@ -34,11 +34,11 @@ of venetian carnival masks, or photos with a specific building or location in
 Venice in the background.
 
 Each type of collection of images needs a different \emph{set of features} that
-allows searching for similar images within a semantic context.  In this work we
-will evaluate features for CBIR in the retrieval of art images in the contexts
-of similar style of illustrations, drawings and paintings.  \emph{Aesthetics}
-are deeply related to the concept of art \cite{rmc12ajs} therefore similar
-style will be discussed by the evaluation of aesthetics of the images, while
+allows searching for similar images within a semantic context.  This work will
+evaluate features for CBIR in the retrieval of art images in the contexts of
+similar style of illustrations, drawings and paintings.  \emph{Aesthetics} are
+deeply related to the concept of art \cite{rmc12ajs} therefore similar style
+will be discussed by the evaluation of aesthetics of the images, whilst
 ignoring the content of the image.  Back to the example of the query image with
 our cousin holding a carnival mask in Venice we would try to evaluate the
 quality of the framing of the photo, and ignore the presence of our cousin, the
@@ -47,9 +47,9 @@ mask and the location.
 Although completely ignoring the content of an image is probably impossible,
 features that are independent of the objects in the image exist.  Such features
 are more relevant in works of art \cite{zirnhelt07art} as the meaning of how
-objects are drawn is important for how humans see the piece of art
-\cite{mach10clas}.  In this work we will use \emph{aesthetic features} tried on
-collections of drawn artwork (illustration, drawing and painting) and on
+objects are drawn is important for how humans see a piece of art
+\cite{mach10clas}.  In this work, we will use \emph{aesthetic features} tried
+on collections of drawn artwork (illustration, drawing and painting) and on
 collections of photography, and apply them for retrieval of artwork with the
 meaning of identifying the author of the artwork.  Further, we will try to
 extrapolate the meaning of these features and try to identify and retrieve
@@ -73,21 +73,21 @@ the \emph{HSL} representation and line estimates drawn from edges detected in
 the image are used in \cite{mach10clas}.  All these features are added to
 colour and texture to produce features for image classification.  Ivanova
 \cite{isv12mpeg} uses MPEG-7 descriptors as features, yet MPEG-7 descriptors
-are just the same features encoded in a different way.  The MPEG-7 features
-used are: colour histograms, colour distribution, dominant colour, edge
-histogram, and texture.  We can argue that the features explored are consistent
-among all these works.
+are just the same features encoded in a different way.  The used MPEG-7
+features are: colour histograms, colour distribution, dominant colour, edge
+histogram, and texture.  We can argue that the features explored among all
+these works are consistent.
 
 A closely related field to CBIR in art is Affective Image Retrieval (AIR)
 summed by Machajdik in \cite{mach10ua,mach10clas}.  In this field both the
 style and the content of the image is important, yet it is important that the
-style and the content are separately evaluated.  Although in the project at
-hand we are not interested in the content of the images the features used in
-AIR to capture the style of the image may prove useful.  In AIR, features from
-art theory based on Itten colours can classify an image into emotions.
-\emph{Itten colours} define colour harmony, colour warmth, completeness of
-contrast, hue spread, hue count and dominant colour areas in mathematical terms
-which make them image features that are simple to compute.
+style and the content are separately evaluated.  In the project at hand we are
+not interested in the content of the images, but the features used in AIR to
+capture the style of the image may prove useful.  In AIR, features from art
+theory based on Itten colours can classify an image into emotions.  \emph{Itten
+colours} define colour harmony, colour warmth, completeness of contrast, hue
+spread, hue count and dominant colour areas in mathematical terms which make
+them image features that are simple to compute.
 
 % old version
 %Itten colours deal with colour harmony and warmth or coldness of colours.
@@ -102,17 +102,17 @@ better, we can link a feature extracted from only one component of HSV or HSL
 to human perception (e.g. how bright the image is), this is not possible in the
 RGB colour space \cite{rmc12ajs}.
 
-The major datasets used in \cite{jma12clas,mach10clas} are of photography
+The major datasets used in \cite{rmc12ajs,mach10clas} are of photography
 (because of the wide availability of such datasets) therefore some of the
-features have not yet been tried on drawn art.  On the other hand small
-datasets of art were tried in \cite{mach10clas} and in \cite{rmc12ajs};  also,
-in \cite{rmc12ajs} a task of \emph{author identification} was successful.  A
-bigger dataset of drawn art was tried in \cite{zirnhelt07art} but using a very
-limited set of features.  Finally, a task of artistic period and art school
-identification is proposed in \cite{zirnhelt07art} and \cite{rmc12ajs} based on
-the features used in the author identification task.  In this work we plan to
-fill the gap by applying the features that have not yet been tried on drawn art
-to a dataset of this kind of images.
+features have not yet been tried on drawn art.  Just small datasets of art were
+tried in \cite{mach10clas} and in \cite{rmc12ajs} a task of \emph{author
+identification} was partially accomplished.  A bigger dataset of drawn art was
+tried in \cite{zirnhelt07art} but using a very limited set of features.
+Eventually, based on the features used in the author identification a task of
+artistic period and art school identification is proposed in
+\cite{zirnhelt07art} and \cite{rmc12ajs} In this work, we plan to fill the gap
+by applying the features that have not yet been tried on drawn art to a dataset
+of this kind of images.
 
 \section{Proposed methodology}
 
