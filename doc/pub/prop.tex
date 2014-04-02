@@ -8,7 +8,7 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 
-\title{Feature Evaluation for Artwork Image Retrieval}
+\title{Style Based Drawn Artwork Image Classification}
 \author{Michal Grochmal
   $<$\href{mailto:grochmal@member.fsf.org}{grochmal@member.fsf.org}$>$
 }
@@ -54,6 +54,11 @@ collections of photography, and apply them for retrieval of artwork with the
 meaning of identifying the author of the artwork.  Further, we will try to
 extrapolate the meaning of these features and try to identify and retrieve
 images of the same art school and same art period.
+
+TODO impact analysis paragraph, containing a two object similar and two style
+similar figures.
+
+Figure 1: TODO
 
 \section{Current work}
 
@@ -140,6 +145,10 @@ feature extraction will be the Sobel and Canny filters for edge detection,
 these techniques are available from OpenCV or can be simulated with PIL and
 scipy \cite{oliphant06numpy}.
 
+TODO examples of which features will be made with which tools.
+
+TODO use scikit-learn instead of libsvm?  It has more classifiers.
+
 For the classification task \emph{Support Vector Machines }(SVMs) will be used,
 as this technique was previously used for the author identification task by
 Romeo in \cite{rmc12ajs}.  SVMs are available from OpenCV.  Yet, for
@@ -176,14 +185,17 @@ Dublin Core Metadata Initiative\footnote{
 for the items in the collections, therefore the items from both collections can
 be identified in the same way.
 
+TODO size and statistics of the datasets
+
 % old version
 %The use of a careful selection of items from the NIRP and VAM collections as
 %datasets allows for space to extrapolate the features proposed for author
 %identification.
 
-\subsection{Milestones}
+\subsection{Evaluation}
 
-First of all, we will need to replicate the work by Romeo in \cite{rmc12ajs}.
+First of all, we will need to replicate the work by Romeo (TODO and criticaly
+evaluate the work) in \cite{rmc12ajs}.
 The major task for this replication is the construction of the \emph{estimate
 of the Koglomorov complexity} by JPEG and fractal image compression, as
 described in Romeo's work. Once the replication of the features used by Romeo
@@ -198,6 +210,17 @@ contains items with missing metadata; such images would add extra complexity
 not envisioned for the classification task and will be removed from the
 datasets.  The resulting datasets will contain only paintings, illustrations
 and drawings classified by the author and period of the item.
+
+TODO correlation of features and authors and correlation feature to feature.
+
+TODO extra features that we might get by running vlfeat or use deep learning
+with pylearn2.  Some extra refs will be needed here.
+
+TODO as part of the evaluation we could maybe add the PCA paragraph.  If the
+features prove insufficient we will perform \emph{Principal Component Analysis}
+(PCA) of the NIRP and VAM datasets against the dataset used in Romeo's work
+using the features as components.  The difference of the disposition of
+features in the datasets shall be visible in the PCA.
 
 We will extrapolate the feature extraction and classification procedure
 previously replicated to the datasets from NIRP and VAM collections.  The
@@ -232,12 +255,7 @@ authors and periods.  This difference may produce different results, proving
 that the set of features is good or is insufficient for author identification
 in a more heterogeneous collection.
 
-%Fallback
-
-If the features prove insufficient we will perform \emph{Principal Component
-Analysis} (PCA) of the NIRP and VAM datasets against the dataset used in
-Romeo's work using the features as components.  The difference of the
-disposition of features in the datasets shall be visible in the PCA.
+TODO testing of correlation and extra features?
 
 Finally, if time permits, we will extrapolate the author identification task
 towards \emph{art period/school identification}.  Although this task is related
@@ -249,7 +267,13 @@ art period classification will need to allow an item to be classified into many
 classes at once.  And the classification of items will use different classes
 depending on the collection the it is made against.
 
-\subsection{Limitations and out of scope issues}
+\section{Milestones}
+
+TODO section of one or two paragraphs on the timings of the work.
+
+\section{Limitations, out of scope and future work}
+
+TODO make this section more optimistic.
 
 One of the most important features proposed is the colour histogram.  The
 reason for this is that before the \emph{second half of the 20th century}
