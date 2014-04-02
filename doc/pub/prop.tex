@@ -55,10 +55,41 @@ meaning of identifying the author of the artwork.  Further, we will try to
 extrapolate the meaning of these features and try to identify and retrieve
 images of the same art school and same art period.
 
-TODO impact analysis paragraph, containing a two object similar and two style
-similar figures.
+\begin{figure}
+\centering
+\includegraphics[width=0.42\textwidth]{diff_caesar}
+\includegraphics[width=0.42\textwidth]{diff_horatius}
+\caption{paintings similar by theme and objects, different by style}
+\label{diff}
+\end{figure}
 
-Figure 1: TODO
+\begin{figure}
+\centering
+\includegraphics[width=0.42\textwidth]{sim_delacroix_samaritan}
+\includegraphics[width=0.42\textwidth]{sim_delacroix_shipwreck}
+\caption{paintings different by theme, similar by style}
+\label{similar}
+\end{figure}
+
+Figures \ref{diff} and \ref{similar} shows an example of classification by
+style.  In Figure 1 we see paintings by NAME and NAME which are closely related
+by context and objects present, both paintings represent military actions of
+the Roman Empire.  Yet the style of the images is different.  Figure 2 shows
+two paintings by Delacroix, these paintings show two different scenes yet the
+style is similar.  The style of an image caries the signature of it's creator
+and the art movement the creator was part of.
+
+The classification of images by style is needed for CBIR systems for artwork
+\cite{cfsp12air,isv12mpeg}, and a better understanding of the features needed
+for this classification will help in the further development of such systems.
+Big collections of artwork, like ones maintained by museums and galleries,
+would benefit as well from better classification techniques.  Often collections
+have incomplete or missing metadata for some of the items, finding which items
+are similar to these items will allow a computer to fill the missing metadata
+automatically.  Finally, understanding style in art is an algorithm that allows
+to define images based on more that it's content.  As described in
+\cite{rmc12ajs}, it leads us closer to algorithms that can understand art, and
+creativity.
 
 \section{Current work}
 
@@ -75,13 +106,15 @@ based on lossy compression errors, \emph{standard deviation} and \emph{average}
 over components of \emph{HSV} representation are used by Romeo and Correia in
 \cite{jma12clas,cmrc13fs,rmc12ajs}.  Itten colour harmony over components of
 the \emph{HSL} representation and line estimates drawn from edges detected in
-the image are used in \cite{mach10clas}.  All these features are added to
-colour and texture to produce features for image classification.  Ivanova
-\cite{isv12mpeg} uses MPEG-7 descriptors as features, yet MPEG-7 descriptors
-are just the same features encoded in a different way.  The used MPEG-7
-features are: colour histograms, colour distribution, dominant colour, edge
-histogram, and texture.  We can argue that the features explored among all
-these works are consistent.
+the image are used in \cite{mach10clas}.  On black and white images, like
+drawings, the pioneer work by Kr\"oner \cite{kroner98draw} used histograms of
+black and white over image regions instead of colour histograms.  All these
+features are added to colour and texture to produce features for image
+classification.  Ivanova \cite{isv12mpeg} uses MPEG-7 descriptors as features,
+yet MPEG-7 descriptors are just the same features encoded in a different way.
+The used MPEG-7 features are: colour histograms, colour distribution, dominant
+colour, edge histogram, and texture.  We can argue that the features explored
+among all these works are consistent.
 
 A closely related field to CBIR in art is Affective Image Retrieval (AIR)
 summed by Machajdik in \cite{mach10ua,mach10clas}.  In this field both the
@@ -93,11 +126,6 @@ theory based on Itten colours can classify an image into emotions.  \emph{Itten
 colours} define colour harmony, colour warmth, completeness of contrast, hue
 spread, hue count and dominant colour areas in mathematical terms which make
 them image features that are simple to compute.
-
-% old version
-%Itten colours deal with colour harmony and warmth or coldness of colours.
-%Also, Itten colours are well defined in mathematical terms which make them
-%image features that are simple to compute.
 
 All features above are \emph{scale dependent} \cite{rmc12ajs,mach10clas}
 therefore normalisation of the size and colour space of the image must be
@@ -128,36 +156,48 @@ Machajdik in \cite{mach10clas} and apply these features to the task of author,
 period and art school classification.  To perform this task we will need
 software for \emph{programmatic image processing} and for classification tasks.
 
-The OpenCV\footnote{available at \href{http://opencv.org/}{opencv.org} under
-the BSD license} library provides a big set of functions that can be used to
-extract features from images, and it is well integrated with many programming
-languages.  Yet, OpenCV is not very good at prototyping because it must be
-called as a library from a programming language.  For prototyping the feature
-extraction the ImageMagick\footnote{available at
+We will use OpenCV\footnote{available at \href{http://opencv.org/}{opencv.org}
+under the BSD license} which is a library that provides a big set of functions
+to extract features from images, and it is well integrated with many
+programming languages.  For example, with OpenCV we can extract the Gray Level
+Co-occurrence Matrix (GLCM) for the texture features as it provides the needed
+functions.  JPEG and fractal compression ratios will be extracted with the
+ImageMagick\footnote{available at
 \href{http://www.imagemagick.org/}{www.imagemagick.org} under the Apache 2.0
-license} set of command line tools will be used.  For a third option, if one of
-the tools miss needed functionality, the python imaging library
-(PIL)\footnote{available at
+license} and the FIASCO\footnote{available at
+\href{http://github.com/l-tamas/Fiasco/}{github.com/l-tamas/Fiasco} under the
+GPLv2 license} set of command line tools, respectively.  The python imaging
+library (PIL)\footnote{available at
 \href{http://pythonware.com/products/pil/}{pythonware.com/products/pil} under a
 generic open source license} (or it's fork Pillow) can be used as described by
-Solem in \cite{solem12book}.  The most complex image transformations for
-feature extraction will be the Sobel and Canny filters for edge detection,
-these techniques are available from OpenCV or can be simulated with PIL and
-scipy \cite{oliphant06numpy}.
+Solem in \cite{solem12book} to extract colour histograms, and will also be used
+to extract the features based on Itten colours.  The most complex image
+transformations for feature extraction will be the Sobel and Canny filters for
+edge detection, these techniques are available from OpenCV, and can also be
+simulated with PIL and scipy \cite{oliphant06numpy}.
 
-TODO examples of which features will be made with which tools.
-
-TODO use scikit-learn instead of libsvm?  It has more classifiers.
-
-For the classification task \emph{Support Vector Machines }(SVMs) will be used,
+For the classification task \emph{Support Vector Machines} (SVMs) will be used,
 as this technique was previously used for the author identification task by
-Romeo in \cite{rmc12ajs}.  SVMs are available from OpenCV.  Yet, for
-prototyping, LIBSVM\footnote{available at
+Romeo in \cite{rmc12ajs}.  In Romeo's work LIBSVM\footnote{available at
 \href{http://www.csie.ntu.edu.tw/~cjlin/libsvm/}
-{www.csie.ntu.edu.tw/~cjlin/libsvm} under a generic open source license}
-command line tools will be used, as described in \cite{hcl03svm}.  This tool
-set shall be enough to replicate previous experiments and to extrapolate the
-experiments onto new datasets.
+{www.csie.ntu.edu.tw/~cjlin/libsvm} under a generic open source license} was
+used, therefore we will start with that tool.  LIBSVM command line tools are
+very good for prototyping, as described in \cite{hcl03svm}.  To produce
+visualisation of the classified images and to allow for the use of different
+classification algorithms we will resort to scikit-learn\footnote{available at
+\href{http://scikit-learn.org/}{scikit-learn.org} under the BSD license}.  With
+scikit-learn we will try different classification algorithms, notably Nearest
+Neighbours and Stochastic Gradient Descent.  This tool set shall be enough to
+replicate previous experiments and to extrapolate the experiments onto new
+datasets.
+
+If the time permits or if the features prove insufficient for the
+classification we will try a different approach.  We will try to acquire new
+features by learning them from the datasets [TODO NEED REF].  To learn features
+from the data we will use pylearn2\footnote{available at
+\href{http://deeplearning.net/software/pylearn2/}
+{deeplearning.net/software/pylearn2} under the BSD license} which is an
+implementation of deep learning.
 
 \subsection{Datasets}
 
@@ -185,23 +225,24 @@ Dublin Core Metadata Initiative\footnote{
 for the items in the collections, therefore the items from both collections can
 be identified in the same way.
 
-TODO size and statistics of the datasets
-
-% old version
-%The use of a careful selection of items from the NIRP and VAM collections as
-%datasets allows for space to extrapolate the features proposed for author
-%identification.
+The NIRP collection contains nearly 8000 pre-1900 European oil paintings from
+public collections in the UK.  In the VAM collections we are interested in
+two specific subsets: paintings, containing over 2000 European oil paintings;
+and drawings, containing over 2000 drawings from Europe and USA.
+Unfortunately not all items in the collections have images of good quality, and
+many items miss some or all metadata information which is needed to evaluate a
+classification task.  Yet, the collections are well maintained and the items
+that will need to be removed from them to build good datasets are few.
 
 \subsection{Evaluation}
 
-First of all, we will need to replicate the work by Romeo (TODO and criticaly
-evaluate the work) in \cite{rmc12ajs}.
-The major task for this replication is the construction of the \emph{estimate
-of the Koglomorov complexity} by JPEG and fractal image compression, as
-described in Romeo's work. Once the replication of the features used by Romeo
-is complete we will add some of the features described by Machajdik in
-\cite{mach10clas}.  In the second set of features the majority of work will be
-in the implementation of \emph{Itten colours}.
+First of all, we will need to replicate and critically evaluate the work by
+Romeo in \cite{rmc12ajs}.  The major task for this replication is the
+construction of the \emph{estimate of the Koglomorov complexity} by JPEG and
+fractal image compression, as described in Romeo's work. Once the replication
+of the features used by Romeo is complete we will add some of the features
+described by Machajdik in \cite{mach10clas}.  In the second set of features the
+majority of work will be in the implementation of \emph{Itten colours}.
 
 We will crawl the NIRP and VAM collections for illustrations, drawings and
 paintings with complete metadata.  The VAM collection contains photographies of
@@ -211,17 +252,6 @@ not envisioned for the classification task and will be removed from the
 datasets.  The resulting datasets will contain only paintings, illustrations
 and drawings classified by the author and period of the item.
 
-TODO correlation of features and authors and correlation feature to feature.
-
-TODO extra features that we might get by running vlfeat or use deep learning
-with pylearn2.  Some extra refs will be needed here.
-
-TODO as part of the evaluation we could maybe add the PCA paragraph.  If the
-features prove insufficient we will perform \emph{Principal Component Analysis}
-(PCA) of the NIRP and VAM datasets against the dataset used in Romeo's work
-using the features as components.  The difference of the disposition of
-features in the datasets shall be visible in the PCA.
-
 We will extrapolate the feature extraction and classification procedure
 previously replicated to the datasets from NIRP and VAM collections.  The
 author identification task will be tried on each dataset separately and
@@ -229,10 +259,23 @@ evaluated separately.  Then both datasets will be merged into one to provide a
 third dataset, and the author identification task will be tried on this third
 dataset.
 
-%For each task of author identification and school/period identification the
-%datasets will be tried as two separate dataset and as one combined dataset.
-%In each case the dataset will be divided into training and testing sets and
-%evaluated.
+\emph{Principal Component Analysis} (PCA) of the NIRP and VAM datasets using
+the features as components will be performed.  Together with a \emph{Pearson
+Correlation} (PCC) of the classes (the authors) and the features will reveal
+the most significant features from the set of features used.  PCC between
+features will then be performed to find groups of closely related features.  We
+will test the classification using only one feature of each of the sets of
+closely related features.
+
+Finally, if time permits, we will extrapolate the author identification task
+towards \emph{art period/school identification}.  Although this task is related
+to author identification the extra complexity lies in the fact that different
+collections are not consistent about this classification.  As argued by
+DiMaggio in \cite{dimaggio87art} classification of art cannot be unified as it
+is part of the behaviour of social groups, which always changes.  Therefore the
+art period classification will need to allow an item to be classified into many
+classes at once.  And the classification of items will use different classes
+depending on the collection the it is made against.
 
 \subsection{Testing}
 
@@ -255,21 +298,34 @@ authors and periods.  This difference may produce different results, proving
 that the set of features is good or is insufficient for author identification
 in a more heterogeneous collection.
 
-TODO testing of correlation and extra features?
-
-Finally, if time permits, we will extrapolate the author identification task
-towards \emph{art period/school identification}.  Although this task is related
-to author identification the extra complexity lies in the fact that different
-collections are not consistent about this classification.  As argued by
-DiMaggio in \cite{dimaggio87art} classification of art cannot be unified as it
-is part of the behaviour of social groups, which always changes.  Therefore the
-art period classification will need to allow an item to be classified into many
-classes at once.  And the classification of items will use different classes
-depending on the collection the it is made against.
+The features selected after PCA and PCC of the entire set of feature will be
+evaluated in new classifications.  Using only the highly uncorrelated features
+shall provide similar performance as with the entire set of features.  Tests
+shall be compared between runs of the full feature set and the smaller set of
+uncorrelated features.
 
 \section{Milestones}
 
-TODO section of one or two paragraphs on the timings of the work.
+We will start by crawling the datasets and storing miniatures of the collection
+items.  The code for the crawlers shall take one week to build.  After the
+first week the crawlers will run whilst the feature extraction code is being
+developed.  Two weeks shall be needed for the replication of features from
+Romeo's work and addition of some extra feature's from Machajdik's work.  Then
+another week will be needed to run the classifiers over the original datasets.
+
+In the second month we will extrapolate the features over the NIRP and VAM
+datasets.  By the middle of the second month we shall know the effectiveness of
+the developed features in classifying the bigger datasets.  We then perform PCA
+and PCC over the feature and build classifiers using the smaller number of
+features.  We end the second month by statistically comparing the classifiers
+with full and reduced number of features.
+
+In the first half of the third month we replicate our experiments and collect
+the tables and graphs.  If no milestone is late at this point there shall be
+extra time, and we will try the proposed art school task and the features
+learned from data.  Finally, the second half of the month is dedicated towards
+finishing the report.  By the half of the third month the report shall be
+already structured and drafted, yet in need of many corrections.
 
 \section{Limitations, out of scope and future work}
 
@@ -297,9 +353,5 @@ items are out of the scope of this project.
 
 \end{document}
 
-emotional response to colour [mach10clas]
-
 Using dataset from VADS, VA museus, BBK collections, CACHe, (ref to CHARt)
-
-No architecture or sculpture, the photo of it have style in itself.
 
