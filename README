@@ -1,19 +1,19 @@
-README for the code and documentation files used in the Feature Evaluation for
-Artwork Image Retrieval work.
+README for the code and documentation files used in the Style Based Drawn
+Artwork Image Classification work.
 
 * The Code Snippets and Documentation
 
-All code snippets in this bundle are part of the Feature Evaluation for Artwork
-Image Retrieval work.  All documentation either in the form of typeset
-documents or software manuals are part of the Feature Evaluation for Artwork
-Image Retrieval work.  Copying permissions vary between the snippets and
+All code snippets in this bundle are part of the Style Based Drawn Artwork
+Image Classification work.  All documentation either in the form of typeset
+documents or software manuals are part of the Style Based Drawn Artwork Image
+Classification work.  Copying permissions vary between the snippets and
 documentation see the appropriate `Copying' section for details.
 
 * Copying Code Snippets
 
 Copyright (C) 2014 Michal Grochmal
 
-This file is part of Feature Evaluation for Artwork Image Retrieval.
+This file is part of Style Based Drawn Artwork Image Classification.
 
 All code snippets in this repository are free software; you can redistribute
 and/or modify all or some of the snippets under the terms of the GNU General

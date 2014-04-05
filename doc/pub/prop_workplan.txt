@@ -1,0 +1,20 @@
+# Summarised work plan for the project
+
+Construct crawlers to retrieve and clean datasets (1 week).
+
+Replicate previous work (2 weeks).
+
+Evaluate replicated work (1 week).
+
+Use the replicated work on datasets of drawn art (2 weeks).
+
+Statistical analysis of experiments on drawn art datasets (1 week).
+
+Evaluation of most important features and new experiments with those (1 week).
+
+Ensure that experiments are re-runnable (1 week).
+
+Produce final tables and graphs (1 week).
+
+Contingency time, possibly used for extra experiments (2 weeks).
+
