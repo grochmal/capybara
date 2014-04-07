@@ -1,38 +1,15 @@
 # Abstract of the Style Based Drawn Artwork Image Classification work
 
-TODO, below are only relevant fragments from the proposal
-
-This work will evaluate features for CBIR in the retrieval of art images in the
-contexts of similar style of illustrations, drawings and paintings.  Aesthetics
-are deeply related to the concept of art therefore similar style will be
-discussed by the evaluation of aesthetics of the images, whilst ignoring the
-content of the image.
-
-In this work, we will use aesthetic features tried on collections of drawn
-artwork (illustration, drawing and painting) and on collections of photography,
-and apply them for classification of artwork with the meaning of identifying
-the author of the artwork.
-
-The classification of images by style is needed for CBIR systems for artwork ,
-and a better understanding of the features needed for this classification will
-help in the further development of such systems.
-
-Estimates of image complexity based on lossy compression errors, standard
-deviation and average over components of HSV representation.  Itten colour
-harmony over components of the HSL representation and line estimates drawn from
-edges detected in the image.  All these features are added to colour and
-texture to produce features for image classification.
-
-The major datasets used are of photography therefore some of the features have
-not yet been tried on drawn art.  In this work, we plan to fill the gap by
-applying the not yet tried features to datasets of drawn art images.
-
-The NIRP collection contains nearly 8000 pre-1900 European oil paintings from
-public collections in the UK.  In the VAM collections we are interested in two
-specific subsets: paintings, containing over 2000 European oil paintings; and
-drawings, containing over 2000 drawings from Europe and USA.  Unfortunately not
-all items in the NIRP and VAM collections have images of good quality and many
-items miss some or all metadata information, which is needed to evaluate a
-classification task.  Therefore, some of the items from the collections will
-need to be removed before using them as datasets for classification.
+A picture is worth a thousand words, therefore an image may mean something
+completely different depending how we look at it.  This is even more apparent
+when we look at works of art, where the artist actively works to produce a
+meaning in his work.  One way to look at artistic drawings, paintings and
+illustrations is to consider the meaning of style.  This work will use
+features extracted from artistic images to classify them by style.  A
+classifier capable of recognising the artistic style of famous painters will
+be built and evaluated.  Such classifiers are currently used in CBIR engines
+for art retrieval and can be further employed to organise collections of
+digitalised drawn art.  Collections from the Victoria and Albert Museum and
+the Virtual Arts Directory Service will be used to engineer this
+classification.
 

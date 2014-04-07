@@ -27,10 +27,10 @@ Content Based Information Retrieval systems for images or simply Content Based
 Image Retrieval systems (CBIR systems) retrieve images from large collections
 similar to a query image.  Yet, what \emph{"similar"} means in this context
 varies;  similarity depends on the nature of the collection and on what
-\emph{meaning} (semantics) contained in the query image we want to search for.
-A specific query image may contain more than one meaning.  e.g. we might query
-a collection of personal photos using a picture of our cousin holding a
-carnival mask in Venice.  For this query image we might want to ask: whether
+\emph{meaning} (semantics) is contained in the query image we want to search
+for.  A specific query image may encapsulate more than one meaning.  e.g. we
+might query a collection of personal photos using a picture of our cousin
+holding a carnival mask in Venice.  For this query image we might ask: whether
 there are photos of our cousin in the collection, or whether there are photos
 of venetian carnival masks, or photos with a specific building or location in
 Venice in the background.
@@ -42,8 +42,8 @@ similar style of illustrations, drawings and paintings.  \emph{Aesthetics} are
 deeply related to the concept of art \cite{rmc12ajs} therefore similar style
 will be discussed by the evaluation of aesthetics of the images, whilst
 ignoring the content of the image.  Back to the example of the query image with
-our cousin holding a carnival mask in Venice we would try to evaluate the
-quality of the framing of the photo, and ignore the presence of our cousin, the
+our cousin holding a carnival mask in Venice, we would try to evaluate the
+quality of the framing of the photo and ignore the presence of our cousin, the
 mask and the location.
 
 Although completely ignoring the content of an image is probably impossible,
@@ -75,34 +75,37 @@ style of the images is different.}
 \includegraphics[width=0.48\textwidth]{sim_delacroix_shipwreck}
 \caption{In these two paintings by Delacroix, "The Good Samaritan" and "The
 Shipwreck of Don Juan", we can see a similar style.  Both paintings are
-different in their theme, yet the author's style of drawing and paining can be
+different in their theme, yet the author's style of drawing and painting can be
 easily noticed by humans.}
 \label{similar}
 \end{figure}
 
-Figures \ref{diff} and \ref{similar} shows an example of similarity by style.
-In Figure \ref{diff} we see paintings by Francesco Granacci and by Francesco
+Figures \ref{diff} and \ref{similar} show examples of image similarity.  In
+Figure \ref{diff} we see paintings by Francesco Granacci and by Francesco
 Pesellino which are closely related by context and objects present, both
 paintings represent military actions of the Roman Empire.  Yet the style of
 these two images is different.  Figure \ref{similar} shows two paintings by
 Delacroix, these paintings show two different scenes yet their \emph{style is
 similar}.  The style of an image caries the signature of it's creator and the
-art movement the creator was part of.  [All images are from the public
-collection of the Victoria and Albert Museum in London, this collection will be
-used as a dataset in this work.  Se section \ref{datasets} for more information
-about this collection.]
+art movement the creator was part of.  We expect that our experiments will
+classify the images in figure \ref{similar} as being authored by Delacroix
+because of high similarity with other works by him.  And that the images in
+figure \ref{diff} will have very low similarity between them.  [All images are
+from the public collection of the Victoria and Albert Museum in London, this
+collection will be used as a dataset in this work.  See section \ref{datasets}
+for more information about this collection.]
 
 The classification of images by style is needed for CBIR systems for artwork
 \cite{cfsp12air,isv12mpeg}, and a better understanding of the features needed
 for this classification will help in the further development of such systems.
 Big collections of artwork, e.g. collections maintained by museums and
-galleries, would also benefit from better classification techniques: Often
+galleries, would also benefit from better classification techniques:  often
 items in these collections have incomplete or \emph{missing metadata}, finding
 which other collection items are similar to these items will allow a computer
 to fill the missing metadata automatically.  Finally, an algorithm that
 understands style in art understands more than just the content of images.  As
 discussed in \cite{rmc12ajs}, such algorithm leads us closer to computers that
-can understand art, and creativity.
+can understand art and creativity.
 
 \section{Related Work}
 
@@ -140,7 +143,7 @@ colours} define colour harmony, colour warmth, completeness of contrast, hue
 spread, hue count and dominant colour areas in mathematical terms which make
 them image features that are simple to compute.
 
-All features above are \emph{scale dependent} \cite{rmc12ajs,mach10clas}
+All above features are \emph{scale dependent} \cite{jma12clas,mach10clas}
 therefore normalisation of the size and colour space of the image must be
 performed.  The HSV/HSL colour spaces are used instead of RGB because features
 extracted from those colour spaces can be linked to human perception.  Even
@@ -153,15 +156,11 @@ The major datasets used in \cite{rmc12ajs,mach10clas} are of photography
 features have not yet been tried on drawn art.  Just small datasets of art were
 tried in \cite{mach10clas} and in \cite{rmc12ajs} a task of \emph{author
 identification} was partially accomplished.  A bigger dataset of drawn art was
-tried in \cite{zirnhelt07art} but using a very limited set of features.
-Eventually, based on the features used in the author identification a task of
-artistic period and art school identification is proposed in
-\cite{zirnhelt07art} and \cite{rmc12ajs}.  In this work, we plan to fill the
-gap by applying the not yet tried features to datasets of drawn art images.
-
-% old version
-%In this work, we plan to fill the gap by applying the features that have not
-%yet been tried on drawn art to datasets of drawn art images.
+tried in \cite{zirnhelt07art} but using a limited set of features.  Eventually,
+based on the features used in the author identification a task of artistic
+period and art school identification is proposed in \cite{zirnhelt07art} and
+\cite{rmc12ajs}.  In this work, we plan to fill the gap by applying untried
+features to datasets of drawn art images.
 
 \section{Proposed Approach}
 
@@ -198,7 +197,7 @@ Romeo in \cite{rmc12ajs}.  In Romeo's work LIBSVM\footnote{available at
 \href{http://www.csie.ntu.edu.tw/~cjlin/libsvm/}
 {www.csie.ntu.edu.tw/\~{}cjlin/libsvm} under a generic open source license} was
 used, therefore we will start with that tool.  LIBSVM command line tools are
-very good for prototyping, as described in \cite{hcl03svm}.  To produce
+good for prototyping, as described in \cite{hcl03svm}.  To produce
 visualisation of the classified images and to allow for the use of different
 classification algorithms we will resort to scikit-learn\footnote{available at
 \href{http://scikit-learn.org/}{scikit-learn.org} under the BSD license}.  With
@@ -207,11 +206,11 @@ Neighbours and Stochastic Gradient Descent.  This tool set shall be enough to
 replicate previous experiments and to extrapolate the experiments onto new
 datasets.
 
-If the time permits or if the features prove insufficient for the
-classification, we will try a different approach.  We will try to acquire new
-features by learning them from the datasets with \emph{deep learning
-techniques}, as summed in \cite{antes13deep}.  To learn features from the data
-we will use pylearn2\footnote{available at
+If time permits or features prove insufficient for the classification, we will
+try a different approach:  acquire new features by learning them from the
+datasets using \emph{deep learning techniques}, as summed in
+\cite{antes13deep}.  To learn features from the data we will use
+pylearn2\footnote{available at
 \href{http://deeplearning.net/software/pylearn2/}
 {deeplearning.net/software/pylearn2} under the BSD license} which is an
 implementation of deep learning.
@@ -223,9 +222,9 @@ Comparison between works can only be achieved if the datasets used for the
 classification are published for the research community \cite{mach10clas}.  And
 the datasets used in \cite{mach10clas} and in \cite{jma12clas} are published.
 Yet, these two datasets are mostly of photographs, whilst the artist
-identification task is to be performed over drawn art.  These two datasets are
-useful to test to which level the previous work can be replicated, which, then
-shall be applied to new, more suitable, datasets.
+identification task is to be performed over drawn art.  These two datasets will
+be useful to test the performance of the previous work, which, will be then
+applied to new, more suitable, datasets.
 
 Online art collections are available from galleries and museums.  One such
 collection originating from the Birkbeck College\footnote{
@@ -236,7 +235,7 @@ available from the Visual Arts Data Service (VADS)\footnote{
 \href{http://vads.ac.uk/}{vads.ac.uk}} project, and is tagged with metadata
 about the author and period of the items.  Another suitable dataset are the
 collections of the \emph{Victoria and Albert Museum (VAM)}\footnote{
-\href{http://www.vam.ac.uk/}{www.vam.ac.uk}}, it's vast API extensively
+\href{http://www.vam.ac.uk/}{www.vam.ac.uk}}, its vast API extensively
 describes the art items in the collections.  Both NIRP and VAM collections use
 the Dublin Core Metadata Initiative\footnote{
 \href{http://dublincore.org/}{dublincore.org}} as a standard for the
@@ -253,19 +252,15 @@ to evaluate a classification task.  Therefore, some of the items from the
 collections will need to be removed before using them as datasets for
 classification.
 
-% old version
-%Yet, the collections are well maintained and the items that will need to be
-%removed from them to build good datasets are few.
-
 \subsection{Evaluation}
 
-First of all, we will need to replicate and critically evaluate the work by
-Romeo in \cite{rmc12ajs}.  The major task for this replication is the
-construction of the \emph{estimate of the Kolmogorov complexity} by JPEG and
-fractal image compression, as described in Romeo's work. Once the replication
-of the features used by Romeo is complete we will add some of the features
-described by Machajdik in \cite{mach10clas}.  In the second set of features the
-majority of work will be in the implementation of \emph{Itten colours}.
+Firstly, we will need to replicate and critically evaluate the work by Romeo in
+\cite{rmc12ajs}.  The major task for this replication is the construction of
+the \emph{estimate of the Kolmogorov complexity} by JPEG and fractal image
+compression, as described in Romeo's work. Once the replication of the features
+used by Romeo is complete we will add some of the features described by
+Machajdik in \cite{mach10clas}.  In the second set of features the majority of
+work will be in the implementation of \emph{Itten colours}.
 
 We will crawl the NIRP and VAM collections for illustrations, drawings and
 paintings with complete metadata.  Such items would add extra complexity not
@@ -281,38 +276,38 @@ third dataset, and the author identification task will be tried on this third
 dataset.
 
 \emph{Principal Component Analysis} (PCA) of the NIRP and VAM datasets using
-the features as components will be performed.  Together with a \emph{Pearson
-Correlation} (PCC) of the classes (the authors) and the features will reveal
-the most significant features from the set of features used.  PCC between
-features will then be performed to find groups of closely related features.  We
-will then test the classification using only one feature of each of the sets of
-closely related features.
+the features as components will be performed.  PCA together with a
+\emph{Pearson Correlation Coefficient} (PCC) of the classes (the authors) and
+features will reveal the most significant features in the datasets.  Then PCC
+between features will be performed to find groups of closely related features.
+Later on, we will test the classification selecting only one feature of each of
+the sets of closely related features.
 
 Finally, if time permits, we will extrapolate the author identification task
 towards \emph{art period/school identification}.  Although this task is related
-to author identification the extra complexity lies in the fact that different
-collections are not consistent about this classification.  As argued by
-DiMaggio in \cite{dimaggio87art} classification of art cannot be unified as it
-is part of the behaviour of social groups, which always changes.  Therefore,
-the art period classification will need to allow an item to be classified into
-many classes at once.  And this classification will use different classes
-depending on the collection the it is made against.
+to author identification, the extra complexity lies in the fact that different
+collections are not consistent in terms of their art school division.  As
+argued by DiMaggio in \cite{dimaggio87art} classification of art cannot be
+unified as it is part of the behaviour of social groups, which always changes.
+Therefore, the art period classification will need to allow an item to be
+classified into multiple classes at once.  And such classification will use
+different classes depending on the collection it is made against.
 
 \subsection{Testing}
 
 Replication of Romeo's work and of features from Machajdik's work shall be
 evaluated towards achieving similar performance on the same dataset.  The
-performance measure used by Romeo in \cite{rmc12ajs} is the percentage of
+performance measure used by Romeo in \cite{jma12clas} is the percentage of
 correctly classified images for each class (or author).  The dataset from
 Romeo's work is published and will be used in a classification task that shall
 \emph{replicate the previous performance}.  With the addition of features from
-\cite{mach10clas} the classification performance shall not deplete.  If the
-performance of the classifier depletes with the new features these shall be
+\cite{mach10clas} the classification performance shall not degrade.  If the
+performance of the classifier degrade with the new features these shall be
 removed.
 
 Author identification task over the NIRP and VAM datasets will be then
 performed using the same features and measured in the same way.  Romeo's work
-on author identification contained only 6 authors (Goya, Monet, Gauguin, Van
+on author identification contained only six authors (Goya, Monet, Gauguin, Van
 Gogh, Kandinsky and Picasso) and from a limited time period (19th and early
 20th century), yet NIRP and VAM collections contain items from many more
 authors and periods.  This difference may produce different results, proving
@@ -343,7 +338,7 @@ selected features only.  We \emph{end the second month} by statistically
 comparing the classifiers with full and reduced number of features.
 
 In the \emph{first half of the third month} we rerun our experiments and
-collect the tables and graphs.  If no milestone is late at this point there
+collect the tables and graphs.  If no milestone is late at this point, there
 shall be extra time, and we will try the proposed art school task and the
 features learned from data.  Finally, the \emph{second half of the month} is
 dedicated towards finishing the report.  By the half of the third month the
@@ -357,11 +352,11 @@ reason for this is that before the \emph{second half of the 20th century}
 artists made their pigments themselves.  Yet, in the second half of the 20th
 century industrialised paints standardised colours and art from this period is
 harder to distinguish by colour.  Moreover, with digital enhancements to
-illustrations starting from the '90s of the previous century, the entire colour
-spectrum was made available to all artists making the colour an even less
-important feature for this period onwards.  Classifying art from these periods
-using the same features will probably render worse results, it is left for
-future work the extraction and testing of features for recent drawn artwork.
+illustrations starting from the '90s of the 20th century, the entire colour
+spectrum was made available to all artists making colour an even less important
+feature from this period onwards.  Classifying art from these periods using the
+same features will probably render worse results.  It is left for future work
+the extraction and testing of features for recent drawn artwork.
 
 Other \emph{flat art} items (flat sculpture, porcelain or some forms of modern
 art) could be classified in similar fashion as illustration, drawing and
