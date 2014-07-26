@@ -1,0 +1,31 @@
+# jcut -l e~available-images |
+# while read x; do
+#   echo -n "$x : ";
+#   jcut -f "$x" e~available-images | wc -L ;
+# done
+inscription : 805
+current accession number : 59
+measurements : 122
+description : 2883
+artist : 883 : taken
+url : 53 : taken
+acquisition details : 402
+notes : 11351
+material : 78 :taken
+rights owner : 118
+collection : 109 : taken
+image_id : 46 :taken
+signed : 583
+date : 33 : taken
+title : 181 : taken
+author : 59
+subject : 300 : taken
+publications : 5486
+principal exhibitions : 2166
+date earliest : 42 : taken
+date latest : 40 : taken
+provenance : 1243
+alternative title : 272
+museum number : 34
+original translation : 191
+former accession number : 147

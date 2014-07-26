@@ -1,0 +1,4 @@
+#!/usr/bin/env jsed
+{artist}{\s*\(.*\)\s*}{}
+{artist}{^\s*}{}
+{artist}{\s*$}{}
