@@ -1,0 +1,13 @@
+# byte compiled
+__pycache__/
+*.pyc
+
+# vim stuff
+*.swp
+
+# emacs stuff
+*~
+
+# directory containing the processed/normalised images
+/src/data
+
