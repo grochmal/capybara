@@ -1,0 +1,6 @@
+beautifulsoup4
+numpy
+scipy
+ipython==1.0.0
+pandas
+Pillow
