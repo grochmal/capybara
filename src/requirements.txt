@@ -4,3 +4,4 @@ scipy
 ipython==1.0.0
 pandas
 Pillow
+scikit-image
