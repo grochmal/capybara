@@ -65,5 +65,5 @@ This will mimic the behaviour of R, plus it will setup the index of the data
 frame as the correct column of the file.  To write the file back to disk with
 the index column properly labeled use:
 
-d.to_csv('out.dat', sep=' ', index=True, header=True, index_label='img')
+    d.to_csv('out.dat', sep=' ', index=True, header=True, index_label='img')
 
