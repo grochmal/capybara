@@ -22,7 +22,7 @@ def glcm_fe(f):
     for i in hmgn[:,0]: print "%.3f" % i,
     for i in corr[:,0]:
         if np.isnan(i): i = 1
-        print "%.3f" % i,
+        print "%.6f" % i,
 
 if '__main__' == __name__:
     if 1 >= len(sys.argv):
