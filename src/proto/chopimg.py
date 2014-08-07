@@ -4,7 +4,7 @@ import os,sys
 from PIL import Image
 import numpy as np
 import matplotlib
-#matplotlib.use('Agg')
+matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 from matplotlib import cm
 
@@ -42,8 +42,8 @@ def chop_img(img, n, out):
     ps = chop(im, n)
     mk = mark(im.copy(), n)
     plot(mk, ps, n)
-    plt.show()
-    #plt.savefig(out, dpi=300)
+    #plt.show()
+    plt.savefig(out, dpi=300)
 
 if '__main__' == __name__:
     if 4 != len(sys.argv):

@@ -16,10 +16,27 @@ __doc__ = 'Usage: segmentation.py file [output]'
 def big_regions(lb, tot):
     l = []
     for i in range(1, tot+1):
-        l.append((sum(sum(i == lb)), i))
+        l.append(((i == lb).sum(), i))
     l.sort()
     l.reverse()
     return l
+
+def plot_seg(spr, spc, sps, img, cmap, alpha, xlabel):
+    plt.subplot(spr, spc, sps)
+    plt.imshow(img, cmap=cmap, interpolation='nearest', alpha=alpha)
+    plt.yticks([])
+    plt.xticks([])
+    plt.xlabel(xlabel)
+
+def plot_mask(spr, spc, sps, reg, lb, regs, cmap, xlabel):
+    masked = np.ma.masked_array(lb, ~(lb == regs[reg][1]))
+    plot_seg(spr, spc, sps, masked, cmap, 1, xlabel)
+
+def plot_crop(spr, spc, sps, reg, img, lb, regs, cmap):
+    masked = np.ma.masked_array(img, ~(lb == regs[reg][1]))
+    crop   = masked[~np.all(masked == 0, axis=1), :]
+    crop   = crop[:, ~np.all(crop == 0, axis=0)]
+    plot_seg(spr, spc, sps, crop, cmap, 1, '%i px' % regs[reg][0])
 
 def segment(img, outimg):
     img = np.array(Image.open(img))
@@ -32,123 +49,29 @@ def segment(img, outimg):
     print 'Total regions:', tot
     regs = big_regions(labels, tot)
 
-    plt.subplot(3,6,1)
-    plt.imshow(img,    cmap=cm.gray,     interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('image')
-    plt.subplot(3,6,2)
-    plt.imshow(den,    cmap=cm.gray,     interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('denoised')
-    plt.subplot(3,6,3)
-    plt.imshow(grad,   cmap=cm.spectral, interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('gradient')
-    plt.subplot(3,6,4)
-    plt.imshow(mrk,    cmap=cm.spectral, interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('markers')
-    plt.subplot(3,6,5)
-    plt.imshow(labels, cmap=cm.spectral, interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('regions\n(%i)' % tot)
-    plt.subplot(3,6,6)
-    plt.imshow(img,    cmap=cm.spectral, interpolation='nearest')
-    plt.imshow(labels, cmap=cm.spectral, interpolation='nearest', alpha=0.7)
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('composite')
+    spr = 3
+    spc = 6
+    plot_seg(spr, spc, 1, img,    cm.gray,     1,   'image')
+    plot_seg(spr, spc, 2, den,    cm.gray,     1,   'denoised')
+    plot_seg(spr, spc, 3, grad,   cm.spectral, 1,   'gradient')
+    plot_seg(spr, spc, 4, mrk,    cm.spectral, 1,   'markers')
+    plot_seg(spr, spc, 5, labels, cm.spectral, 1,   'regions\n%i' % tot)
+    plot_seg(spr, spc, 6, img,    cm.gray,     1,   'composite')
+    plot_seg(spr, spc, 6, labels, cm.spectral, 0.7, 'composite')
 
-    plt.subplot(3,6,7)
-    masked = np.ma.masked_array(labels, ~(labels == regs[0][1]))
-    plt.imshow(masked, cmap=cm.spectral, interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('main region')
-    plt.subplot(3,6,8)
-    masked = np.ma.masked_array(labels, ~(labels == regs[1][1]))
-    plt.imshow(masked, cmap=cm.spectral, interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('2nd region')
-    plt.subplot(3,6,9)
-    masked = np.ma.masked_array(labels, ~(labels == regs[2][1]))
-    plt.imshow(masked, cmap=cm.spectral, interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('3rd region')
-    plt.subplot(3,6,10)
-    masked = np.ma.masked_array(labels, ~(labels == regs[3][1]))
-    plt.imshow(masked, cmap=cm.spectral, interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('4th region')
-    plt.subplot(3,6,11)
-    masked = np.ma.masked_array(labels, ~(labels == regs[4][1]))
-    plt.imshow(masked, cmap=cm.spectral, interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('5th region')
-    plt.subplot(3,6,12)
-    masked = np.ma.masked_array(labels, ~(labels == regs[5][1]))
-    plt.imshow(masked, cmap=cm.spectral, interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('6th region')
+    plot_mask(spr, spc, 7,  0, labels, regs, cm.spectral, 'main region')
+    plot_mask(spr, spc, 8,  1, labels, regs, cm.spectral, '2nd region')
+    plot_mask(spr, spc, 9,  2, labels, regs, cm.spectral, '3rd region')
+    plot_mask(spr, spc, 10, 3, labels, regs, cm.spectral, '4th region')
+    plot_mask(spr, spc, 11, 4, labels, regs, cm.spectral, '5th region')
+    plot_mask(spr, spc, 12, 5, labels, regs, cm.spectral, '6th region')
 
-    plt.subplot(3,6,13)
-    masked = np.ma.masked_array(labels, ~(labels == regs[0][1]))
-    crop   = masked[~np.all(masked == 0, axis=1), :]
-    crop   = crop[:, ~np.all(crop == 0, axis=0)]
-    plt.imshow(crop, cmap=cm.spectral, interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('main region')
-    plt.subplot(3,6,14)
-    masked = np.ma.masked_array(labels, ~(labels == regs[1][1]))
-    crop   = masked[~np.all(masked == 0, axis=1), :]
-    crop   = crop[:, ~np.all(crop == 0, axis=0)]
-    plt.imshow(crop, cmap=cm.spectral, interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('2nd region')
-    plt.subplot(3,6,15)
-    masked = np.ma.masked_array(labels, ~(labels == regs[2][1]))
-    crop   = masked[~np.all(masked == 0, axis=1), :]
-    crop   = crop[:, ~np.all(crop == 0, axis=0)]
-    plt.imshow(crop, cmap=cm.spectral, interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('3rd region')
-    plt.subplot(3,6,16)
-    masked = np.ma.masked_array(labels, ~(labels == regs[3][1]))
-    crop   = masked[~np.all(masked == 0, axis=1), :]
-    crop   = crop[:, ~np.all(crop == 0, axis=0)]
-    plt.imshow(crop, cmap=cm.spectral, interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('4th region')
-    plt.subplot(3,6,17)
-    masked = np.ma.masked_array(labels, ~(labels == regs[4][1]))
-    crop   = masked[~np.all(masked == 0, axis=1), :]
-    crop   = crop[:, ~np.all(crop == 0, axis=0)]
-    plt.imshow(crop, cmap=cm.spectral, interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('5th region')
-    plt.subplot(3,6,18)
-    masked = np.ma.masked_array(labels, ~(labels == regs[5][1]))
-    crop   = masked[~np.all(masked == 0, axis=1), :]
-    crop   = crop[:, ~np.all(crop == 0, axis=0)]
-    plt.imshow(crop, cmap=cm.spectral, interpolation='nearest')
-    plt.yticks([])
-    plt.xticks([])
-    plt.xlabel('6th region')
+    plot_crop(spr, spc, 13, 0, img, labels, regs, cm.gray)
+    plot_crop(spr, spc, 14, 1, img, labels, regs, cm.gray)
+    plot_crop(spr, spc, 15, 2, img, labels, regs, cm.gray)
+    plot_crop(spr, spc, 16, 3, img, labels, regs, cm.gray)
+    plot_crop(spr, spc, 17, 4, img, labels, regs, cm.gray)
+    plot_crop(spr, spc, 18, 5, img, labels, regs, cm.gray)
 
     #plt.savefig('test.eps', dpi=300)
     plt.savefig(outimg, dpi=300)
