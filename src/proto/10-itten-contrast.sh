@@ -30,14 +30,23 @@ echo -n img
 # 300 - 329 : purple        (p)
 # 330 - 360 : purple red    (pr)
 
-echo -n " itct-sat-sl itct-sat-sv"
-echo -n " itct-lightdark-l itct-lightdark-v"
-echo -n " itct-hue-h itct-hue-cs"
-echo -n " itct-warmcold-h itct-warmcold-cs"
-echo -n " itct-comp-h itct-comp-cs"
+echo -n " itct-sat-sl-r3 itct-sat-sl-r7 itct-sat-sl-sg"
+echo -n " itct-sat-sv-r3 itct-sat-sv-r7 itct-sat-sv-sg"
+
+echo -n " itct-lightdark-l-r3 itct-lightdark-l-r7 itct-lightdark-l-sg"
+echo -n " itct-lightdark-v-r3 itct-lightdark-v-r7 itct-lightdark-v-sg"
+
+echo -n " itct-hue-h-r3 itct-hue-h-r7 itct-hue-h-sg"
+echo -n " itct-hue-cs-r3 itct-hue-cs-r7 itct-hue-cs-sg"
+
+echo -n " itct-warmcold-h-r3 itct-warmcold-h-r7 itct-warmcold-h-sg"
+echo -n " itct-warmcold-cs-r3 itct-warmcold-cs-r7 itct-warmcold-cs-sg"
+
+echo -n " itct-comp-h-r3 itct-comp-h-r7 itct-comp-h-sg"
+echo -n " itct-comp-cs-r3 itct-comp-cs-r7 itct-comp-cs-sg"
 
 echo
 
-#itten_cont rembrandt_eu_464
+itten_cont rembrandt_eu_464
 itten_cont caravaggio_1962_139_1
 
