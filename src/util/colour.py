@@ -26,8 +26,8 @@ __doc__ = '''
 def itten12(f):
     hue_img = np.array(Image.open(f), 'uint32')
     v, bins = np.histogram(((hue_img*360/255)+15)%360, bins=12)
-    stdev   = int(np.ceil(v.std()))
-    colours = v - stdev
+    avg     = int(np.ceil(v.mean()))
+    colours = v - avg
     colours[colours < 0] = 0
     for c in colours: print c,
 
