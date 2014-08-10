@@ -3,8 +3,9 @@
 DIR=$(dirname $(readlink -e "$0"))
 NORM=util/norm-size.pl
 PIXELS=300000
-OUT=data/images_rgb
+OUT=data/rgb
 
+cd "$DIR"
 from_set () {
   for input in $(find $1 -name '*.jpg'); do
     j=$(basename $input .jpg)
@@ -16,11 +17,11 @@ from_set () {
   done
 }
 
-cd "$DIR"
 if [[ ! -d $OUT ]]; then
   echo mkdir -p $OUT
   mkdir -p $OUT
 fi
+
 from_set ../vam-dataset  vam
 from_set ../nirp-dataset nirp
 

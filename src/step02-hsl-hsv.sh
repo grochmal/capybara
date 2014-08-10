@@ -1,23 +1,30 @@
 #!/bin/sh
 
 DIR=$(dirname $(readlink -e "$0"))
-IN=data/images_rgb
-OUTBASE=data/images
+IN=data/rgb
+OUT=data/hsvl
 
-from_set () {
-  out_dir=${OUTBASE}_${1,,}
-  if [[ ! -d $out_dir ]]; then
-    echo mkdir -p $out_dir
-    mkdir -p $out_dir
-  fi
+cd "$DIR"
+separate () {
   for i in $IN/*.png; do
-    j=$(basename $i)
-    echo convert $i -colorspace $1 $out_dir/$j
-    convert $i -colorspace $1 $out_dir/$j
+    j=$(basename $i .png)
+    echo convert $i -colorspace HSL -channel R -separate $OUT/H_$j.pgm
+         convert $i -colorspace HSL -channel R -separate $OUT/H_$j.pgm
+    echo convert $i -colorspace HSL -channel G -separate $OUT/SHSL_$j.pgm
+         convert $i -colorspace HSL -channel G -separate $OUT/SHSL_$j.pgm
+    echo convert $i -colorspace HSL -channel B -separate $OUT/L_$j.pgm
+         convert $i -colorspace HSL -channel B -separate $OUT/L_$j.pgm
+    echo convert $i -colorspace HSB -channel G -separate $OUT/SHSV_$j.pgm
+         convert $i -colorspace HSB -channel G -separate $OUT/SHSV_$j.pgm
+    echo convert $i -colorspace HSB -channel B -separate $OUT/V_$j.pgm
+         convert $i -colorspace HSB -channel B -separate $OUT/V_$j.pgm
   done
 }
 
-cd "$DIR"
-from_set HSB
-from_set HSL
+if [[ ! -d $OUT ]]; then
+  echo mkdir -p $OUT
+       mkdir -p $OUT
+fi
+
+separate
 
