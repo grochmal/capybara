@@ -3,6 +3,7 @@
 DIR=$(dirname $(readlink -e "$0"))
 BASE=img
 
+cd "$DIR"
 compress () {
   for i in $BASE/$1/*.pgm; do
     j=$(basename $i .pgm)

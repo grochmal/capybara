@@ -4,6 +4,7 @@ DIR=$(dirname $(readlink -e "$0"))
 CONTR=../util/itten.py
 BASE=img/hsvl
 
+cd "$DIR"
 itten_cont () {
   echo -n "$1 "
 #  echo $CONTR $BASE/SHSL_$1.pgm $BASE/SHSV_$1.pgm  \

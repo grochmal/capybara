@@ -5,6 +5,7 @@ FILTER=../util/canny.py
 IN=img/hsvl
 OUT=img/canny-hsvl
 
+cd "$DIR"
 for i in $IN/*.pgm; do
   j=$(basename $i)
   echo $FILTER $i $OUT/$j

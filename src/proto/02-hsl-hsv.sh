@@ -12,6 +12,7 @@ r=rembrandt_eu_464
 # -channel must be passed before -separate otherwise all channles will be
 # written to file regardless of the -separate option.
 
+cd "$DIR"
 echo convert $IN/$c.png -colorspace HSL -channel R -separate $OUT/H_$c.pgm
 convert $IN/$c.png -colorspace HSL -channel R -separate $OUT/H_$c.pgm
 echo convert $IN/$c.png -colorspace HSL -channel G -separate $OUT/SHSL_$c.pgm

@@ -5,6 +5,7 @@ CHOPAVG=../util/chops.py
 RULE=3
 BASE=img/hsvl
 
+cd "$DIR"
 rule_of_thirds () {
   echo -n "$1 "
 #  echo $CHOPAVG $RULE $BASE/CS_$1.pgm   $BASE/H_$1.pgm    $BASE/L_$1.pgm \

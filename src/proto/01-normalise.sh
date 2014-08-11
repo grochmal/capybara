@@ -8,6 +8,7 @@ OUT=img/rgb
 CAR=../../nirp-dataset/caravaggio_rgb/caravaggio_1962_139_1.jpg
 REM=../../nirp-dataset/rembrandt_rgb/rembrandt_eu_464.jpg
 
+cd "$DIR"
 car_size=$(identify $CAR | cut -d ' ' -f 3)
 rem_size=$(identify $REM | cut -d ' ' -f 3)
 echo "ORIGINAL: caravaggio [$car_size] rembrandt [$rem_size]"

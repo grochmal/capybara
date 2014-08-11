@@ -4,6 +4,7 @@ DIR=$(dirname $(readlink -e "$0"))
 MKSTAT=../util/glcm.py
 BASE=img/hsvl
 
+cd "$DIR"
 glcm () {
   echo -n "$1 "
 #  echo $MKSTAT $BASE/CS_$1.pgm   $BASE/H_$1.pgm    $BASE/L_$1.pgm \

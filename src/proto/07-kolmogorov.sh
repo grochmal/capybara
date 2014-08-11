@@ -3,6 +3,7 @@
 DIR=$(dirname $(readlink -e "$0"))
 BASE=img
 
+cd "$DIR"
 kolmogorov () {
   for p in CS_ H_ L_ SHSL_ SHSV_ V_; do
     i=$BASE/$1/$p$3.pgm

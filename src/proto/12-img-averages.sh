@@ -5,6 +5,7 @@ IMGAVG=../util/imgavg.py
 RULE=3
 BASE=img/hsvl
 
+cd "$DIR"
 averages () {
   echo -n "$1 "
 #  echo $IMGAVG $BASE/CS_$1.pgm   $BASE/H_$1.pgm    $BASE/L_$1.pgm \

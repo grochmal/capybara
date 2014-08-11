@@ -4,6 +4,7 @@ DIR=$(dirname $(readlink -e "$0"))
 COLOURS=../util/colour.py
 BASE=img/hsvl
 
+cd "$DIR"
 itten12 () {
   echo -n "$1 "
 #  echo $COLOURS $BASE/H_$1.pgm >&2
