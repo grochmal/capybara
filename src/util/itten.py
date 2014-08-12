@@ -42,11 +42,11 @@ def segm(img):
     labels   = morph.watershed(grad, mrk)
     return seg_regions(img, labels, tot)
 
-def contrast_hsl(regs):
+def contrast_hsl(regs, d):
     avgs  = []
     for reg in regs:
-        size = (reg[1] > 0).sum()
-        avg = (reg[1].sum()) / ((reg[1] > 0).sum())
+        size  = (reg[1] >= 0).sum()
+        avg   = (reg[1].sum()) / size
         avgs += [avg] * reg[0]
     print '%.6f' % np.array(avgs).std(),
 
@@ -112,12 +112,12 @@ def itten_contrasts(shsl, shsv, l, v, h, cs):
         i['sg'] = segm(i['img'])
     for i in [shsli, shsvi, li, vi]:
         for d in divs:
-            contrast_hsl(i[d])
+            contrast_hsl(i[d], d)
     # scale to 0-360 and make all hue arrays into masked arrays
     map(scale_hue, [hi[x] for x in divs] + [csi[x] for x in divs])
     for i in [hi, csi]:
         for d in divs:
-            contrast_hsl(i[d])
+            contrast_hsl(i[d], d)
             contrast_wc(i[d])
     contrast_comp(hi,  divs, 160)
     contrast_comp(csi, divs, 125)  # 160*200/255 (scaled by saturation)
