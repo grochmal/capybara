@@ -10,7 +10,7 @@ BIBS   = *.bbl *.blg
 IDXS   = *.idx *.ilg *.ind *.ist
 OTHER  = *.acn *.acr *.glg *.glo *.gls *.brf *.lol
 
-all: prop.pdf
+all: rept.pdf
 
 %.pdf: %.tex %.bbl
 	$(LATEX) $<
