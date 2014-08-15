@@ -5,31 +5,28 @@ BASE=data/hsvl
 
 cd "$DIR"
 declare -A amt=( \
-  ["rembrandt"]="rembrandt baroque netherlands"      \
-  ["caravaggio"]="caravaggio baroque italy"          \
-  ["gauguin"]="gauguin post-impressionism france"    \ ### impressionism
-  ["greco"]="greco mannerism spain"                  \ ### baroque
-  ["botticelli"]="botticelli renaissance italy"      \
-  ["delacroix"]="delacroix romanticism france"       \
-  ["goya"]="goya romanticism spain"                  \
-  ["pissarro"]="pissarro post-impressionism france"  \ ### impressionism
-  ["hondecoeter"]="hondecoeter baroque netherlands"  \
-  ["molenaer"]="molenaer baroque netherlands"        \
-  ["bassano"]="bassano venetian italy"               \ ### renaissance
-  ["ricci"]="ricci baroque italy"                    \
-  ["teniers"]="teniers baroque netherlands"          \
-  ["dujardin"]="dujardin baroque netherlands"        \
-  ["miereveld"]="miereveld baroque netherlands"      \
-  ["daubigny"]="daubigny realism france"             \ ### romanticism
+  ["rembrandt"]="rembrandt baroque netherlands"        \
+  ["caravaggio"]="caravaggio baroque italy"            \
+  ["gauguin"]="gauguin post-impressionism france"      \ ### impressionism
+  ["greco"]="greco mannerism spain"                    \ ### baroque
+  ["botticelli"]="botticelli renaissance italy"        \
+  ["delacroix"]="delacroix romanticism france"         \
+  ["goya"]="goya romanticism spain"                    \
+  ["pissarro"]="pissarro post-impressionism france"    \ ### impressionism
+  ["hondecoeter"]="hondecoeter baroque netherlands"    \
+  ["molenaer"]="molenaer baroque netherlands"          \
+  ["bassano"]="bassano venetian italy"                 \ ### renaissance
+  ["ricci"]="ricci baroque italy"                      \
+  ["teniers"]="teniers baroque netherlands"            \
+  ["dujardin"]="dujardin baroque netherlands"          \
+  ["miereveld"]="miereveld baroque netherlands"        \
+  ["daubigny"]="daubigny realism france"               \ ### romanticism
+  ["loutherbourg"]="loutherbourg romanticism britain"  \
+  ["rousseau"]="rousseau realism france"               \ ### romanticism
+  ["monticelli"]="monticelli impressionism france"     \
+  ["zoffany"]="zoffany neoclassicism britain"          \
                )
 
-
-ga loutherbourg 'Loutherbourg, P' britain '1740-1812' \
-                'Loutherbourg, Philip James de'
-ga rousseau   'Rousseau, T'     france  '1812-1867' 'Rousseau, Theodore'
-ga monticelli 'Monticelli, A'   france  '1824-1886' \
-              'Monticelli, Adolphe Joseph Thomas'
-ga zoffany    'Zoffany, [JR]'   britain '1733-1810' 'Zoffany, Johann'
 ga veronese   'Veronese, P'     italy   '1528-1588' 'Veronese, Paolo'
 ga monnoyer   'Monnoyer, J'     france  '1636-1699' 'Monnoyer, Jean-Baptiste'
 ga diaz       'Diaz de la Pe.a' france  '1808-1876' \
