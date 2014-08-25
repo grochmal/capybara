@@ -3,66 +3,82 @@
 DIR=$(dirname $(readlink -e "$0"))
 BASE=data/hsvl
 
+# simplifications (as the style is similar):
+# mannerism           ->  baroque
+# dutch golden age    ->  baroque
+# venetian school     ->  renaissance
+# barbizon school     ->  romanticism
+# realism             ->  romanticism
+# post-impressionism  ->  impressionism
+# neoimpressionism    ->  impressionism
+
 cd "$DIR"
 declare -A amt=( \
-  ["rembrandt"]="rembrandt baroque netherlands"        \
-  ["caravaggio"]="caravaggio baroque italy"            \
-  ["gauguin"]="gauguin post-impressionism france"      \ ### impressionism
-  ["greco"]="greco mannerism spain"                    \ ### baroque
-  ["botticelli"]="botticelli renaissance italy"        \
-  ["delacroix"]="delacroix romanticism france"         \
-  ["goya"]="goya romanticism spain"                    \
-  ["pissarro"]="pissarro post-impressionism france"    \ ### impressionism
-  ["hondecoeter"]="hondecoeter baroque netherlands"    \
-  ["molenaer"]="molenaer baroque netherlands"          \
-  ["bassano"]="bassano venetian italy"                 \ ### renaissance
-  ["ricci"]="ricci baroque italy"                      \
-  ["teniers"]="teniers baroque netherlands"            \
-  ["dujardin"]="dujardin baroque netherlands"          \
-  ["miereveld"]="miereveld baroque netherlands"        \
-  ["daubigny"]="daubigny realism france"               \ ### romanticism
-  ["loutherbourg"]="loutherbourg romanticism britain"  \
-  ["rousseau"]="rousseau realism france"               \ ### romanticism
-  ["monticelli"]="monticelli impressionism france"     \
+  ["bassano"]="bassano renaissance italy"        \
+  ["botticelli"]="botticelli renaissance italy"  \
+  ["raphael"]="raphael renaissance italy"        \
+  ["titian"]="titian renaissance italy"          \
+  ["veronese"]="veronese renaissance italy"      \
+  \
+  ["berchem"]="berchem baroque netherlands"          \
+  ["caravaggio"]="caravaggio baroque italy"          \
+  ["cuyp"]="cuyp baroque netherlands"                \
+  ["dujardin"]="dujardin baroque netherlands"        \
+  ["greco"]="greco baroque spain"                    \
+  ["hondecoeter"]="hondecoeter baroque netherlands"  \
+  ["miereveld"]="miereveld baroque netherlands"      \
+  ["molenaer"]="molenaer baroque netherlands"        \
+  ["monnoyer"]="monnoyer baroque france"             \
+  ["murillo"]="murillo baroque spain"                \
+  ["poussin"]="poussin baroque italy"                \
+  ["rebecca"]="rebecca baroque italy"                \
+  ["rembrandt"]="rembrandt baroque netherlands"      \
+  ["ribera"]="ribera baroque italy"                  \
+  ["ricci"]="ricci baroque italy"                    \
+  ["rosa"]="rosa baroque italy"                      \
+  ["rubens"]="rubens baroque netherlands"            \
+  ["teniers"]="teniers baroque netherlands"          \
+  ["velazquez"]="velazquez baroque spain"            \
+  ["wouwerman"]="wouwerman baroque netherlands"      \
+  \
+  ["canaletto"]="canaletto neoclassicism italy"        \
+  ["carlevariis"]="carlevariis neoclassicism italy"    \
+  ["dughet"]="dughet neoclassicism italy"              \
+  ["kauffmann"]="kauffmann neoclassicism switzerland"  \
+  ["panini"]="panini neoclassicism italy"              \
   ["zoffany"]="zoffany neoclassicism britain"          \
+  \
+  ["boudin"]="boudin romanticism france"               \
+  ["daubigny"]="daubigny romanticism france"           \
+  ["delacroix"]="delacroix romanticism france"         \
+  ["diaz"]="diaz romanticism france"                   \
+  ["goya"]="goya romanticism spain"                    \
+  ["latour"]="latour romanticism france"               \
+  ["loutherbourg"]="loutherbourg romanticism britain"  \
+  ["rousseau"]="rousseau romanticism france"           \
+  \
+  ["gauguin"]="gauguin impressionism france"        \
+  ["monticelli"]="monticelli impressionism france"  \
+  ["pissarro"]="pissarro impressionism france"      \
+  \
+  ["basawan"]="basawan mughal india"  \
+  ["jagan"]="jagan mughal india"      \
+  ["kesav"]="kesav mughal india"      \
+  ["lal"]="lal mughal india"          \
+  ["miskin"]="miskin mughal india"    \
+  ["tulsi"]="tulsi mughal india"      \
+  \
+  ["carpenter"]="carpenter watercolour india"    \
+  ["constable"]="constable watercolour britain"  \
+  ["tagore"]="tagore watercolour india"          \
+  \
+  ["gainsborough"]="gainsborough romanticism britain"  \
+  ["leslie"]="leslie romanticism britain"              \
+  ["mulready"]="mulready romanticism britain"          \
+  ["watts"]="watts romanticism britain"                \
+  \
+  ["devi"]="devi na india"  \
                )
-
-ga veronese   'Veronese, P'     italy   '1528-1588' 'Veronese, Paolo'
-ga monnoyer   'Monnoyer, J'     france  '1636-1699' 'Monnoyer, Jean-Baptiste'
-ga diaz       'Diaz de la Pe.a' france  '1808-1876' \
-              'Diaz de la Pena, Narcisse Virgile'
-
-ga poussin 'Poussin, N'              italy       '1594-1665' 'Poussin, Nicolas'
-ga boudin  'Boudin, E|Eug.ne Boudin' france      '1824-1898' \
-           'Boudin, Eugene Louis'
-
-ga cuyp      'Cuyp, A'          netherlands '1620-1691' 'Cuyp, Aelbert'
-ga kauffmann 'Kauffmann, A'     switzerland '1741-1807' 'Kauffmann, Angelica'
-ga ribera    'Ribera, J'        italy       '1591-1652' 'Ribera, Jusepe de'
-ga velazquez 'Vel.zquez, D'     spain       '1599-1660' 'Velazquez, Diego'
-ga latour    'Fantin-Latour, H' france      '1836-1904' 'Fantin-Latour, Henri'
-ga dughet    'Dughet, G'        italy       '1615-1675' 'Dughet, Gaspard'
-ga wouwerman 'Wouwerman, P'     netherlands '1619-1668' 'Wouwerman, Philips'
-ga titian    'Titian'           italy       '1488-1576' 'Titian'
-ga canaletto 'Canaletto'        italy       '1697-1768' 'Canaletto'
-ga panini    'Panini, G'        italy       '1692-1765' \
-             'Panini, Giovanni Paolo'
-ga rebecca   'Rebecca, B'       italy       '1735-1808' 'Rebecca, Biagio'
-ga murillo   'Murillo, B'       spain       '1618-1682' \
-             'Murillo, Bartolome Esteban'
-ga rosa      'Rosa, S'          italy       '1615-1673' 'Rosa, Salvator'
-ga berchem   'Berchem, N'       netherlands '1620-1683' 'Berchem, Nicolaes'
-ga rubens    'Rubens, P'        netherlands '1577-1640' 'Rubens, Peter Paul'
-
-
-ga carlevariis 'Carlevariis, L'    italy '1663-1729' 'Carlevariis, Luca'
-ga raphael     'Raphael \(Italian' italy '1483-1520' 'Raphael'
-
-ga rembrandt    \
-   'Rembrandt van Rijn|van Rijn, Rembrandt|Rembrandt, Harmensz van Rijn' \
-   netherlands  \
-   '1606-1669'  \
-   'Rijn, Rembrandt Harmenszoon van'
 
 img_meta () {
   a=$(echo $1 | cut -d '_' -f 1)
