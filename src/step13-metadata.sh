@@ -81,7 +81,7 @@ declare -A amt=( \
                )
 
 img_meta () {
-  a=$(echo $1 | cut -d '_' -f 1)
+  a=$(echo $1 | cut -d '_' -f 2)
   echo "$1 ${amt["$a"]}"
 }
 

@@ -53,7 +53,7 @@ def contrast_hsl(regs, d):
 def scale_hue(regs):
     for reg in regs: reg[1] = ((np.ma.array(reg[1], np.uint32)*360/255)+15)%360
 
-# contrast only regions biggert than 548 pixels (square root fo 300 000)
+# contrast only regions biggert than 548 pixels (square root of 300 000)
 def filter_small_regions(regs): return filter(lambda x: x[0] >= 548, regs)
 
 #   0 -  29 : red           (r)  --\
