@@ -44,17 +44,18 @@ my %artist = ( bassano    => 1
              , panini      => 44
              , zoffany     => 45
              , boudin       => 50
-             , daubigny     => 51
-             , delacroix    => 52
-             , diaz         => 53
-             , gainsborough => 54
-             , goya         => 55
-             , latour       => 56
-             , leslie       => 57
-             , loutherbourg => 58
-             , mulready     => 59
-             , rousseau     => 60
-             , watts        => 61
+             , constable    => 51
+             , daubigny     => 52
+             , delacroix    => 53
+             , diaz         => 54
+             , gainsborough => 55
+             , goya         => 56
+             , latour       => 57
+             , leslie       => 58
+             , loutherbourg => 59
+             , mulready     => 60
+             , rousseau     => 61
+             , watts        => 62
              , gauguin    => 70
              , monticelli => 71
              , pissarro   => 72
@@ -65,7 +66,6 @@ my %artist = ( bassano    => 1
              , miskin  => 84
              , tulsi   => 85
              , carpenter => 90
-             , constable => 91
              , tagore    => 92
              , devi => 99
              );

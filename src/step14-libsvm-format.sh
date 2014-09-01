@@ -29,12 +29,12 @@ join - $BASE/img-averages.dat   > $DAT
 # --complement is not POSIX, if it does not work for you
 # type all the fields into the comma separated list for -f
 echo -n "cut --complement -d ' ' -f 1,3,4 $DAT |"
-echo    " $ARTIST | sort > $OUTART"
+echo    " $ARTIST | sort -n > $OUTART"
       cut --complement -d ' ' -f 1,3,4 $DAT |
-        $ARTIST | sort > $OUTART
+        $ARTIST | sort -n > $OUTART
 
 echo -n "cut --complement -d ' ' -f 1,2,4 $DAT |"
-echo    " $SCHOOL | sort > $OUTSCH"
+echo    " $SCHOOL | sort -n > $OUTSCH"
       cut --complement -d ' ' -f 1,2,4 $DAT |
-        $SCHOOL | sort > $OUTSCH
+        $SCHOOL | sort -n > $OUTSCH
 

@@ -8,6 +8,7 @@ BASE=data/hsvl
 # dutch golden age    ->  baroque
 # venetian school     ->  renaissance
 # barbizon school     ->  romanticism
+# symbolism           ->  romanticism
 # realism             ->  romanticism
 # post-impressionism  ->  impressionism
 # neoimpressionism    ->  impressionism
@@ -68,10 +69,10 @@ declare -A amt=( \
   ["miskin"]="miskin mughal india"    \
   ["tulsi"]="tulsi mughal india"      \
   \
-  ["carpenter"]="carpenter watercolour india"    \
-  ["constable"]="constable watercolour britain"  \
-  ["tagore"]="tagore watercolour india"          \
+  ["carpenter"]="carpenter watercolour india"  \
+  ["tagore"]="tagore watercolour india"        \
   \
+  ["constable"]="constable romanticism britain"        \
   ["gainsborough"]="gainsborough romanticism britain"  \
   ["leslie"]="leslie romanticism britain"              \
   ["mulready"]="mulready romanticism britain"          \
