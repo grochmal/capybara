@@ -24,7 +24,7 @@ def plotcorrs(dat, idx, out):
     plt.plot(x, corr[180], 'Dy', label='cs-avg')
     plt.legend(loc='upper left', numpoints=1)
     plt.xlabel('feature')
-    plt.ylabel('correlation coefficient')
+    plt.ylabel('correlation coefficient (absolute value)')
     plt.savefig(out, dpi=150)
 
 if '__main__' == __name__:
