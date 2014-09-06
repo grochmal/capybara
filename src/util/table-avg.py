@@ -33,8 +33,8 @@ def avgs(dat, idx, topout, botout):
     scols = map(lambda x: x+rsf, stds.columns)
     order = list(chain(*zip(mcols, scols)))
     table = means.join(stds, lsuffix=lsf, rsuffix=rsf)[order]
-    kolix = map(lambda x: 'kol-'+x,table.index[0:54])
-    table.index = kolix + table.index[54:192].tolist()
+    #kolix = map(lambda x: 'kol-'+x,table.index[0:54])
+    #table.index = kolix + table.index[54:192].tolist()
     with open(topout, 'wb') as t:
         t.write(table[order[0:6]].to_latex(header=False, float_format=pfl))
     with open(botout, 'wb') as b:
