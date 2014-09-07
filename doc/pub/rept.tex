@@ -1,4 +1,6 @@
-\documentclass[11pt,a4paper]{report}
+\documentclass[11pt,a4paper,draft]{report}
+
+% The PDF must be named rep_grochmalm_act.pdf
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -15,6 +17,21 @@
 \usepackage{tocloft}
 \usepackage{graphicx}
 \usepackage{rotfloat}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage[table]{xcolor}
+
+% \label convention
+% chap:    chapter
+% sec:     section
+% subsec:  subsection
+% fig:     figure
+% tab:     table
+% eq:      equation
+% lst:     code listing
+% itm:     enumerated list item
+% app:     appendix subsection
 
 \title{Style Based Drawn Artwork Image Classification}
 \author{A dissertation submitted in partial fulfilment of the requirements\\
@@ -32,8 +49,9 @@
 
 %\hyphenation{ge-ne-ric Ge-ne-ric Ro-me-ro Ma-ria}
 
+\definecolor{lightgray}{gray}{0.9}
 \setlength{\headheight}{16pt}
-\renewcommand{\chaptername}{Section}
+%\renewcommand{\chaptername}{Section}  % Not needed
 \renewcommand{\bibname}{References}
 \titlespacing*{\chapter}{0pt}{60pt}{60pt}
 
@@ -45,6 +63,7 @@
   \normalfont\large\bfseries}{\thesubsection}{1em}{}
 
 \begin{document}
+\VerbatimFootnotes
 \maketitle
 
 \newpage
@@ -59,7 +78,7 @@
 
 \begin{abstract}
 
-The abstract of the work, this will be writen at the very end
+The abstract of the work, this will be written at the very end
 
 \begin{flushright}
 \emph{Ars longa, vita brevis -- Hippocrates}
@@ -92,20 +111,23 @@ The abstract of the work, this will be writen at the very end
 \phantomsection
 \addcontentsline{toc}{chapter}{Academic Declaration}
 \chapter*{Academic Declaration}
-This report is substantially the result...
+This report is substantially the result of my own work except where explicitly
+indicated in the text.  I give my permission for it to be submitted to the JISC
+Plagiarism Detection Service.  I have read and understood the sections on
+plagiarism in the Programme Handbook and the College website.
 
 \newpage
 \phantomsection
 \addcontentsline{toc}{chapter}{Acknowledgements}
 \chapter*{Acknowledgements}
-Thanks to someone here.
+Thanks to my family and my friend, for their patience with me not having the
+time to spend with them.
 
 \newpage
 \setcounter{page}{1}
 \pagenumbering{arabic}
 
 \chapter{Introduction}
-
 \begin{multicols}{2}
 
 \section{Background}
@@ -134,27 +156,29 @@ nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
 nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
 batman
 
-\begin{figure*}[tb]  % figre* instead of figure becuse of multicols
+\begin{figure*}[tb]  % figure* instead of figure because of multicols
 \centering
 \includegraphics[width=0.48\textwidth]{diff_caesar}
 \includegraphics[width=0.48\textwidth]{diff_horatius}
-\caption[Example of different styles]{The image at the top is the painting
-"Julius Caesar and the Crossing of the Rubicon" by Francesco Granacci and at
-the bottom is the panel "Horatius Cocles Defending the Sublician Bridge" by
-Francesco Pesellino.  Both images have a similar theme and the objects
-contained in them are similar, yet the style of the images is different.}
-\label{diff}
+\caption[Example of different styles]{The image to the left is the painting
+"Julius Caesar and the Crossing of the Rubicon" by \emph{Francesco Granacci}
+and to the right is the panel "Horatius Cocles Defending the Sublician Bridge"
+by \emph{Francesco Pesellino}.  The theme in both images is the same: roman
+warfare, soldiers and horses moving through a river.  Yet the style used in
+depicting both scenes is different.}
+\label{fig:diff}
 \end{figure*}
 
 \begin{figure*}[tb]
 \centering
 \includegraphics[width=0.48\textwidth]{sim_delacroix_samaritan}
 \includegraphics[width=0.48\textwidth]{sim_delacroix_shipwreck}
-\caption[Example of similar styles]{In these two paintings by Delacroix, "The
-Good Samaritan" and "The Shipwreck of Don Juan", we can see a similar style.
-Both paintings are different in their theme, yet the author's style of drawing
-and painting can be easily noticed by humans.}
-\label{similar}
+\caption[Example of similar styles]{A similar style can be observed in these
+two paintings by \emph{Eug\`ene Delacroix}: "The Good Samaritan" (left) and
+"The Shipwreck of Don Juan" (right).  The author's style of painting is
+observed in both paintings, although the theme of the images is completely
+different.}
+\label{fig:similar}
 \end{figure*}
 
 \section{Features in the previous works}
@@ -176,24 +200,75 @@ batman
 
 \end{multicols}
 
-\chapter{Acquiring datasets}
+\chapter{Data}
 
 \begin{multicols}{2}
 
+As the result of the crawl, the images are assigned the surname of the artist
+and a unique identifier consisting of letters and numbers
+\texttt{<painter>\_<id>}.  We use more than one dataset, therefore the images
+will be prefixed with the dataset name to generate globally unique identifiers:
+\texttt{<dataset>\_<painter>\_<id>} (e.g. \texttt{vam\_constable\_2006AP4487}
+or \texttt{nirp\_monticelli\_fa000286}).
+
 \section{Victoria and Albert Museum (VAM)}
 
-VAM exposes a JSON API to retrieve metadata and image locations, the metadata
-is organised as a small JSON structure for each museum item.
+VAM exposes a JSON
+API\footnote{\href{http://www.vam.ac.uk/api/json/museumobject/}
+{http://www.vam.ac.uk/api/json/museumobject/}} to retrieve metadata and image
+locations, the metadata is organised as a small JSON structure for each museum
+item.
 
-`vam-get-all.py` used to get metadata about all items in the category
-painintins.  Yielding 2000 results.
+\texttt{vam-get-all.py} used to get metadata about all items in the category
+"painintins".  Yielding 2000 results.
 
-Using `jgrep` the results were filtered into 878 items with an availlable
-image.
+Using \texttt{jgrep} the results were filtered into 878 items with an
+available image.
 
-Downloaded the images using `vam-img-get.py` and filtered the images by hand
-removing 10 images that were not of painintgs.  Giving a final result of 868
-images of paintings with metadata.
+Downloaded the images using \texttt{vam-img-get.py} and filtered the images by
+hand removing 10 images that were not of painintgs.  Giving a final result of
+868 images of paintings with metadata.
+
+From these 868 we filtered out unknown artists and artists with less than 7
+paintings.  Finding unknown artists was tricky as VAM represents them with
+three different strings: "Unknown", "unknown" and "" (empty value).
+
+Used the format of small JSONs, one per line, in a long file.  This reduces
+memory usage and allows for processing the data in a stream (not possible with
+one big JSON).  This is describe in a work by Chen \cite{chen09yahoo}.
+
+\begin{table*}[ptb]
+\centering
+\rowcolors{1}{}{lightgray}
+\begin{tabular}{|l|rr|}
+\toprule
+Dataset & VAM dataset & NIRP dataset \\
+\midrule
+Paintings available                   & 2000 & 24373 \\
+Unique paintings (according to index) & 2000 &  9181 \\
+Paintings without an image            & 1132 &  2511 \\
+Paintings with an image               &  878 &  6641 \\
+Object misclassified as painting      &   10 &     1 \\
+Corrupted image file                  &    0 &     8 \\
+Duplicate image                       &    0 &     5 \\
+Different photo of the same painting  &    0 &    15 \\
+Artist of painting was not known      &  302 &   144 \\
+% VAM had "Unknown", "unknown" and ""
+% NIRP was a mess, as always
+\midrule
+Indexed artists                       &  565 &  3222 \\
+Missing artist index                  &    0 &     1 \\
+Artists without paintings             &    0 &    23 \\
+Artists used for selection            &  565 &  3199 \\
+Selected artists                      &   14 &    42 \\
+\midrule
+Paintings by the selected artists     &  193 &  1007 \\
+\bottomrule
+\end{tabular}
+\caption[Dataset acquisition]{Dataset acquisition.  The number of images and
+artists at each phase of crawling and cleansing the dataset.}
+\label{tab:crawl}
+\end{table*}
 
 \section{Visual Arts Data Service (NIRP)}
 
@@ -217,30 +292,43 @@ Finally `get-painting.py` crawls the detail page, retrieves the image for the
 painting and converts the HTML representation of the metadata into a JSON
 representation.
 
-In a JSON representation the painings that do not have an image available were
+In a JSON representation the paintings that do not have an image available were
 filtered out using `jgrep`.
 
-\section{Further cleansing}
-
-Semi automatic check for duplicated by checking if no two images have the same
+Semi automatic check for duplicates by checking if no two images have the same
 sha1sum checksum.  Use of jgrep, jcut, etc to perfom artist cleaing...
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+\section{Datasets in previous works}
+
+One of Romeo's work contain a dataset of photos only and is classified into
+"beautiful photos" and "not beautiful photos".  This is not the kind of data we
+need.  Another of Romeo's works has a dataset of photos as well but a small
+dataset of paintings is used.  We tried to contact Romeo and Machado for the
+dataset or at least the titles of the paintings they used, but we received no
+answe to the request.
+
+Machajidik's work uses images from the deviantart website, it does sepcify that
+809 images were used but does not specify the images used.  Deviantart has
+thousands of images and sampling 809 at random would likely produce different
+results.  Finally, deviantart focuses on digital art, which differs from
+classical paintings significantly.
 
 \end{multicols}
 
-\chapter{Methodology}
+\chapter{Approach}  % Why not "Methodology"?
 
 \begin{multicols}{2}
+
+With the datasets downloaded and organised we can move towards the
+classification.  First we shall normalise all images to similar sizes and
+separate tham into channels that will be used by feature extraction processes.
+Then we run the feature extractors.  All features have been divided into
+related groups: Kolmogorov complexity, GLCM, amount of Itten colours, rule of
+thirds, Itten contrasts and image averages.  A separate feature extractor for
+each group of features was built.
+
+Later (in chapter \ref{chap:results}) we join all features together and run the
+classifiers over the joined data.
 
 \section{Normalisation and separation}
 
@@ -248,18 +336,26 @@ First of all size normalisation, as most features depend on the number of
 pixels in the image.  As close as possible to 300 000 pixels but without
 changing the aspect ration.  In golden ration 300 000 pixels is an image of
 671x447 pixels, it is close to the ASCII screen resolution of 640x480 pixels.
-Equation \ref{eqsize} shows how an image of arbitrary \emph{height} and
+Equation \ref{eq:size} shows how an image of arbitrary \emph{height} and
 \emph{width} can be resized to an image of 300 000 pixels.  This technique do
 not ensures that an image will have the desired number of pixels but that it
 will be as close as possible to 300 000 pixels without changing the spect
-ration.  In our dataset the image that deviated the most ended with 299 485
+ration.  In our dataset the image that deviated the most ended with 300 515
 pixels, that's an error of less than 0.172\% and, therefore, can be ignored.
+
+% from libsvm documentation
+%
+% normalisation to [0,1]:
+%   x' = ( x - min(x) ) / ( max(x) - min(x) )
+%
+% normalisation to [-1,1]:
+%   x' = 2 * ( x - min(x) ) / ( max(x) - min(x) ) - 1
 
 \begin{equation}
 \begin{aligned}
-height'  &= height \times \sqrt{ \frac{3 \times 10^5}{height \times width} } \\
-width'   &= width  \times \sqrt{ \frac{3 \times 10^5}{height \times width} } \\
-\label{eqsize}
+h'  &= h \times \sqrt{ \frac{3 \times 10^5}{h \times w} } \\
+w'  &= w \times \sqrt{ \frac{3 \times 10^5}{h \times w} } \\
+\label{eq:size}
 \end{aligned}
 \end{equation}
 
@@ -269,9 +365,13 @@ width'   &= width  \times \sqrt{ \frac{3 \times 10^5}{height \times width} } \\
 \includegraphics[width=0.48\textwidth]{caravaggio_1962_139_1}
 \includegraphics[width=0.48\textwidth]{nirp_rembrandt_eu_464}
 \includegraphics[width=0.48\textwidth]{rembrandt_eu_464}
-\caption[Colour normalisation]{To the left original image, to the right
-normalised one.}
-\label{norm}
+\caption[Colour normalisation]{To the left are the original images, to the
+right normalised ones.  It can be seen that the normalised images are brighter
+to the human eye, this is because the darker and brighter colours are further
+apart in the normalised images.  The top image is the "The Betrayal of Christ"
+by \emph{Michelangelo da Caravaggio} and the image at the bottom is the "The
+Anatomy Lesson of Dr. Nicolaes Tulp" by \emph{Rembranidt van Rijn}.}
+\label{fig:norm}
 \end{figure*}
 
 Different pictures of the same painting may have different illumination, colour
@@ -292,7 +392,7 @@ S_{HSV}  &= \left\{
   &  \text{otherwise}. \\
   \end{array}
             \right.
-\label{eqhsv}
+\label{eq:hsv}
 \end{aligned}
 \end{equation}
 \end{figure*}
@@ -310,31 +410,31 @@ S_{HSL}  &= \left\{
   &  \text{otherwise}. \\
   \end{array}
            \right.
-\label{eqhsl}
+\label{eq:hsl}
 \end{aligned}
 \end{equation}
 \end{figure*}
 
 \begin{equation}
 CS_{HSV} = \frac{S_{HSV} \times V_{HSV}}{255}
-\label{eqcs}
+\label{eq:cs}
 \end{equation}
 
-Usubg equations for HSV \ref{eqhsv}, HSL \ref{eqhsl} and CS \ref{eqcs}.
+Using equations for HSV \ref{eq:hsv}, HSL \ref{eq:hsl} and CS \ref{eq:cs}.  Hue
+is the same for both HSV and HSL representations, whilst saturation and the
+third channel (Value or Lightness) are different.  The separation using
+ImageMagick is done channel by channel due to a limitation where ImageMagick
+concatenates all channels into the output image when extracting three channels
+at the same time.
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+Separation into HSV and HSL, equations below.  Also, definition of Romeo's
+colourfullness.  \texttt{sv2cs.py} is what multiplies Saturation and Value and
+then scales them.
 
-Separation into HSV and HSL, equations below.  Also, defintion of Romeo's
-colourfullness.
+To store each channel of the image the Portable Graymap (PGM)\footnote{One of
+the \texttt{netpbm} formats for images (PPM, PGM and PBM)} format was used.
+This format stores the channel uncompressed, which is important for the
+calculation of the Kolmogorov complexity (see below).
 
 \begin{figure*}[tbp]
 \centering
@@ -344,8 +444,13 @@ colourfullness.
 \includegraphics[width=0.30\textwidth]{H_caravaggio_1962_139_1}
 \includegraphics[width=0.30\textwidth]{SHSL_caravaggio_1962_139_1}
 \includegraphics[width=0.30\textwidth]{L_caravaggio_1962_139_1}
-\caption[HSV/HSL separation]{HSV/HSL separation}
-\label{hsvl}
+\caption[HSV/HSL separation]{HSV/HSL separation of "The Betrayal of Christ".
+At the top are the channels \emph{Hue}, \emph{Saturation} and \emph{Value} of
+the HSV representation, at the bottom are the \emph{Hue}, \emph{Saturation} and
+\emph{Lightness} channels of the HSL representation.  The \emph{Hue} channel is
+the same in both representations, whilst the \emph{Saturation} and the third
+channel is different across the representations.}
+\label{fig:hsvl}
 \end{figure*}
 
 \begin{figure*}[tbp]
@@ -353,8 +458,11 @@ colourfullness.
 \includegraphics[width=0.30\textwidth]{H_caravaggio_1962_139_1}
 \includegraphics[width=0.30\textwidth]{SHSV_caravaggio_1962_139_1}
 \includegraphics[width=0.30\textwidth]{CS_caravaggio_1962_139_1}
-\caption[Colourfullness]{Colourfullness}
-\label{figcs}
+\caption[Colourfullness]{The \emph{Colourfullness} (right) of an image can be
+derived from it's \emph{Hue} channel (left) and it's \emph{Saturation} channel
+(centre), taken from the HSV representation.  Both channels are multiplied and
+scaled as seen in equation \ref{eq:cs}.}
+\label{fig:cs}
 \end{figure*}
 
 \section{Basic Features}
@@ -363,33 +471,22 @@ Groups of related features decribed below.
 
 \subsection{Kolmogorov complexity}
 
-Sobel and Canny filters, JPEG compression
+Sobel and Canny filters, JPEG compression.
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+JPEG compression at quality 60, 40 and 20 (just like Romeo), for each channel
+of the image.
+
+% We did not use any form of fractal compression.
 
 \subsection{Grey Level Co-occurrence Matrix}
 
 All features of texture coming from that.
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+For each channel we build three GLCMs, one using neighbouring pixels (next
+pixel to the left), one using the next 6th pixel to the left and one using the
+next 20th pixel to the left.  For each of these GLCM we calculate the contrast,
+energy, homogeneity and correlation of the texture.  Correlation is not always
+possible to calculate, in such cases we consider the texture correlation as 1.
 
 \begin{figure*}[tbp]
 \centering
@@ -399,9 +496,11 @@ batman
 \includegraphics[width=0.30\textwidth]{L_rembrandt_eu_464}
 \includegraphics[width=0.30\textwidth]{sobel_L_rembrandt_eu_464}
 \includegraphics[width=0.30\textwidth]{canny_L_rembrandt_eu_464}
-\caption[Canny and Sobel filters of Ligthness]{Canny and Sobel filters of
-Lightness}
-\label{figcansobl}
+\caption[Canny and Sobel filters of Lightness]{Canny and Sobel filters of the
+Lightness channel of an image.  For both images, to the left is the lightness
+channel, in the centre is the \emph{Sobel filter} applied to this channel and
+to the right is the \emph{Canny filter} applied to this channel.}
+\label{fig:cannysobell}
 \end{figure*}
 
 \begin{figure*}[tbp]
@@ -413,31 +512,24 @@ Lightness}
 \includegraphics[width=0.30\textwidth]{sobel_CS_rembrandt_eu_464}
 \includegraphics[width=0.30\textwidth]{canny_CS_rembrandt_eu_464}
 \caption[Canny and Sobel filters of Colourfullness]{Canny and Sobel filters of
-Colourfullness}
-\label{figcansobcs}
+Colourfullness.  Again, to the left is the original image, in the centre the
+\emph{Sobel filter} is applied and to the right the \emph{Canny filter} is
+applied.}
+\label{fig:cannysobelcs}
 \end{figure*}
-
-\subsection{Image Averages}
-
-Std and average, super simple.
-
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
 
 \subsection{Rule of Thirds}
 
 Same averages on the central rectangle.
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+Average per channel, Standard deviation per channel on the central rectangle
+only.
+
+\subsection{Image Averages}
+
+Std and average, super simple.
+
+Average per channel, Standard deviation per channel.
 
 \section{Itten Colours}
 
@@ -447,29 +539,43 @@ Stuff based on itten colours
 
 Only the colours above the image average get counted.
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+Scale 0-255 into 0-360 and add 15 degrees to account for red being centered
+at zero.  After this we have the following 12 bins:
+
+\begin{verbatim}
+red           (r)
+orange red    (or)
+orange        (o)
+orange yellow (oy)
+yellow        (y)
+green yellow  (gy)
+green         (g)
+green blue    (gb)
+blue          (b)
+purple blue   (pb)
+purple        (p)
+purple red    (pr)
+\end{verbatim}
+
+Most prominent colours only.  All colours below the average of colours are
+taken to be zero.
 
 \subsection{Segmentation}
 
 To measure contrasts we need to segment the image.  Rule of thirds, rule of
-seven, watershed segmentation.
+sevenths, watershed segmentation.
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+In rule of thirds and rule of sevenths we contrast all regions against all
+other regions, but in the watershed segmentation we ignore the smallest
+regions that are found.
 
 \subsection{Itten Contrasts}
 
 Contrast of hue, saturation, light and dark, warm and cold colours,
 complements.
+
+In watershed segmentation contrast only regions bigger than 548 pixels (square
+root of 300 000)
 
 \begin{figure*}[!htb]
 \begin{equation}
@@ -482,7 +588,7 @@ contrast  &= \frac{ max\left( \left\lvert \frac{warm_1}{warm_2}
                                         - \frac{cold_2}{cold_1} \right\rvert
                        \right)
                  }{ n_1 \times n_2 }
-\label{eqcoldwarm}
+\label{eq:coldwarm}
 \end{aligned}
 \end{equation}
 \end{figure*}
@@ -495,9 +601,9 @@ n_2       &= 1 - warm_2 - cold_2 \\
 contrast  &= \frac{ warm_1 \times warm_2
                    + n_1    \times n_2
                    + cold_1 \times cold_2
-                  }{ \sqrt{ (warm_1 + n_1 + cold_1)^2
-                          + (warm_2 + n_2 + cold_2)^2 } }
-\label{eqmach}
+                  }{ \sqrt{      (warm_1^2 + n_1^2 + cold_1^2)
+                          \times (warm_2^2 + n_2^2 + cold_2^2) } }
+\label{eq:mach}
 \end{aligned}
 \end{equation}
 \end{figure*}
@@ -505,93 +611,187 @@ contrast  &= \frac{ warm_1 \times warm_2
 \begin{figure*}[!htb]
 \begin{equation}
 D = min( \lvert H_1 - H_2 \rvert , 360 - \lvert H_1 - H_2 \rvert )
-\label{eqwheel}
+\label{eq:wheel}
 \end{equation}
 \end{figure*}
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+Warm and cold contrast is represented by the value of warm colours, cold
+colours and a value of neutrality which is 1 minus the scaled amount of warm
+and cold colours.
+
+\begin{verbatim}
+red           (r)  --\
+orange red    (or)   |  warm
+orange        (o)    | colours
+orange yellow (oy) --/
+yellow        (y)
+green yellow  (gy)
+green         (g)  --\
+green blue    (gb)   |  cold
+blue          (b)    | colours
+purple blue   (pb) --/
+purple        (p)
+purple red    (pr)
+\end{verbatim}
+
+% We did not do the contrast of extension, as it was not described.  Also we
+% did not perform the Itten Harmony as it is the absence of contrast of
+% complements.
+
+The contrast is: the average of the region scaled by the size of the region and
+then contrasted against all other regions.  We then take the biggest contrast
+value from all contrasts (not in contrast of hue and complements when watershed
+segmentation is used, in this case we use another technique).  Calculating the
+contrast value is done in many ways: warm vs cold, complements of colours,
+saturation, lightness or value.
+
+Contrast of saturation x2 (HSV and HSL)
+
+Contrast of light and dark x2 (Lightness and value)
+
+Contrast of Hue x2 (Hue and Colourfullness)
+
+Contrast of Complements x2 (Hue and Colourfullness) here we also consider only
+the most prominent hues.  Hues amounting for less than 5\% of colours are
+ignored.
+
+When contrast of hue or of complements is done over the watershed segmented
+image we take the number of high contrasts (two regions that have a high
+contrast between themselves).  For the contrast on the hue channel we count a
+contrast each time we find two regions with a contrast of more than 160 degrees
+(remember it's a circle), and for the contrast on the colourfullness channel we
+count a contrast for every two regions with more than 125 degrees (because the
+contrast is damped by the saturation).
+
+The equation for contrast of cold and warm in Machajidik's work \ref{eq:mach}
+represents well contrasts when the amount of cold and warm colours varies
+across the regions we calculate the contrast.  Yet Machajidik's equation
+performs a poor estimate when one region is completely warm and another region
+completely cold, in this case the equation results in a contrast value smaller
+than if the regions had less warmth and coldness.  To work around this issue we
+developed another equation for the cold and warm contrast \ref{eq:coldwarm}.
+The contrast by this equation scales up when one region is highly warm and the
+other highly cold, also there is a hard limit for the neutrality of a region
+which cannot be come less than 0.1.
 
 \begin{figure*}[tbp]
 \centering
 \includegraphics[width=0.48\textwidth]{r3_L_caravaggio_1962_139_1}
 \includegraphics[width=0.48\textwidth]{r7_L_caravaggio_1962_139_1}
-\caption[Rule of thirds]{Rule of thirds}
-\label{figr3}
+\caption[Rule of thirds]{Rule of \emph{thirds} consist of dividing the image
+into three equal parts on each axis, as seen on the image on the left.  It is
+common that the colours and objects in the central region are the most
+important for the scene painted.  A rule of \emph{sevenths}, figure on the
+right, was also used in the segmentation process.  Dividing into seven equal
+parts on each axis produce smaller regions than the rule of thirds but big
+enough to be noticeable for the contrast of the image.}
+\label{fig:r3}
 \end{figure*}
 
 \begin{sidewaysfigure*}[p]
 \centering
 \includegraphics[width=0.9\textwidth]{segm_rembrandt_eu_464}
-\caption[Segmentation example]{Segmentation example}
-\label{figsegm}
+\caption[Watershed segmentation example]{Watershed segmentation example.  The
+images at the top show the steps for the segmentation of the image.  The
+original image, a denoised image on which the segmentation is actually made,
+the gradient magnitude, and the original places of the markers.  Next the
+markers \emph{flow as water} filling the regions, this is shown on the next
+image.  Finally, the last image in the first row shows how the found regions
+are distributed over the original image.  The second row show the five biggest
+regions found as a mask over the image.  The last row show the mask generated
+by each of the five biggest regions applied to the image and cropped.}
+\label{fig:segm}
 \end{sidewaysfigure*}
 
 \section{Extra Metadata}
 
 It was needed to classify the artists into art movements, some of this data
-caould be found on the museum website yet most of it needed to be evaluated by
+could be found on the museum website yet most of it needed to be evaluated by
 hand.  The life period and country where the artist worked were the most
 important points to classify him into an art movement.
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
-
 \end{multicols}
 
-\chapter{Results and Discussion}
+\chapter{Results}
+\label{chap:results}
+
+% No PCA was done, we can say that the features are unrelated enough that we do
+% not need feature selection.
+
+% Pearson coefficient was not used, we do not have any categorical data instead
+% all data for correlation is numeric.
+
+% Extrapolation towards, art movement/school is the most important part of this
+% chapter.
 
 \begin{multicols}{2}
 
-\section{Expected correlation between features}
+\section{Correlation between features}
 
 Artists in the same art movement shall be close, in distinct movements shall be
 apart.
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+The absolute value of the correlation coefficient on the scatter graph shall be
+good enough.  It can be seen on the graph that few correlation coefficients are
+above 0.7.
 
-\section{Measured correlation}
+\section{Classification}
 
-How we calculated the correlation.  Most signiicant numbers from each table.  A
-plethora of tables.  A grph with three most prominenet features between each
+How we calculated the correlation.  Most significant numbers from each table.
+A plethora of tables.  A graph with three most prominent features between each
 school.
 
 \begin{table*}[htp]  % table* instead of table because of multicols
 \centering
 \begin{tabular}{|l|l|}
-\hline
-Art Movement & Artists \\
-\hline \hline
-Renaissance    &  Bassano, Botticelli, Raphael, Titian, Veronese             \\
-Baroque        &  Berchem, Caravaggio, Cuyp, Dujardin, Greco, Hondecoeter,   \\
-               &  Miereveld, Molenaer, Monnoyer, Murillo, Poussin, Rebecca,  \\
-               &  Rembrandt, Ribera, Ricci, Rosa, Rubens, Teniers,           \\
-               &  Vel\'azquez, Wouwerman                                     \\
-Neoclassicism  &  Canaletto, Carlevariis, Dughet, Kauffmann, Panini, Zoffany \\
-Romanticism    &  Boudin, Daubigny, Delacroix, Diaz, Gainsborough, Goya,     \\
-               &  Latour, Leslie, Loutherbourg, Mulready, Rousseau, Watts    \\
-Impressionism  &  Gauguin, Monticelli, Pissarro                              \\
-\hline
-Watercolour    &  Carpenter, Constable, Tagore                               \\
-Mughal         &  Basawan, Jagan, Kesav, La'l, Miskin, Tulsi                 \\
-N/A            &  Devi                                                       \\
-\hline
+\toprule
+Art Movement & Artists (number of paintings) \\
+\bottomrule \toprule
+\multirow{2}{*}{Renaissance (126)}
+                     &  Bassano (17), Botticelli (6), Raphael (52), \\
+                     &  Titian (34), Veronese (17)                  \\
+\midrule
+\multirow{7}{*}{Baroque (521)}
+                     &  Berchem (47), Caravaggio (8), Cuyp (20),      \\
+                     &  Dujardin (14), Greco (4), Hondecoeter (10),   \\
+                     &  Miereveld (12), Molenaer (12), Monnoyer (19), \\
+                     &  Murillo (38), Poussin (20), Rebecca (14),     \\
+                     &  Rembrandt (30), Ribera (28), Ricci (25),      \\
+                     &  Rosa (31), Rubens (61), Teniers (76),         \\
+                     &  Vel\'azquez (24), Wouwerman (28)              \\
+\midrule
+\multirow{2}{*}{Neoclassicism (195)}
+                     &  Canaletto (34), Carlevariis (51), Dughet (30), \\
+                     &  Kauffmann (22), Panini (38), Zoffany (20)      \\
+\midrule
+\multirow{5}{*}{Romanticism (215)}
+                     &  Boudin (26), Constable (39), Daubigny (13),  \\
+                     &  Delacroix (9), Diaz (17), Gainsborough (13), \\
+                     &  Goya (8), Latour (31), Leslie (10),          \\
+                     &  Loutherbourg (17), Mulready (10),            \\
+                     &  Rousseau (12),  Watts (10)                   \\
+\midrule
+Impressionism (32)   &  Gauguin (4), Monticelli (18), Pissarro (10) \\
+\bottomrule \toprule
+Watercolour (16)     &  Carpenter (9), Tagore (7) \\
+\midrule
+\multirow{2}{*}{Mughal (79)}
+                     &  Basawan (11), Jagan (9), Kesav (15), La'l (19), \\
+                     &  Miskin (15), Tulsi (10)                         \\
+\midrule
+N/A                  &  Devi (16) \\
+\bottomrule
 \end{tabular}
-\caption{Artists in art movements}
-\label{sketch}
+\caption[Artists in art movements]{Artists in art movements, or art schools.
+Several simplifications were made to allow for a smaller number of classes.
+The top of the table represents a simplified version of the \emph{history of
+art in Europe}, starting with \emph{Renaissance} in the 15th-16th centuries,
+\emph{Baroque} in the 17th century, \emph{Neoclassicism} in the 18th century,
+\emph{Romanticism} containing all styles of the early 19th century and
+\emph{Impressionism} including all styles of the late 19th century.  The bottom
+of the table includes movements unrelated to the mentioned ones (\emph{Mughal
+miniature painting style}) or using different materials (\emph{Watercolour}).}
+\label{tab:style}
 \end{table*}
 
 nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
@@ -657,37 +857,138 @@ batman
 %canny-h20 canny-l60 canny-l40 canny-l20 canny-shsv60 canny-shsv40 canny-shsv20
 %canny-shsl60 canny-shsl40 canny-shsl20 canny-v60 canny-v40 canny-v20
 
-\begin{sidewaystable*}[ptb]
+%\begin{sidewaystable*}[ptb]
 %\begin{table*}[ptb]
-\centering
-\begin{tabular}{l|ccccccccc|}
-\large{\bf Correlation on Hue}
-  & \rotatebox{270}{Kolmogorov raw 60}
-  & \rotatebox{270}{Kolmogorov raw 40}
-  & \rotatebox{270}{Kolmogorov raw 20}
-  & \rotatebox{270}{Kolmogorov Sobel 60}
-  & \rotatebox{270}{Kolmogorov Sobel 60}
-  & \rotatebox{270}{Kolmogorov Sobel 40}
-  & \rotatebox{270}{Kolmogorov Canny 20}
-  & \rotatebox{270}{Kolmogorov Canny 40}
-  & \rotatebox{270}{Kolmogorov Canny 20}
-  \\
-\hline
-Kolmogorov raw 60  &1.01&2.01&3.01&4.01&5.01&6.01&7.01&8.01&9.01\\
-Kolmogorov raw 40  &    &2.01&3.01&4.01&5.01&6.01&7.01&8.01&9.01\\
-Kolmogorov raw 20  &    &    &3.01&4.01&5.01&6.01&7.01&8.01&9.01\\
-Kolmogorov Sobel 60&    &    &    &4.01&5.01&6.01&7.01&8.01&9.01\\
-Kolmogorov Sobel 40&    &    &    &    &5.01&6.01&7.01&8.01&9.01\\
-Kolmogorov Sobel 20&    &    &    &    &    &6.01&7.01&8.01&9.01\\
-Kolmogorov Canny 60&    &    &    &    &    &    &7.01&8.01&9.01\\
-Kolmogorov Canny 40&    &    &    &    &    &    &    &8.01&9.01\\
-Kolmogorov Canny 20&    &    &    &    &    &    &    &    &9.01\\
-\hline
-\end{tabular}
-\caption{Artists in art movements}
-\label{corrstuff}
-\end{sidewaystable*}
+%\centering
+%\begin{tabular}{l|ccccccccc|}
+%\large{\bf Correlation on Hue}
+%  & \rotatebox{270}{Kolmogorov raw 60}
+%  & \rotatebox{270}{Kolmogorov raw 40}
+%  & \rotatebox{270}{Kolmogorov raw 20}
+%  & \rotatebox{270}{Kolmogorov Sobel 60}
+%  & \rotatebox{270}{Kolmogorov Sobel 60}
+%  & \rotatebox{270}{Kolmogorov Sobel 40}
+%  & \rotatebox{270}{Kolmogorov Canny 20}
+%  & \rotatebox{270}{Kolmogorov Canny 40}
+%  & \rotatebox{270}{Kolmogorov Canny 20}
+%  \\
+%\hline
+%Kolmogorov raw 60  &1.01&2.01&3.01&4.01&5.01&6.01&7.01&8.01&9.01\\
+%Kolmogorov raw 40  &    &2.01&3.01&4.01&5.01&6.01&7.01&8.01&9.01\\
+%Kolmogorov raw 20  &    &    &3.01&4.01&5.01&6.01&7.01&8.01&9.01\\
+%Kolmogorov Sobel 60&    &    &    &4.01&5.01&6.01&7.01&8.01&9.01\\
+%Kolmogorov Sobel 40&    &    &    &    &5.01&6.01&7.01&8.01&9.01\\
+%Kolmogorov Sobel 20&    &    &    &    &    &6.01&7.01&8.01&9.01\\
+%Kolmogorov Canny 60&    &    &    &    &    &    &7.01&8.01&9.01\\
+%Kolmogorov Canny 40&    &    &    &    &    &    &    &8.01&9.01\\
+%Kolmogorov Canny 20&    &    &    &    &    &    &    &    &9.01\\
+%\hline
+%\end{tabular}
+%\caption{Artists in art movements}
+%\label{tab:corrstuff}
+%\end{sidewaystable*}
 %\end{table*}
+
+\begin{table*}[ptb]
+\centering
+\rowcolors{1}{}{lightgray}
+\begin{tabular}{|l|r||l|r||l|r|}
+\toprule
+artist & acc. & artist & acc. & artist & acc. \\
+\midrule
+\input{art-predict.tex}
+\bottomrule
+\end{tabular}
+\caption[Multiclass artist classification]{Multiclass artist classification}
+\label{tab:predart}
+\end{table*}
+
+\begin{table*}[ptb]
+\centering
+\begin{tabular}{|l|r||l|r|}
+\toprule
+school & acc. & school & acc. \\
+\midrule
+\input{sch-predict.tex}
+\bottomrule
+\end{tabular}
+\caption[Multiclass school classification]{Multiclass school classification}
+\label{tab:predsch}
+\end{table*}
+
+\section{Cross Classification}
+
+When we take two classes only and run the classifiers between them the results
+are better.  This is because classification between two classes is easier as
+classifiers can concentrate on specific points that are different between those
+two classes.
+
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+batman
+
+\begin{table*}[ptb]
+\centering
+\begin{tabular}{r||r|r|r|r|r}
+\toprule
+\input{art-compm.tex}
+\bottomrule
+\end{tabular}
+\caption[Two class artist classification]{Two class artist classification}
+\label{tab:foldart}
+\end{table*}
+
+\begin{table*}[ptb]
+\centering
+\rowcolors{5}{}{lightgray}
+\begin{tabular}{r||r|r|r|r|r}
+\toprule
+\input{sch-compm.tex}
+\bottomrule
+\end{tabular}
+\caption[Two class school classification]{Two class school classification}
+\label{tab:foldsch}
+\end{table*}
+
+\begin{figure*}[tbp]
+\centering
+\includegraphics[width=\textwidth]{corr-graph}
+\caption[Correlation]{Correlation Coefficient}
+\label{fig:corr}
+\end{figure*}
+
+\begin{figure*}[tbp]
+\centering
+\includegraphics[width=\textwidth]{school-graph}
+\caption[Feature Values]{Feature values per School}
+\label{fig:school}
+\end{figure*}
+
+\begin{figure*}[tbp]
+\centering
+\includegraphics[width=0.7\textwidth]{class-graph}
+\caption[Classification]{Classification Accuracy}
+\label{fig:class}
+\end{figure*}
+
+\begin{figure*}[tbp]
+\centering
+\includegraphics[width=0.30\textwidth]{basawan_2009BX3686}
+\includegraphics[width=0.30\textwidth]{titian_eu_741}
+\includegraphics[width=0.30\textwidth]{murillo_1974p24}
+\includegraphics[width=0.48\textwidth]{kauffmann_va_pc_2006an1773}
+\includegraphics[width=0.48\textwidth]{loutherbourg_k264}
+\includegraphics[width=0.40\textwidth]{monticelli_300}
+\caption[Examples of styles in art movements/schools]{Styles}
+\label{fig:styles}
+\end{figure*}
+
+\chapter{Conclusions}
+
+Whelp, it will be some time before I write this.
 
 \end{multicols}
 
@@ -700,34 +1001,140 @@ Kolmogorov Canny 20&    &    &    &    &    &    &    &    &9.01\\
 \appendix
 
 \chapter{Requirements to run the code}
+\label{chap:requirements}
 
 Describe each library installed, there are some.
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+\emph{ImageMagick} 6.5.4-7 or later, available at
+\href{http://www.imagemagick.org/}{http://www.imagemagick.org/}
+
+Provided by LSB:
+\begin{itemize}
+\item[]\emph{python} 2.6.6 or later (but not python 3), \\
+available at \href{http://www.python.org/}{http://www.python.org/}
+
+\item[]\emph{perl} 5.8.8 or later, \\
+available at \href{http://www.perl.org/}{http://www.perl.org/}
+
+\item[]\emph{bash} 4.1.0 or later, \\
+available at \href{http://www.gnu.org/software/bash/index.html}
+{http://www.gnu.org/software/bash/index.html}
+\end{itemize}
+
+Python packages:
+\begin{itemize}
+\item[]\emph{numpy} 1.8.1 or later, \\
+available at \href{http://www.numpy.org/}{http://www.numpy.org/}
+
+\item[]\emph{scipy} 0.14.0, \\
+available at \href{http://www.scipy.org/}{http://www.scipy.org/}
+
+\item[]\emph{matplotlib} 0.99.1.1, \\
+available at \href{http://matplotlib.org/}{http://matplotlib.org/}
+
+\item[]\emph{pillow} 2.5.1 or later, \\
+available at the pypi index at
+\href{https://pypi.python.org/pypi/Pillow}
+{http://pypi.python.org/pypi/Pillow} \\
+or directly from github at
+\href{http://github.com/python-pillow/Pillow}
+{http://github.com/python-pillow/Pillow}
+
+\item[]\emph{scikit-image} 0.10.1, \\
+available at \href{http://scikit-image.org/}{http://scikit-image.org/}
+
+\item[]\emph{ipython} 1.0.0 or later, \\
+available at \href{http://ipython.org/}{http://ipython.org/}
+
+\item[]\emph{pandas} 0.14.1, \\
+available at \href{http://pandas.pydata.org/}{http://pandas.pydata.org/}
+\end{itemize}
+
+For dataset acquisition
+\begin{itemize}
+\item[]\emph{beautifulsoup4} 4.3.2 or later, \\
+available at \href{http://www.crummy.com/software/BeautifulSoup/}
+{http://www.crummy.com/software/BeautifulSoup/}
+
+\item[]\emph{pyyaml} 3.10 or later, \\
+available at \href{http://pyyaml.org/}{http://pyyaml.org/}
+
+\item[]\emph{git} 1.5.0 or later is needed to clone unixjsons from its
+repository, available at \href{http://www.git-scm.com/}{http://www.git-scm.com/}
+
+\item[]\emph{unixjsons} 0.7 or later, \\
+available at \href{https://github.com/grochmal/unixjsons}
+{https://github.com/grochmal/unixjsons}
+\end{itemize}
 
 \chapter{How to run the code}
 
-In an LSB system install the libraries described in (above).  Yu can also clone
-the git directl with:
+Before running the code make sure you are in an LSB compatible system\footnote{
+\href{http://www.linuxfoundation.org/collaborate/workgroups/lsb}
+{http://www.linuxfoundation.org/collaborate/workgroups/lsb}} and install the
+libraries described in Appendix \ref{chap:requirements}.  Copy the code into a
+directory\footnote{If git and an internet connection are available you can
+clone the code directly from its repository with
+\verb|git clone https://github.com/grochmal/capybara.git|.}
+and go to \texttt{src/}.
 
-git ...
+Acquisition and cleansing of the datasets is not covered because that process
+is not automated.  To browse the code used to acquire the datasets go to
+\texttt{dataset-acquisition/vam} and \texttt{dataset-acquisition/nirp} for the
+VAM and NIRP datasets respectively.
 
-go to src/ and run the steps in order:
+In \texttt{src/} run the scripts that normalise, separate and filter the images
+before the extraction of features:
 
-\begin{Verbatim}
-./step01
-./step02
-./step03
-./step04
-...
+\begin{Verbatim}[frame=leftline]
+./step01-normalise.sh      # normalise to ~300 000 pixels
+./step02-hsl-hsv.sh        # separates the channels
+./step03-colourfulness.sh  # calculates the colourfullness
+./step04-sobel.sh          # applies the Sobel filter
+./step05-canny.sh          # applies the Canny filter
+./step06-jpeg.sh           # compress the images
 \end{Verbatim}
 
-\chapter{jsons tools}
+Next run the feature extractors.  These scripts print the calculated features
+to the \emph{standard output stream} and logging to the \emph{standard error
+stream}, therefore redirect the standard output to files:
+
+\begin{Verbatim}[frame=leftline]
+./step07-kolmogorov.sh     > fe/kolmogorov.dat
+./step08-glcm.sh           > fe/glcm.dat
+./step09-itten12.sh        > fe/itten12.dat
+./step10-itten-contrast.sh > fe/itten-contrast.dat
+./step11-rule-of-3.sh      > fe/rule-of-3.dat
+./step12-img-averages.sh   > fe/img-averages.dat
+\end{Verbatim}
+
+A last feature script generating the metadata (artist, school and contry) of
+the image shall then be run.  This metadata is what we classify against:
+
+\begin{Verbatim}[frame=leftline]
+./step13-metadata.sh > fe/meta.dat
+\end{Verbatim}
+
+Format the features to a format compatible with LIBSVM and run the classifiers
+using the following scripts.  The results of the classifiers are printed to the
+file \texttt{cls/output.dat}.
+
+\begin{Verbatim}[frame=leftline]
+./step14-libsvm-format.sh
+./step15-classify.sh
+\end{Verbatim}
+
+The last script combines the results from the classifiers and the full dataset
+of features (the horizontal concatenation of all \texttt{.dat} files) to
+produce the graphs and tables present in Chapter \ref{chap:results} and
+Appendix \ref{chap:glossary}.
+
+\begin{Verbatim}[frame=leftline]
+./step16-outputs.sh
+\end{Verbatim}
+
+\chapter{unixjsons}
+\label{chap:unixjsons}
 
 \section{jgrep}
 
@@ -743,6 +1150,29 @@ Histograms of features (especially itten colours) by different artists.
 
 R library to explore data: ggplot2 (use it?).
 
+% Inside \small Verbatim use 69 characters max to respect the margins
+{\small
+\begin{Verbatim}[samepage=true]
+Usage: jgrep [-n key] [-hVqviIHR] <key re> <value re> [<file> ...]
+
+  -h, --help
+        Print this help.
+
+  -V, --version
+        Prints the version of the script.
+
+  -q, --quiet, --silent
+        Do not print anything, even on error.
+
+  -n key, --line-number=key
+        Give the line number in the output, it is added to the
+        result under the key specified as the argument.
+
+  -v, --invert-match
+        Print lines that do not match re pattern pattern.
+\end{Verbatim}
+}
+
 \section{jcut}
 
 nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
@@ -756,7 +1186,33 @@ nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
 nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
 batman
 
-\section{jcat}
+{\small
+\begin{Verbatim}[samepage=true]
+Usage: jcut [-chrlV] [-f field,field,...] [<file> ...]
+
+  -h, --help
+        Print this help.
+
+  -V, --version
+        Prints the version of the script.
+
+  -f, --fields=
+        Comma delimited list of fields to cut from the JSON.
+
+  -c, --complement
+        Print all fields that are not in the fields list.
+
+  -r, --regex
+        Treat every field in the field list as a regex, this
+        is useful to pattern match several similar fields or
+        to match a field with a comma in it (using \\054).
+
+  -l, --list
+        Print all available field in the input, then exit.
+\end{Verbatim}
+}
+
+\section{jsed}
 
 nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
 nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
@@ -768,6 +1224,492 @@ nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
 nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
 nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
 batman
+
+{\small
+\begin{verbatim}
+Usage: jsed [-hVqiI] [-f file | -e expr -e expr ...] [<file> ...]
+
+  -h, --help
+        Print this help.
+
+  -V, --version
+        Prints the version of the script.
+
+  -q, --quiet, --silent
+        Do not print anything, even on error.
+
+  -e /pattern/replacement/, --expression=/pattern/replacement/
+  -e /pattern/replacement/flags
+  -e /pattern/pattern/replacement/
+  -e /pattern/pattern/replacement/flags
+  -e /pattern/replacement/pattern/replacement/
+  -e /pattern/replacement/pattern/replacement/flags
+  -e {pattern}{replacement}
+  -e {pattern}{replacement}flags
+  -e {pattern}{pattern}{replacement}
+  -e {pattern}{pattern}{replacement}flags
+  -e {pattern}{replacement}{pattern}{replacement}
+  -e {pattern}{replacement}{pattern}{replacement}flags
+        The substitution expression to execute, this expression
+        will be run on every line on every key that matches.
+        Several expressions can be specified on a single
+        invocation and will be executed in the order they're
+        present in the command line.  The pattern part of the
+        expression is a regular expression, whilst the
+        replacement part is a string that accepts '\'
+        groupings (e.g. \1 for first grouping).
+
+        An expression is divided into fields, each field is
+        delimited by a delimiter character.  The first character
+        of the expression becomes the delimiter character, every
+        occurrence of that character thereof will mark the start
+        of a new field.  The delimiter character must be
+        printable and cannot be a digit (0-9) or one of the
+        characters: 'g', 'i', '.' or '#'.  The delimiter
+        character cannot be used in the fields of the
+        expression.
+
+        Also, the three grouping pairs characters '()', '[]'
+        and '{}' can be used to group the fields together.
+        Note that using '()' will not allow the use of grouping
+        in the pattern and using '[]' will not allow the use of
+        character definitions.
+
+        Examples of equivalent expressions follows:
+
+        Change the key 'image_id' to 'image':
+            -e /image_id/image/
+            -e ;image_id;image;
+            -e "image_id"image"
+            -e {image_id}{image}
+            -e (image_id)(image)
+
+        Every image key content from .jpg to .png
+            -e /image_.*/\.jpg$/.png/g
+            -e =image_.*=\.jpg$=.png=g
+            -e [image_.*][\.jpg$][.png]g
+
+        First change every field containing `image` to start
+        with this word, then change every occurrence of .jpg
+        to .png (note: if two fields are named `first_image`,
+        `second_image` the first field will be overridden by
+        the second because the substitution happens in
+        ASCIIbetical order of fields).
+            -e /.*image(.*)/image\1/g -e /image.*/\.jpg/.png/g
+            -e {.*image(.*)}{image\1}g -e {image.*}{\.jpg}{.png}g
+            -e /.*image(.*)/image\1/g -e {image.*}{\.jpg}{.png}g
+
+        More on the purpose of each field  and the `flags`
+        suffix in the -e expression can be found in the
+        `Expression` section, below.
+
+  -f script_file, --file=script_file
+        The script file contains one expression (as in the -e
+        option) per line, which are executed in order as they
+        appear in the input.  Every expression in the
+        `script_file` is exactly the same as if it was passed
+        to the -e flag.
+
+        If both -f and -e are present (possibly several -e
+        flags) the changes to each line of the input will
+        happen by first executing the script passed by -f
+        and then executing all -e flags in order.
+
+  -i, --in-place
+        Change the file in place, the default is to print the
+        modified file to standard output.  If the input is
+        composed of standard input only, of several files or
+        of a combination of standard input and files this flag
+        is ignored.
+
+  -b extension , --backup=extension
+        If -i is in effect copy the input file is copied and the
+        extension `extension` is appended to it.  Only then the
+        original file is modified.  If -i is in effect and -b is
+        not present the changes made are irreversible.
+\end{verbatim}
+}
+
+\section{jecho}
+
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+batman
+
+{\small
+\begin{Verbatim}[samepage=true]
+Usage: jecho [-hV] -f k:v [-f k:v -f k:v ...] [<file> ...]
+
+  -h, --help
+        Print this help.
+
+  -V, --version
+        Prints the version of the script.
+
+  -q, --quiet, --silent
+        Do not print messages.
+
+  -f k:v, --field=k:v
+        Add field `k` with value `v` to the stream.
+
+  -r, --replace
+        By default fields already in the stream will not be
+        replaced, unless this flag is on.
+\end{Verbatim}
+}
+
+\section{jjoin}
+
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
+batman
+
+{\small
+\begin{Verbatim}[samepage=true]
+Usage: jjoin [-hVq] file1 file2
+
+  -h, --help
+        Print this help.
+
+  -V, --version
+        Prints the version of the script.
+
+  -q, --quiet, --silent
+        Do not print messages.
+
+  -, STDIN
+        Read from STDIN instead of file.
+\end{Verbatim}
+}
+
+\chapter{Feature Values}
+\label{chap:glossary}
+
+Tables \ref{tab:glossary}, \ref{tab:bigtop} and \ref{tab:bigbot}.
+
+\begin{center}
+\footnotesize
+\begin{longtable}{|l|c|l|}
+\toprule
+\multirow{2}{*}{Feature} & number   & short name         \\
+                         & (graphs) & (in the data file) \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{{Continued on next page}} \\
+\cmidrule{2-3}
+\endfoot
+
+\bottomrule
+\caption{Glossary}
+\label{tab:glossary}
+\endlastfoot
+
+\midrule
+\multicolumn{3}{c}{Komogorov Complexity for$\ldots$} \\
+\midrule
+Colourfullness (quality 60) & 0 & nofilter-cs60 \\
+Colourfullness (quality 40) & 1 & nofilter-cs40 \\
+Colourfullness (quality 20) & 2 & nofilter-cs20 \\
+Hue (quality 60) & 3 & nofilter-h60 \\
+Hue (quality 40) & 4 & nofilter-h40 \\
+Hue (quality 20) & 5 & nofilter-h20 \\
+Lightness (quality 60) & 6 & nofilter-l60 \\
+Lightness (quality 40) & 7 & nofilter-l40 \\
+Lightness (quality 20) & 8 & nofilter-l20 \\
+Saturation$_{HSV}$ (quality 60) & 9 & nofilter-shsv60 \\
+Saturation$_{HSV}$ (quality 40) & 10 & nofilter-shsv40 \\
+Saturation$_{HSV}$ (quality 20) & 11 & nofilter-shsv20 \\
+Saturation$_{HSL}$ (quality 60) & 12 & nofilter-shsl60 \\
+Saturation$_{HSL}$ (quality 40) & 13 & nofilter-shsl40 \\
+Saturation$_{HSL}$ (quality 20) & 14 & nofilter-shsl20 \\
+Value (quality 60) & 15 & nofilter-v60 \\
+Value (quality 40) & 16 & nofilter-v40 \\
+Value (quality 20) & 17 & nofilter-v20 \\
+Sobel filter of Colourfullness (quality 60) & 18 & sobel-cs60 \\
+Sobel filter of Colourfullness (quality 40) & 19 & sobel-cs40 \\
+Sobel filter of Colourfullness (quality 20) & 20 & sobel-cs20 \\
+Sobel filter of Hue (quality 60) & 21 & sobel-h60 \\
+Sobel filter of Hue (quality 40) & 22 & sobel-h40 \\
+Sobel filter of Hue (quality 20) & 23 & sobel-h20 \\
+Sobel filter of Lightness (quality 60) & 24 & sobel-l60 \\
+Sobel filter of Lightness (quality 40) & 25 & sobel-l40 \\
+Sobel filter of Lightness (quality 20) & 26 & sobel-l20 \\
+Sobel filter of Saturation$_{HSV}$ (quality 60) & 27 & sobel-shsv60 \\
+Sobel filter of Saturation$_{HSV}$ (quality 40) & 28 & sobel-shsv40 \\
+Sobel filter of Saturation$_{HSV}$ (quality 20) & 29 & sobel-shsv20 \\
+Sobel filter of Saturation$_{HSL}$ (quality 60) & 30 & sobel-shsl60 \\
+Sobel filter of Saturation$_{HSL}$ (quality 40) & 31 & sobel-shsl40 \\
+Sobel filter of Saturation$_{HSL}$ (quality 20) & 32 & sobel-shsl20 \\
+Sobel filter of Value (quality 60) & 33 & sobel-v60 \\
+Sobel filter of Value (quality 40) & 34 & sobel-v40 \\
+Sobel filter of Value (quality 20) & 35 & sobel-v20 \\
+Canny filter of Colourfullness (quality 60) & 36 & canny-cs60 \\
+Canny filter of Colourfullness (quality 40) & 37 & canny-cs40 \\
+Canny filter of Colourfullness (quality 20) & 38 & canny-cs20 \\
+Canny filter of Hue (quality 60) & 39 & canny-h60 \\
+Canny filter of Hue (quality 40) & 40 & canny-h40 \\
+Canny filter of Hue (quality 20) & 41 & canny-h20 \\
+Canny filter of Lightness (quality 60) & 42 & canny-l60 \\
+Canny filter of Lightness (quality 40) & 43 & canny-l40 \\
+Canny filter of Lightness (quality 20) & 44 & canny-l20 \\
+Canny filter of Saturation$_{HSV}$ (quality 60) & 45 & canny-shsv60 \\
+Canny filter of Saturation$_{HSV}$ (quality 40) & 46 & canny-shsv40 \\
+Canny filter of Saturation$_{HSV}$ (quality 20) & 47 & canny-shsv20 \\
+Canny filter of Saturation$_{HSL}$ (quality 60) & 48 & canny-shsl60 \\
+Canny filter of Saturation$_{HSL}$ (quality 40) & 49 & canny-shsl40 \\
+Canny filter of Saturation$_{HSL}$ (quality 20) & 50 & canny-shsl20 \\
+Canny filter of Value (quality 60) & 51 & canny-v60 \\
+Canny filter of Value (quality 40) & 52 & canny-v40 \\
+Canny filter of Value (quality 20) & 53 & canny-v20 \\
+
+\midrule
+\multicolumn{3}{c}{Grey Level Co-occurence Matrix} \\
+\midrule
+Contrast of Colourfullness (each pixel) & 54 & glcm-cs-ct1 \\
+Contrast of Colourfullness (each 6 pixels) & 55 & glcm-cs-ct6 \\
+Contrast of Colourfullness (each 20 pixels) & 56 & glcm-cs-ct20 \\
+Energy of Colourfullness (each pixel) & 57 & glcm-cs-en1 \\
+Energy of Colourfullness (each 6 pixels) & 58 & glcm-cs-en6 \\
+Energy of Colourfullness (each 20 pixels) & 59 & glcm-cs-en20 \\
+Homogeneity of Colourfullness (each pixel) & 60 & glcm-cs-hm1 \\
+Homogeneity of Colourfullness (each 6 pixels) & 61 & glcm-cs-hm6 \\
+Homogeneity of Colourfullness (each 20 pixels) & 62 & glcm-cs-hm20 \\
+Correlation of Colourfullness (each pixel) & 63 & glcm-cs-cr1 \\
+Correlation of Colourfullness (each 6 pixels) & 64 & glcm-cs-cr6 \\
+Correlation of Colourfullness (each 20 pixels) & 65 & glcm-cs-cr20 \\
+Contrast of Hue (each pixel) & 66 & glcm-h-ct1 \\
+Contrast of Hue (each 6 pixels) & 67 & glcm-h-ct6 \\
+Contrast of Hue (each 20 pixels) & 68 & glcm-h-ct20 \\
+Energy of Hue (each pixel) & 69 & glcm-h-en1 \\
+Energy of Hue (each 6 pixels) & 70 & glcm-h-en6 \\
+Energy of Hue (each 20 pixels) & 71 & glcm-h-en20 \\
+Homogeneity of Hue (each pixel) & 72 & glcm-h-hm1 \\
+Homogeneity of Hue (each 6 pixels) & 73 & glcm-h-hm6 \\
+Homogeneity of Hue (each 20 pixels) & 74 & glcm-h-hm20 \\
+Correlation of Hue (each pixel) & 75 & glcm-h-cr1 \\
+Correlation of Hue (each 6 pixels) & 76 & glcm-h-cr6 \\
+Correlation of Hue (each 20 pixels) & 77 & glcm-h-cr20 \\
+Contrast of Lightness (each pixel) & 78 & glcm-l-ct1 \\
+Contrast of Lightness (each 6 pixels) & 79 & glcm-l-ct6 \\
+Contrast of Lightness (each 20 pixels) & 80 & glcm-l-ct20 \\
+Energy of Lightness (each pixel) & 81 & glcm-l-en1 \\
+Energy of Lightness (each 6 pixels) & 82 & glcm-l-en6 \\
+Energy of Lightness (each 20 pixels) & 83 & glcm-l-en20 \\
+Homogeneity of Lightness (each pixel) & 84 & glcm-l-hm1 \\
+Homogeneity of Lightness (each 6 pixels) & 85 & glcm-l-hm6 \\
+Homogeneity of Lightness (each 20 pixels) & 86 & glcm-l-hm20 \\
+Correlation of Lightness (each pixel) & 87 & glcm-l-cr1 \\
+Correlation of Lightness (each 6 pixels) & 88 & glcm-l-cr6 \\
+Correlation of Lightness (each 20 pixels) & 89 & glcm-l-cr20 \\
+Contrast of Saturation$_{HSL}$ (each pixel) & 90 & glcm-shsl-ct1 \\
+Contrast of Saturation$_{HSL}$ (each 6 pixels) & 91 & glcm-shsl-ct6 \\
+Contrast of Saturation$_{HSL}$ (each 20 pixels) & 92 & glcm-shsl-ct20 \\
+Energy of Saturation$_{HSL}$ (each pixel) & 93 & glcm-shsl-en1 \\
+Energy of Saturation$_{HSL}$ (each 6 pixels) & 94 & glcm-shsl-en6 \\
+Energy of Saturation$_{HSL}$ (each 20 pixels) & 95 & glcm-shsl-en20 \\
+Homogeneity of Saturation$_{HSL}$ (each pixel) & 96 & glcm-shsl-hm1 \\
+Homogeneity of Saturation$_{HSL}$ (each 6 pixels) & 97 & glcm-shsl-hm6 \\
+Homogeneity of Saturation$_{HSL}$ (each 20 pixels) & 98 & glcm-shsl-hm20 \\
+Correlation of Saturation$_{HSL}$ (each pixel) & 99 & glcm-shsl-cr1 \\
+Correlation of Saturation$_{HSL}$ (each 6 pixels) & 100 & glcm-shsl-cr6 \\
+Correlation of Saturation$_{HSL}$ (each 20 pixels) & 101 & glcm-shsl-cr20 \\
+Contrast of Saturation$_{HSV}$ (each pixel) & 102 & glcm-shsv-ct1 \\
+Contrast of Saturation$_{HSV}$ (each 6 pixels) & 103 & glcm-shsv-ct6 \\
+Contrast of Saturation$_{HSV}$ (each 20 pixels) & 104 & glcm-shsv-ct20 \\
+Energy of Saturation$_{HSV}$ (each pixel) & 105 & glcm-shsv-en1 \\
+Energy of Saturation$_{HSV}$ (each 6 pixels) & 106 & glcm-shsv-en6 \\
+Energy of Saturation$_{HSV}$ (each 20 pixels) & 107 & glcm-shsv-en20 \\
+Homogeneity of Saturation$_{HSV}$ (each pixel) & 108 & glcm-shsv-hm1 \\
+Homogeneity of Saturation$_{HSV}$ (each 6 pixels) & 109 & glcm-shsv-hm6 \\
+Homogeneity of Saturation$_{HSV}$ (each 20 pixels) & 110 & glcm-shsv-hm20 \\
+Correlation of Saturation$_{HSV}$ (each pixel) & 111 & glcm-shsv-cr1 \\
+Correlation of Saturation$_{HSV}$ (each 6 pixels) & 112 & glcm-shsv-cr6 \\
+Correlation of Saturation$_{HSV}$ (each 20 pixels) & 113 & glcm-shsv-cr20 \\
+Contrast of Value (each pixel) & 114 & glcm-v-ct1 \\
+Contrast of Value (each 6 pixels) & 115 & glcm-v-ct6 \\
+Contrast of Value (each 20 pixels) & 116 & glcm-v-ct20 \\
+Energy of Value (each pixel) & 117 & glcm-v-en1 \\
+Energy of Value (each 6 pixels) & 118 & glcm-v-en6 \\
+Energy of Value (each 20 pixels) & 119 & glcm-v-en20 \\
+Homogeneity of Value (each pixel) & 120 & glcm-v-hm1 \\
+Homogeneity of Value (each 6 pixels) & 121 & glcm-v-hm6 \\
+Homogeneity of Value (each 20 pixels) & 122 & glcm-v-hm20 \\
+Correlation of Value (each pixel) & 123 & glcm-v-cr1 \\
+Correlation of Value (each 6 pixels) & 124 & glcm-v-cr6 \\
+Correlation of Value (each 20 pixels) & 125 & glcm-v-cr20 \\
+
+\midrule
+\multicolumn{3}{c}{Itten Colours} \\
+\midrule
+Amount of Red & 126 & it12-r \\
+Amount of Orange Red & 127 & it12-or \\
+Amount of Orange & 128 & it12-o \\
+Amount of Orange Yellow & 129 & it12-oy \\
+Amount of Yellow & 130 & it12-y \\
+Amount of Green Yellow & 131 & it12-gy \\
+Amount of Green & 132 & it12-g \\
+Amount of Green Blue & 133 & it12-gb \\
+Amount of Blue & 134 & it12-b \\
+Amount of Purple Blue & 135 & it12-pb \\
+Amount of Purple & 136 & it12-p \\
+Amount of Purple Red & 137 & it12-pr \\
+
+\midrule
+\multicolumn{3}{c}{Rule of Thirds} \\
+\midrule
+Average of central Colourfullness & 138 & r3-cs-avg \\
+Standard Deviation of central Colourfullness & 139 & r3-cs-std \\
+Average of central Hue & 140 & r3-h-avg \\
+Standard Deviation of central Hue & 141 & r3-h-std \\
+Average of central Lightness & 142 & r3-l-avg \\
+Standard Deviation of central Lightness & 143 & r3-l-std \\
+Average of central Saturation$_{HSL}$ & 144 & r3-shsl-avg \\
+Standard Deviation of central Saturation$_{HSL}$ & 145 & r3-shsl-std \\
+Average of central Saturation$_{HSV}$ & 146 & r3-shsv-avg \\
+Standard Deviation of central Saturation$_{HSV}$ & 147 & r3-shsv-std \\
+Average of central Value & 148 & r3-v-avg \\
+Standard Deviation of central Value & 149 & r3-v-std \\
+
+\midrule
+\multicolumn{3}{c}{Itten Contrast of$\ldots$} \\
+\midrule
+Saturation$_{HSL}$ (rule of thirds) & 150 & itct-sat-sl-r3 \\
+Saturation$_{HSL}$ (rule of sevenths) & 151 & itct-sat-sl-r7 \\
+Saturation$_{HSL}$ (watershed) & 152 & itct-sat-sl-sg \\
+Saturation$_{HSV}$ (rule of thirds) & 153 & itct-sat-sv-r3 \\
+Saturation$_{HSV}$ (rule of sevenths) & 154 & itct-sat-sv-r7 \\
+Saturation$_{HSV}$ (watershed) & 155 & itct-sat-sv-sg \\
+Light and Dark of Lightness (rule of thirds) & 156 & itct-lightdark-l-r3 \\
+Light and Dark of Lightness (rule of sevenths) & 157 & itct-lightdark-l-r7 \\
+Light and Dark of Lightness (watershed) & 158 & itct-lightdark-l-sg \\
+Light and Dark of Value (rule of thirds) & 159 & itct-lightdark-v-r3 \\
+Light and Dark of Value (rule of sevenths) & 160 & itct-lightdark-v-r7 \\
+Light and Dark of Value (watershed) & 161 & itct-lightdark-v-sg \\
+Hue (rule of thirds) & 162 & itct-hue-h-r3 \\
+Hue (rule of sevenths) & 163 & itct-hue-h-r7 \\
+Hue (watershed) & 164 & itct-hue-h-sg \\
+Hue Colourfullness (rule of thirds) & 165 & itct-hue-cs-r3 \\
+Hue Colourfullness (rule of sevenths) & 166 & itct-hue-cs-r7 \\
+Hue Colourfullness (watershed) & 167 & itct-hue-cs-sg \\
+Warm and Cold of Hue (rule of thirds) & 168 & itct-warmcold-h-r3 \\
+Warm and Cold of Hue (rule of sevenths) & 169 & itct-warmcold-h-r7 \\
+Warm and Cold of Hue (watershed) & 170 & itct-warmcold-h-sg \\
+Warm and Cold of Colourfullness (rule of thirds) & 171 & itct-warmcold-cs-r3 \\
+Warm and Cold of Colourfullness (rule of sevenths) & 172 & itct-warmcold-cs-r7 \\
+Warm and Cold of Colourfullness (watershed) & 173 & itct-warmcold-cs-sg \\
+Complements of Hue (rule of thirds) & 174 & itct-comp-h-r3 \\
+Complements of Hue (rule of sevenths) & 175 & itct-comp-h-r7 \\
+Complements of Hue (watershed) & 176 & itct-comp-h-sg \\
+Complements of Colourfullness (rule of thirds) & 177 & itct-comp-cs-r3 \\
+Complements of Colourfullness (rule of sevenths) & 178 & itct-comp-cs-r7 \\
+Complements of Colourfullness (watershed) & 179 & itct-comp-cs-sg \\
+
+\midrule
+\multicolumn{3}{c}{Image Averages} \\
+\midrule
+Average of Colourfullness & 180 & cs-avg \\
+Standard Deviation of Colourfullness & 181 & cs-std \\
+Average of Hue & 182 & h-avg \\
+Standard Deviation of Hue & 183 & h-std \\
+Average of Lightness & 184 & l-avg \\
+Standard Deviation of Lightness & 185 & l-std \\
+Average of Saturation$_{HSL}$ & 186 & shsl-avg \\
+Standard Deviation of Saturation$_{HSL}$ & 187 & shsl-std \\
+Average of Saturation$_{HSV}$ & 188 & shsv-avg \\
+Standard Deviation of Saturation$_{HSV}$ & 189 & shsv-std \\
+Average of Value & 190 & v-avg \\
+Standard Deviation of Value & 191 & v-std \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\newpage
+
+\begin{center}
+\footnotesize
+\begin{longtable}{l|rr|rr|rr}
+\toprule
+\multirow{2}{*}{Feature}
+  & \multicolumn{2}{c}{renaissance}
+  & \multicolumn{2}{c}{baroque}
+  & \multicolumn{2}{c}{neoclassicism}
+  \\
+\cline{2-7}
+& mean & std & mean & std & mean & std \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{{Continued on next page}} \\
+\midrule
+\endfoot
+
+\bottomrule
+\caption{Big table top}
+\label{tab:bigtop}
+\endlastfoot
+
+\input{means-stds-top.tex}
+\bottomrule
+\end{longtable}
+\end{center}
+
+\newpage
+
+\begin{center}
+\footnotesize
+\begin{longtable}{l|rr|rr||rr}
+\toprule
+\multirow{2}{*}{Feature}
+  & \multicolumn{2}{c}{romanticism}
+  & \multicolumn{2}{c}{impressionism}
+  & \multicolumn{2}{c}{mughal}
+  \\
+\cline{2-7}
+& mean & std & mean & std & mean & std \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{r}{{Continued on next page}} \\
+\midrule
+\endfoot
+
+\bottomrule
+\caption{Big table bottom}
+\label{tab:bigbot}
+\endlastfoot
+
+\input{means-stds-bot.tex}
+\bottomrule
+\end{longtable}
+\end{center}
+
+\chapter{Code}
+
+In the electronic version only.
+
+{\footnotesize
+\centerline{\fbox{\large \texttt glcm.py}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/util/glcm.py}
+}
 
 \newpage
 \null
