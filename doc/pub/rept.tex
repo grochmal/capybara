@@ -39,6 +39,8 @@
   \\
   by Michal Grochmal
   $<$\href{mailto:grochmal@member.fsf.org}{grochmal@member.fsf.org}$>$\\
+  supervisor Dell Zhang
+  $<$\href{mailto:dell@dcs.bbk.ac.uk}{dell@dcs.bbk.ac.uk}$>$\\
   \\
   Department of Computer Science and Information Systems\\
   Birkbeck College, University of London
@@ -116,6 +118,9 @@ indicated in the text.  I give my permission for it to be submitted to the JISC
 Plagiarism Detection Service.  I have read and understood the sections on
 plagiarism in the Programme Handbook and the College website.
 
+The report may be freely copied and distributed provided the source is
+explicitly acknowledged.
+
 \newpage
 \phantomsection
 \addcontentsline{toc}{chapter}{Acknowledgements}
@@ -129,6 +134,12 @@ time to spend with them.
 
 \chapter{Introduction}
 \begin{multicols}{2}
+
+Citations useful for the introduction (and for the remaining of the text too):
+Romero \cite{jma12clas}, Romero \cite{rmc12ajs}, Chen (Yahoo) on JSONS
+\cite{chen09yahoo}, Zirnhelt (generic artist classification)
+\cite{zirnhelt07art}, Machajdik (affective) \cite{mach10clas}, Chih-Wei
+(libsvm) \cite{hcl03svm}, DiMaggio (art classification) \cite{dimaggio87art}
 
 \section{Background}
 
@@ -1005,8 +1016,15 @@ Whelp, it will be some time before I write this.
 
 Describe each library installed, there are some.
 
-\emph{ImageMagick} 6.5.4-7 or later, available at
-\href{http://www.imagemagick.org/}{http://www.imagemagick.org/}
+Compiled software (often available as software packages as .rpm or .deb)
+\begin{itemize}
+\item[]\emph{ImageMagick} 6.5.4-7 or later, \\
+available at \href{http://www.imagemagick.org/}{http://www.imagemagick.org/}
+
+\item[]\emph{libsvm} 3.18 or later, \\
+available at \href{http://csie.ntu.edu.tw/~cjlin/libsvm/index}
+{http://csie.ntu.edu.tw/~cjlin/libsvm/index}
+\end{itemize}
 
 Provided by LSB:
 \begin{itemize}
@@ -1068,6 +1086,7 @@ available at \href{https://github.com/grochmal/unixjsons}
 \end{itemize}
 
 \chapter{How to run the code}
+\label{chap:runthecode}
 
 Before running the code make sure you are in an LSB compatible system\footnote{
 \href{http://www.linuxfoundation.org/collaborate/workgroups/lsb}
@@ -1396,6 +1415,31 @@ Usage: jjoin [-hVq] file1 file2
 \end{Verbatim}
 }
 
+\chapter{Resources on the CD}
+\label{chap:resources}
+
+The DVD contains the cleaned datasets and the code to run all experiments under
+a directory called \texttt{capybara}.  That directory also contains a README.md
+file which mentions the Copyright (Copyleft) of the code and explains how to
+run it, in the same way as Appendix \ref{chap:runthecode}.  The CD also
+contains a copy of the code of \emph{unixjsons}, which is needed to browse the
+intermediate files in acquiring the datasets.  \emph{unixjsons} is mentioned in
+Appendix \ref{chap:unixjsons}.
+
+If the CD is not available the code for the experiments can be retrieved using
+\emph{git}:
+
+\begin{verbatim}
+git clone https://github.com/grochmal/capybara.git
+\end{verbatim}
+
+Also, a mentioned in Appendix \ref{chap:unixjsons}, the code for
+\emph{unixjsons} can be retrieved using \emph{git} too:
+
+\begin{verbatim}
+git clone https://github.com/grochmal/unixjsons.git
+\end{verbatim}
+
 \chapter{Feature Values}
 \label{chap:glossary}
 
@@ -1706,9 +1750,15 @@ Standard Deviation of Value & 191 & v-std \\
 In the electronic version only.
 
 {\footnotesize
-\centerline{\fbox{\large \texttt glcm.py}}
+\centerline{\fbox{\large \texttt glcm.py: feature extractor}}
 \VerbatimInput[ frame=leftline
               , numbers=left ]{../../src/util/glcm.py}
+}
+
+{\footnotesize
+\centerline{\fbox{\large \texttt step15-classify.sh: runs classifiers}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/step15-classify.sh}
 }
 
 \newpage
