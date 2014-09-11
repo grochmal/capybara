@@ -1,5 +1,7 @@
 \documentclass[11pt,a4paper,draft]{report}
 
+% twoside,openright screws up sideways figure positioning, use empty pages
+% to force openright formating by hand.
 % The PDF must be named rep_grochmalm_act.pdf
 
 \usepackage[utf8]{inputenc}
@@ -51,8 +53,11 @@
 
 %\hyphenation{ge-ne-ric Ge-ne-ric Ro-me-ro Ma-ria}
 
-\definecolor{lightgray}{gray}{0.9}
+% fix adobe's PDF reader (it cannot stand xcolor)
+\definecolor{lightgray}{gray}{0.7}
 \setlength{\headheight}{16pt}
+\setlength{\arrayrulewidth}{0.6pt}
+
 %\renewcommand{\chaptername}{Section}  % Not needed
 \renewcommand{\bibname}{References}
 \titlespacing*{\chapter}{0pt}{60pt}{60pt}
@@ -105,9 +110,19 @@ The abstract of the work, this will be written at the very end
 \listoffigures
 
 \newpage
+\null
+\thispagestyle{empty}
+\newpage
+
+\newpage
 \phantomsection
 \addcontentsline{toc}{chapter}{List of Tables}
 \listoftables
+
+\newpage
+\null
+\thispagestyle{empty}
+\newpage
 
 \newpage
 \phantomsection
@@ -122,11 +137,21 @@ The report may be freely copied and distributed provided the source is
 explicitly acknowledged.
 
 \newpage
+\null
+\thispagestyle{empty}
+\newpage
+
+\newpage
 \phantomsection
 \addcontentsline{toc}{chapter}{Acknowledgements}
 \chapter*{Acknowledgements}
 Thanks to my family and my friend, for their patience with me not having the
 time to spend with them.
+
+\newpage
+\null
+\thispagestyle{empty}
+\newpage
 
 \newpage
 \setcounter{page}{1}
@@ -135,37 +160,60 @@ time to spend with them.
 \chapter{Introduction}
 \begin{multicols}{2}
 
-Citations useful for the introduction (and for the remaining of the text too):
-Romero \cite{jma12clas}, Romero \cite{rmc12ajs}, Chen (Yahoo) on JSONS
-\cite{chen09yahoo}, Zirnhelt (generic artist classification)
-\cite{zirnhelt07art}, Machajdik (affective) \cite{mach10clas}, Chih-Wei
-(libsvm) \cite{hcl03svm}, DiMaggio (art classification) \cite{dimaggio87art}
+Similar images are classified by Content Based Image Retrieval systems (CBIR
+systems) based on \emph{several features}.  The feature we use depend on one of
+the meanings (semantics) contained in the image, it could be one specific
+object present in the image, a combination of objects, a specific person or
+something even different.  One image has often much more than one meaning.
+e.g. we might query a collection of personal photos using a picture of our
+cousin holding a carnival mask in Venice.  For this query image we might ask:
+whether there are photos of our cousin in the collection, or whether there are
+photos of venetian carnival masks, or photos with a specific building or
+location in Venice in the background.
+
+Different \emph{sets of features} are needed for different semantics and
+different collections.  In this work we will search for features related to the
+\emph{artistic style} between different artists and, more generally between
+different art schools (aka. art movements).  We will focus on \emph{aesthetics}
+of an image as it is related to the concept of art \cite{rmc12ajs}, and on the
+\emph{emotions} an image can provoke on the viewer as it is one of the purposes
+of art \cite{mach10clas}.
+
+CBIR systems for artwork \cite{cfsp12air,isv12mpeg,ymvz03tree} can benefit from
+extra features and from a better understanding of current features.  Museum
+collection can also benefit from better classification of art images:  Several
+images in these collections miss some or all metadata, by finding similar
+images we could fill in the missing metadata.
 
 \section{Background}
 
-Same stuff as in the proposal, just shorter.
+Features that are independent for objects in the image (or at least as
+independent as possible) need to be used to evaluate the art style.  Work by
+Zirnhelt \cite{zirnhelt07art} present a limited number of such features in the
+\emph{context of art}.  Works by Machaijdik \cite{mach10clas} and Romero
+\cite{rmc12ajs} present more features independent from objects, but most of the
+features tried were tested on illustration and photography only.  Romero in
+\cite{rmc12ajs} tests some of the features on a very limited number of art
+paintings.  Thanks to photo web sharing (\texttt{photo.net},
+\texttt{panoramio.com} or \texttt{flickr.com}) consistent datasets of
+photography are much easier to acquire than datasets of art, that is the major
+reason why the majority of work on style uses photography.
 
-Although completely ignoring the content of an image is probably impossible,
-features that are independent of the objects in the image exist.  Such features
-are more relevant in works of art \cite{zirnhelt07art} as the meaning of how
-objects are drawn is important for how humans see a piece of art
-\cite{mach10clas}.  In this work, we will use \emph{aesthetic features} tried
-on collections of drawn artwork (illustration, drawing and painting) and on
-collections of photography, and apply them for classification of artwork with
-the meaning of identifying the author of the artwork.  Further, we will try to
-extrapolate the meaning of these features and try to identify images of the
-same art school and same art period.
+Art paintings style is evident to humans, Figures \ref{fig:diff} and
+\ref{fig:similar} show an example of image similarity.  In Figure \ref{diff} we
+see paintings by Francesco Granacci and by Francesco Pesellino, these paintings
+contain similar object and depict a similar contex yet their \emph{style is
+different}.  Figure \ref{fig:similar} shows two paintings by Delacroix, in
+which the \emph{style is similar} although the scenes depicted are different.
+Using the correct features we shall be capable of identifying the firs two
+images as different and the last two as similar.  [The images are part of the
+public collection of the Victoria and Albert Museum in London, this collection
+is used as a dataset in this work.  See Chapter \ref{chap:data}.]
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+To achieve such classification we follow works that detour from interest points
+or corner detection for general object identification as SIFT or MSER
+techniques \cite{szel11book}.  Such features describe the content of the image
+instead of it's style.
 
 \begin{figure*}[tb]  % figure* instead of figure because of multicols
 \centering
@@ -194,59 +242,180 @@ different.}
 
 \section{Features in the previous works}
 
-Description of features in Romeo's work \cite{rmc12ajs} and in Machajdik's work
-\cite{mach10clas}.  Describing ignored features too (and why they were
-ignored).
+A richer sets of features can be found in works that explore style in
+photography \cite{jma12clas,cmrc13fs,rmc12ajs,mach10clas}.  \emph{Image
+complexity} based on lossy compression, \emph{standard deviation} and
+\emph{average} over components of \emph{HSV} and/or \emph{HSL} colour
+representation, \emph{Itten colours and contrasts} and weighted importance of
+all these feature in the center of the image.  Other works propose histograms
+of black and white on drawing classification \cite{kroner98draw} or MPEG-7
+descriptors as features.
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+Size normalisation of all images is needed as all these features are
+\emph{scale dependent} \cite{jma12clas,mach10clas}.  Also, several of the works
+(\cite{jma12clas,cmrc13fs,rmc12ajs}) perform colour normalisation to eliminate
+the differences of illumination between images.  RGB colour space do not
+represent well the human perception of the image \cite{mach10clas} therefore
+the features are extracted from the \emph{HSV} and \emph{HSL} colour
+representations of the image.
+
+In this work, to the features used by Romero in \cite{rmc12ajs} we add many
+features described by Machajdik in \cite{mach10clas}.  Although we ignore some
+of Machajdik's features that are directly related to object recognition as we
+need features that are as independent as possible form the objects in the
+image.  From \emph{Romero's work} we use Kolmogorov complexity features and
+image averages, from \emph{Machajdik's work} we use Itten colours, Itten
+contrasts, grey level co-occurrence matrix and the rule of thirds.  The most
+complex of these features to implement are the Itten contrasts.  In Romero's
+and Machajdik's work the task of author classification is not the main focus,
+we use their features on a much bigger collection as a main focus of this work.
+We also extrapolate the \emph{feature extraction and classification} to
+classify on artistic schools.
+
+\section{Project execution}
+
+Time and effort to acquire the datasets proved to be the most complicated part
+of the work.  It is not surprising that the number of works that explore art
+collections is small given that big and consistent datasets are hard to
+acquire.  The remaining of the time of the project was spent on feature
+extraction, classification and write up.
+
+The \emph{13 weeks} of the project were executed as follows: First 7 weeks were
+used for dataset acquisition and cleansing, next 3 week for feature extraction,
+one week of holiday, 1 week of classification and 1 week for write up.  The
+dataset acquisition work can be subdivided into: \emph{1st week}: reading the
+VAM JSON API and building scripts for the VAM dataset crawlers; \emph{2nd
+week}: organisation of VAM data, removing inexistent, duplicated, misclassified
+paintings and unknown artists;  \emph{3rd week}: writing crawlers for the NIRP
+dataset, crawlers over artist indexes and painting indexes which are then
+compared against each other;  \emph{4th week}: Word count and manual selection
+of artists from the NIRP dataset;  \emph{5th week}: Recording of data from NIRP
+dataset, including manual intervention with encoding issues;  \emph{6th week}:
+writing unixjsons tools (see Appendix \ref{chap:unixjsons} to deal with data
+organisation;  \emph{7th week}: using unixjsons tools to filter only the images
+of artists that have a sizeable amount of paintings, also a manual check on the
+resulting images.
+
+Feature extraction can be subdivided into: \emph{8th week}: normalisation,
+separation and Kolmogorov complexity features;  \emph{9th week}: GLCM features,
+rule of thirds and image averages; \emph{10th week}: Watershed segmentation and
+Itten colours and contrasts.
+
+Remaining two weeks were used to link metadata to the features and run the
+classifiers.  The last week was mostly used to finish the report write up.
+
+\section{Summary}
+
+Chapter \ref{chap:data} describes the process of dataset acquisition, for each
+of the two datasets used.  Chapter \ref{chap:approach} extensively describes
+the feature extraction process, dividing the features into related groups and
+explaining each.  Chapter \ref{chap:results} describes a crude classification
+process as an example of how these features can be used.  Appendices show how
+to use the code accompanying this report and show the most important parts of
+the data and code used.
 
 \end{multicols}
 
 \chapter{Data}
+\label{chap:data}
 
 \begin{multicols}{2}
 
-As the result of the crawl, the images are assigned the surname of the artist
-and a unique identifier consisting of letters and numbers
-\texttt{<painter>\_<id>}.  We use more than one dataset, therefore the images
-will be prefixed with the dataset name to generate globally unique identifiers:
+We use online art collections as the datasets for our classification,
+unfortunately such art collections are far from being machine readable inputs
+of images and metadata.  Two such collections are used: the \emph{Victoria and
+Albert Museum (VAM)} collection\footnote{\href{http://www.vam.ac.uk/}
+{http://www.vam.ac.uk}}, which is freely available for academic use.  And the
+\emph{NICE paintings (NIRP)} collection available from the Visual Arts Data
+Service (VADS)\footnote{\href{http://vads.ac.uk/}{http://vads.ac.uk}} project.
+NIRP collection is an agglomeration of several collections of paintings
+including, among others, the CACHe project\footnote{
+\href{http://www.bbk.ac.uk/hosted/cache/}{http://www.bbk.ac.uk/hosted/cache}}
+at the Birkbeck College.
+
+To produce a machine readable dataset we crawl the NIRP and VAM collections for
+paintings, then we filter them based on the completeness and \emph{consistency
+of the metadata} of the collection item.  This task often cannot be done
+automatically, e.g. we rejected a painting by Leonardo da Vinci painted in
+1856, 200 years after the painter's death.  In this case it is clear that the
+metadata of the item is incorrect and the painting cannot be used, but writing
+a piece of software that evaluates such metadata to be correct or incorrect is
+a project in it's own.  Therefore, a lot of the work on the acquisition of the
+collection items was done manually as item with wrong metadata would add extra
+complexity to the classification.
+
+Results of the crawl, the images, are assigned the surname of the artist and a
+unique identifier consisting of letters and numbers \texttt{<painter>\_<id>}.
+We use more than one dataset, therefore later the images are prefixed with the
+dataset name to generate globally unique identifiers:
 \texttt{<dataset>\_<painter>\_<id>} (e.g. \texttt{vam\_constable\_2006AP4487}
 or \texttt{nirp\_monticelli\_fa000286}).
 
 \section{Victoria and Albert Museum (VAM)}
 
-VAM exposes a JSON
+In the VAM collection we are interested in the collection objects classified as
+paintings.  The entire collection contains other objects that are not
+paintings: sculpture, clothing or manuscripts among others.  In the VAM
+collection there are 2000 items classified as paintings.  VAM exposes a JSON
 API\footnote{\href{http://www.vam.ac.uk/api/json/museumobject/}
 {http://www.vam.ac.uk/api/json/museumobject/}} to retrieve metadata and image
-locations, the metadata is organised as a small JSON structure for each museum
-item.
+web locations, the metadata is organised as a small JSON structure for each
+museum item.
 
-\texttt{vam-get-all.py} used to get metadata about all items in the category
-"painintins".  Yielding 2000 results.
+The API do not allow to retrieve data for more than 45 items in one call,
+therefore we develop a crawling script (\texttt{vam-get-all.py}) that retrieves
+data about the 2000 paintings in order.  Instead of working with big JSONs by
+joining all JSON results into one agglomerated result we take the approach of
+Chen in \cite{chen09yahoo} and use a plain text file containing one small JSON
+per line.  Each line in this JSONS file is the JSON encoded data for one
+painting, as Chen \cite{chen09yahoo} describes, this approach reduces the
+memory needed to process each record and allows the processing of the entire
+dataset as a stream.
 
-Using \texttt{jgrep} the results were filtered into 878 items with an
-available image.
+To easily work with files in the JSONS, format we developed implementations of
+the \texttt{grep}, \texttt{cut}, \texttt{sed}, \texttt{echo} and \texttt{join}
+commands over files and streams in the JSONS format.  This set of tools is
+described in Appendix \ref{chap:unixjsons}.
 
-Downloaded the images using \texttt{vam-img-get.py} and filtered the images by
-hand removing 10 images that were not of painintgs.  Giving a final result of
-868 images of paintings with metadata.
+Using \texttt{jgrep} we filtered out of the collection items classified as
+paintings all items that did not have and image.  This left us with 878 items
+with an image.  We then downloaded the images for these items using another
+crawling script (\texttt{vam-img-get.py}).  Some of the images did not depict
+paintings, therefore we manually went through each of the 876 downloaded images
+and removed items that were misclassified as paintings.  We found 4 images of
+vases, 3 images of sculptures and 3 references to a photo of three vials of
+paint (which also explained why we got 876 images for 878 items).  We removed
+all misclassified items from the set and 868 paintings remained.
 
-From these 868 we filtered out unknown artists and artists with less than 7
-paintings.  Finding unknown artists was tricky as VAM represents them with
-three different strings: "Unknown", "unknown" and "" (empty value).
+Several paintings had the "artist" metadata field set as: "Unknown", "unknown"
+or "" (empty).  We removed all these paintings from the set as we would not be
+able to evaluate the classification according to \emph{artist identification}
+if we do not know the artist in the first place.  303 were removed from the set
+for having the artist unknown, leaving 565 paintings with assigned artists.
 
-Used the format of small JSONs, one per line, in a long file.  This reduces
-memory usage and allows for processing the data in a stream (not possible with
-one big JSON).  This is describe in a work by Chen \cite{chen09yahoo}.
+Next we needed to remove artists that have a number of paintings too little to
+be relevant.  A classifier that can assign the only painting of a certain
+artist to that artist is not a general classifier.  Yet first, the metadata in
+the "artist" field needed to be cleaned to find the names of artists and the
+paintings by each artist.  e.g. the name of Charles Robert Leslie is encoded in
+the VAM collection as both "Charles Robert Leslie" and "Leslie, Charles Robert
+(RA)" of the name of William Mulready is encoded as "Mulready, William (RA)"
+and as "Mulready, William".  A simple \texttt{jsed} script
+(\texttt{cleanse-artists.jsed}) was created to re-encode the artist's names in
+a consistent manner across the set of 565 paintings.
+
+After the cleaning of artist names we got a list of 281 artists, most of them
+with only one painting in the collection.  We filtered out all artists with 6
+paintings or less from the set and collected the paintings for all remaining
+artists.  This leaves the \emph{VAM dataset} with 193 paintings by 14 artists:
+John Constable (39 paintings), Thomas Gainsborough (13 paintings), Charles
+Robert Leslie (10 paintings), William Mulready (10 paintings), George Frederick
+Watts (10 paintings), William Carpenter (9 paintings), Abanindranath Tagore (7
+paintings), Basawan (11 paintings), Jagan (9 paintings), Kesav Kalan (15
+paintings), La'l (19 paintings), Miskin (15 paintings), Tulsi Kalan (10
+paintings) and Devi (16 paintings).
+
+Table \ref{tab:crawl} shows the VAM dataset acquisition in perspective.
 
 \begin{table*}[ptb]
 \centering
@@ -263,14 +432,15 @@ Object misclassified as painting      &   10 &     1 \\
 Corrupted image file                  &    0 &     8 \\
 Duplicate image                       &    0 &     5 \\
 Different photo of the same painting  &    0 &    15 \\
-Artist of painting was not known      &  302 &   144 \\
+Artist of painting was not known      &  303 &   144 \\
 % VAM had "Unknown", "unknown" and ""
 % NIRP was a mess, as always
 \midrule
-Indexed artists                       &  565 &  3222 \\
+Indexed artists                       &  281 &  3222 \\
 Missing artist index                  &    0 &     1 \\
+Not artist index entry                &    0 &     9 \\
 Artists without paintings             &    0 &    23 \\
-Artists used for selection            &  565 &  3199 \\
+Artists used for selection            &  281 &  3190 \\
 Selected artists                      &   14 &    42 \\
 \midrule
 Paintings by the selected artists     &  193 &  1007 \\
@@ -281,62 +451,147 @@ artists at each phase of crawling and cleansing the dataset.}
 \label{tab:crawl}
 \end{table*}
 
-\section{Visual Arts Data Service (NIRP)}
+\section{Visual Arts Data Service - NICE Paintings (NIRP)}
 
-Visual Arts Data Service, Nice Paintings - VADS NIRP
+NIRP is an agglomeration of public collections in the UK and it contains more
+than 9000 pre-1900 European \emph{oil paintings}.  Unfortunately the
+organisation of the collection is poor, and no API exists.  The crawlers
+collection the data from the NIRP collection are \emph{HTML crawlers}, yet to
+maintain consistency with the VAM dataset the final form of the metadata for
+the NIRP collection are plain files containing a JSON on each line.
 
-Searched the alphabetical index of artists using `all-artists.py`, giving us
-3222 artists.
+Although no API exist for the NIRP dataset there is an alphabetical index of
+artist names.  With a script (\texttt{all-artists.py}) we crawled the index of
+artist names producing a list of all 3222 artists in the NIRP collection.
+A manual intervention was needed in the crawl as the index for the letter "x"
+exists although there is no artist name starting with the letter "x".  From the
+remaining index entries we manually removed 9 entries that were not artists but
+agglomerations of artists by country (e.g. "French Painters" under the letter F
+or "Italian Painters" under the letter I).
 
-Each artist was checked for works and artists without works (23 such artists
-were present) were filtered out.  This was achieved with `curl` and `grep`.
+Each index entry links the artist name to a query search string using the
+VADS's website\footnote{\href{http://www.vads.ac.uk/collections/NIRP/index.php}
+{http://www.vads.ac.uk/collections/NIRP/index.php}} search engine.  The search
+retrieves matches on all words of the query, therefore the index links of the
+three Italian artists: Francesco Bassano, Leandro Bassano, and Jacopo Bassano
+il vecchio result in the same list of paintings for each.  Whether an artist
+shares part of his name with another artist the result for both are displayed
+when following the index link for any of them, e.g. every John is assigned the
+paintings of all Johns in the NIRP collection.
 
-The artist index on NIRP contains duplicate entries for the same artist and
-names that are categories of artists (e.g. "French painters").  This result in
-individual painitngs being listed several times, we deal with it later.
+The descriptions of paintings in the NIRP collection posses \emph{unique IDs},
+therefore we collected all painting descriptions from all artists in the artist
+name index including several duplicates.  With the duplicates we had 24 373
+painting descriptions, filtering them by the \emph{unique IDs} resulted in 9181
+unique painting descriptions.  Also, from the index of artist names we manually
+removed 23 artists for which the index did not return any paintings, duplicates
+of not.  This was checked using a combination of \texttt{curl} and
+\texttt{grep} calls.
 
-`by-artist.py` was used to retrieve detailed pages about all paintings of all
-artists.  The duplicates were removed by simple `sort | uniq`.  Yielding 9181
-unique paintings.
+From the 9181 descriptions of paintings only 2511 had available images, which
+we downloaded using a \texttt{get-painting.py} script.  The remaining 6641
+painting descriptions were removed from the set, as we need an image of the
+painting to extract features from.  A script (\texttt{by-artist.py}) was used
+to crawl the descriptions of the 2511 paintings with an image, yet it did not
+produce acceptable results.  The encoding of the HTML encoding used by VADS is
+\texttt{UTF-8} but several pieces of metadata are encoded in \texttt{ISO
+8859-1} character encoding, sometimes in \texttt{ISO 8859-2} character encoding
+and some (not all) quotes are encoded in \texttt{Windows-1252} character
+encoding.  The main piece of metadata which had mixed encodings across
+different painting descriptions was the artist field, the most important
+metadata field for this project.  The \texttt{by-artist.py} was extended to
+deal with mixed encoding of \texttt{UTF-8} and \texttt{ISO 8859-1}, but the
+cases where characters were encoded in \texttt{ISO 8859-2} or
+\texttt{Windows-1252} needed to be dealt with manually.  After all changes, all
+painting descriptions were converted to \texttt{UTF-8} character encoding and
+formatted in the same way as metadata from the VAM collection (a JSONS file).
 
-Finally `get-painting.py` crawls the detail page, retrieves the image for the
-painting and converts the HTML representation of the metadata into a JSON
-representation.
+In possession of 2511 paintings with descriptions there were 3190 artists to
+assign to them based on a messy artist name index.  The (now UTF-8 encoded)
+data for the "artist" field was not possible to clean with a \texttt{jsed}
+script as in case of the VAM collection.  Most of the data was encoded in
+natural language, for example:
 
-In a JSON representation the paintings that do not have an image available were
-filtered out using `jgrep`.
+\begin{quote}
+"artist": " Attributed to school of Masaccio (Italian painter, 1401-1428)
+Attributed to Giovanni di Ser Giovanni Guidi (Italian painter, 1406-1486)
+Previously attributed to Boccati, Giovanni di Piermatteo da Camerino (Italian
+painter, born ca.1420, active 1480) "
+\end{quote}
 
-Semi automatic check for duplicates by checking if no two images have the same
-sha1sum checksum.  Use of jgrep, jcut, etc to perfom artist cleaing...
+Even unknown artists were not stated in a machine readable way:
+
+\begin{quote}
+"artist": " Unknown  Previously attributed to Soldi, Andrea (Italian painter,
+ca.  1703-1771, active in Great Britain) "
+\end{quote}
+
+Therefore the number of paintings of unknown artists for the NIRP collection in
+Table \ref{tab:crawl} is smaller than the real number.
+
+To find the actual artists of the 2511 paintings we concatenated together the
+data of the "artist" field for all and run a word count algorithm over the
+result.  The word count was just a combination of \texttt{jcut}, \texttt{cut},
+\texttt{sed}, \texttt{sort} and \texttt{uniq} commands.  From the result of the
+word count we removed stop words and removed any words appearing less than 10
+times (unless the word was clearly the surname of a well known painter).  The
+resulting ~2000 words were checked by hand, using \texttt{jgrep} to ensure that
+it is a surname or forename of an artist by checking the "artist" metadata
+field of each image that cntains that word.  It was a humongous manual work to
+organise the words into 42 artist names which had a considerable number of
+works in th NIRP collection.
+
+For the selected 42 artist, a script (\texttt{filter-artists.sh}) was developed
+to pick the images of each artist (using regular expressions and
+\texttt{jgrep}) and to enhance the metadata with a machine readable "artist"
+field.  At the end of the process each artist had a metadata file in JSONS
+format and a directory of all images listed in the metadata file.  Finally, the
+image file names and IDs were all converted to lowercase, to make them more
+consistent.  The total of images for all the 42 artists was 1036.  The names of
+all artists are too long to list therefore are presented in Table
+\ref{tab:style}, together with the 14 artists from the VAM collection.
+
+The 1036 paintings were checked for duplicates using a \texttt{SHA1} checksum,
+resulting in 8 corrupted files and 5 duplicate images (same painting, different
+description).  All 13 images were removed leaving 1023 paintings, which were
+then checked manually for duplicates.  There were 15 duplicates (almost
+identical image of the same painting) and 1 image of a sculpture, which were
+all removed from the dataset.  The final dataset from the NIRP collection had
+1007 images by 42 artists.  Table \ref{tab:crawl} also shows the perspective of
+the acquisition of the NIRP dataset.
 
 \section{Datasets in previous works}
 
-One of Romeo's work contain a dataset of photos only and is classified into
-"beautiful photos" and "not beautiful photos".  This is not the kind of data we
-need.  Another of Romeo's works has a dataset of photos as well but a small
-dataset of paintings is used.  We tried to contact Romeo and Machado for the
-dataset or at least the titles of the paintings they used, but we received no
-answe to the request.
+Two of Romeo's and Machado's works (\cite{jma12clas} and \cite{cmrc13fs})
+contain datasets of photos only, and these are classified into "good
+aesthetics" and "not good aesthetics".  This is not the kind of data we need
+for a classification of paintings.  Another of Romeo's works \cite{rmc12ajs}
+has a dataset of photos and a small dataset of paintings.  We tried to contact
+Romeo and Machado for the dataset, or at least the titles of the paintings they
+used, but we received no answer to the request.
 
-Machajidik's work uses images from the deviantart website, it does sepcify that
-809 images were used but does not specify the images used.  Deviantart has
-thousands of images and sampling 809 at random would likely produce different
-results.  Finally, deviantart focuses on digital art, which differs from
-classical paintings significantly.
+Machajdik's work \cite{mach10clas} and \cite{mach10ua} uses images from the
+\texttt{deviantart.com} website, it does sepcify that 809 images were used but
+does not specify the images used.  \emph{Deviantart} has thousands of images
+and sampling 809 at random would likely produce different results.  Finally,
+deviantart focuses on digital art, which differs from classical paintings
+significantly.
 
 \end{multicols}
 
 \chapter{Approach}  % Why not "Methodology"?
+\label{chap:approach}
 
 \begin{multicols}{2}
 
-With the datasets downloaded and organised we can move towards the
-classification.  First we shall normalise all images to similar sizes and
-separate tham into channels that will be used by feature extraction processes.
-Then we run the feature extractors.  All features have been divided into
-related groups: Kolmogorov complexity, GLCM, amount of Itten colours, rule of
-thirds, Itten contrasts and image averages.  A separate feature extractor for
-each group of features was built.
+With the datasets downloaded and organised we join them to achieve the number
+of 1200 images of paintings by 56 artists, over which we can perform feature
+extraction.  First we normalise all images to similar sizes and separate them
+into channels, then we run the feature extractors.  All features have been
+divided into related groups: \emph{Kolmogorov complexity}, \emph{grey level
+co-occurrence matrix}, \emph{amount of Itten colours}, \emph{rule of thirds},
+\emph{Itten contrasts} and \emph{image averages}.  A separate feature extractor
+for each group of features was built.
 
 Later (in chapter \ref{chap:results}) we join all features together and run the
 classifiers over the joined data.
@@ -344,15 +599,18 @@ classifiers over the joined data.
 \section{Normalisation and separation}
 
 First of all size normalisation, as most features depend on the number of
-pixels in the image.  As close as possible to 300 000 pixels but without
-changing the aspect ration.  In golden ration 300 000 pixels is an image of
-671x447 pixels, it is close to the ASCII screen resolution of 640x480 pixels.
-Equation \ref{eq:size} shows how an image of arbitrary \emph{height} and
-\emph{width} can be resized to an image of 300 000 pixels.  This technique do
-not ensures that an image will have the desired number of pixels but that it
-will be as close as possible to 300 000 pixels without changing the spect
-ration.  In our dataset the image that deviated the most ended with 300 515
-pixels, that's an error of less than 0.172\% and, therefore, can be ignored.
+pixels in the image.  We normalise each image to a size close as possible to
+300 000 pixels but without changing the aspect ration, this approach is adopted
+by Machajdik \cite{mach10clas}.  In \emph{golden ratio} 300 000 pixels is an
+image of 671x447 pixels, which maintains a good amount of detail without being
+too big.  Equation \ref{eq:size} shows how an image of arbitrary \emph{height}
+and \emph{width} can be resized to an image of 300 000 pixels.  A Perl script
+called \texttt{norm-size.pl} was developed to perform this task.  This
+technique do not ensure that an image will have the desired number of pixels
+but that it will be as close as possible to 300 000 pixels without changing the
+aspect ratio.  In our dataset, the image that deviated the most ended with 300
+515 pixels, that's an error of less than 0.172\% and, therefore, can be
+ignored.
 
 % from libsvm documentation
 %
@@ -364,8 +622,10 @@ pixels, that's an error of less than 0.172\% and, therefore, can be ignored.
 
 \begin{equation}
 \begin{aligned}
-h'  &= h \times \sqrt{ \frac{3 \times 10^5}{h \times w} } \\
-w'  &= w \times \sqrt{ \frac{3 \times 10^5}{h \times w} } \\
+h'  &= \left\lfloor h \times
+                    \sqrt{ \frac{3 \times 10^5}{h \times w} } \right\rfloor \\
+w'  &= \left\lfloor w \times
+                    \sqrt{ \frac{3 \times 10^5}{h \times w} } \right\rfloor \\
 \label{eq:size}
 \end{aligned}
 \end{equation}
@@ -385,10 +645,11 @@ Anatomy Lesson of Dr. Nicolaes Tulp" by \emph{Rembranidt van Rijn}.}
 \label{fig:norm}
 \end{figure*}
 
-Different pictures of the same painting may have different illumination, colour
-normalisation removes this complexity.  Colour normalisation is performed by,
-for each channel, subtracting the minimum value from all pixels, then dividing
-them by the value of the maximum value and multiplying by 255.
+As done by Romero and Machado in  \cite{jma12clas}, \emph{colour normalisation}
+of the images is performed: for each channel, we subtract the minimum value
+from all pixels, then divide all pixels by the value of the maximum value and
+multiply by 255.  Different pictures of the same painting may have been taken
+under different illumination, colour normalisation removes this complexity
 
 \begin{figure*}[!htb]
 \begin{equation}
@@ -431,21 +692,43 @@ CS_{HSV} = \frac{S_{HSV} \times V_{HSV}}{255}
 \label{eq:cs}
 \end{equation}
 
-Using equations for HSV \ref{eq:hsv}, HSL \ref{eq:hsl} and CS \ref{eq:cs}.  Hue
-is the same for both HSV and HSL representations, whilst saturation and the
-third channel (Value or Lightness) are different.  The separation using
-ImageMagick is done channel by channel due to a limitation where ImageMagick
+The \emph{HSV colour space} was used by Romero \cite{jma12clas} in his work to
+extract the features, on the other hand Machajdik \cite{mach10clas} uses the
+\emph{HSL colour space} for the features in her work.  Both HSV and HSL colour
+spaces are closer to how we humans perceive an image rather than the \emph{RGB
+colour space}.  All images in the dataset are in RGB therefore we use
+ImageMagick\footnote{ \href{http://imagemagick.org/}{http://imagemagick.org/} }
+to convert the images into HSV and HSL colour spaces, the conversions are
+depicted by Equation \ref{eq:hsv} and Equation \ref{eq:hsl}.  Each channel
+(\emph{Hue}, \emph{Saturation}, \emph{Value} and \emph{Lightness}) is stored as
+a Portable Graymap (PGM)\footnote{One of the \texttt{netpbm} formats for images
+(PPM, PGM and PBM)}.  This format stores the channel uncompressed, which is
+important for the calculation of the Kolmogorov complexity (one of the intended
+features).  From the Equations \ref{eq:hsv} and \ref{eq:hsl} we can see that
+the Hue is the same for both HSV and HSL colour spaces, yet the Saturation is
+different.  We, therefore, store 5 channels (each as a separate PGM) for each
+image: \emph{Hue}, \emph{Saturation$_{HSV}$}, \emph{Saturation$_{HSL}$},
+\emph{Value}, and \emph{Lightness}.  Each channel is separated from the
+original image as a single operation due to a limitation where ImageMagick
 concatenates all channels into the output image when extracting three channels
 at the same time.
 
-Separation into HSV and HSL, equations below.  Also, definition of Romeo's
-colourfullness.  \texttt{sv2cs.py} is what multiplies Saturation and Value and
-then scales them.
+In \cite{rmc12ajs} Romero defines an extra image channel from which he extracts
+features, the \emph{colourfulness of the image}.  The colourfulness is the hue
+of the image damped by the saturation, in the HSV colour space.  To achieve the
+colourfulness the hue and saturation are multiplied and scaled to a range
+between 0 and 255.  We developed a script (\texttt{sv2cs.py}) that performs the
+calculation of the colourfulness of the image from the hues and saturation
+according to the Equation \ref{eq:cs}.  Note that ImageMagick already scales
+the hue channel to values between 0 and 255 when separating the channels,
+therefore the Equation results in values in the range between 0 and 255.
 
-To store each channel of the image the Portable Graymap (PGM)\footnote{One of
-the \texttt{netpbm} formats for images (PPM, PGM and PBM)} format was used.
-This format stores the channel uncompressed, which is important for the
-calculation of the Kolmogorov complexity (see below).
+Feature extractors then run on some or all of the six "channels" of the image:
+\emph{Hue}, \emph{Saturation$_{HSV}$}, \emph{Saturation$_{HSL}$}, \emph{Value},
+\emph{Lightness} and \emph{Colourfulness}.  Although these are not strictly
+image channels, because the combination of them do not form the original image,
+we will refer to these six representations as "image channels" throughout the
+rest of the document for simplicity.
 
 \begin{figure*}[tbp]
 \centering
@@ -469,23 +752,62 @@ channel is different across the representations.}
 \includegraphics[width=0.30\textwidth]{H_caravaggio_1962_139_1}
 \includegraphics[width=0.30\textwidth]{SHSV_caravaggio_1962_139_1}
 \includegraphics[width=0.30\textwidth]{CS_caravaggio_1962_139_1}
-\caption[Colourfullness]{The \emph{Colourfullness} (right) of an image can be
+\caption[Colourfulness]{The \emph{Colourfulness} (right) of an image can be
 derived from it's \emph{Hue} channel (left) and it's \emph{Saturation} channel
 (centre), taken from the HSV representation.  Both channels are multiplied and
 scaled as seen in equation \ref{eq:cs}.}
 \label{fig:cs}
 \end{figure*}
 
+%Citations useful for the introduction (and for the remaining of the text too):
+%Romero \cite{jma12clas}, Romero \cite{rmc12ajs}, Chen (Yahoo) on JSONS
+%\cite{chen09yahoo}, Zirnhelt (generic artist classification)
+%\cite{zirnhelt07art}, Machajdik (affective) \cite{mach10clas}, Chih-Wei
+%(libsvm) \cite{hcl03svm}, DiMaggio (art classification) \cite{dimaggio87art}
+
 \section{Basic Features}
 
-Groups of related features decribed below.
+Some features shall be retrieved from each of the six image channels.  From
+Romero's work in \cite{rmc12ajs} we extract the features the are an
+approximation of \emph{Kolmogorov complexity} of each of the channels; used in
+Machajdik's work \cite{mach10clas} and Zirnhelt's work \cite{zirnhelt07art} the
+features based on texture are calculated on the \emph{Grey Level Co-occurrence
+Matrix} of each channel.  The \emph{average and standard deviation of all
+pixels} in each of the channels is a common feature used across all three works
+\cite{jma12clas,zirnhelt07art,mach10clas}.  Machajdik \cite{mach10clas} also
+proposes to use the average and standard deviation of the pixels in the central
+rectangle of the image when it is divided into three parts on it's width and
+three parts on it's height, a \emph{Rule of thirds} of the image framing.
+
+For each of these groups of features a feature extractor was built and run over
+all images in the dataset.
 
 \subsection{Kolmogorov complexity}
 
-Sobel and Canny filters, JPEG compression.
+To estimate the Kolmogorov complexity of each channel we follow Romero's
+procedure \cite{jma12clas} in finding the ratio between the file size of
+uncompressed and compressed, using lossy compression, images.  The PGM format,
+in which all channels of the image are stored, is an uncompressed format.  To
+produce compressed images we use \emph{JPEG compression}, which is a lossy
+compression format.
 
-JPEG compression at quality 60, 40 and 20 (just like Romeo), for each channel
-of the image.
+Following Romero in \cite{jma12clas} we produce the estimates of complexity not
+only for each channel but for the edges that can be found in the channel.  We
+use two edge detector filters: the \emph{Sobel} filter and the \emph{Canny}
+filter, both provided by the \texttt{skimage.filter} python library.  For each
+channel we produce a Sobel filtered uncompressed channel (in PGM format) and a
+Canny filtered uncompressed channel (also in PGM format).  This totals for 18
+PGM images for each image in the dataset.
+
+Next, we compress each of the 18 images with JPEG compression with different
+quality values.  We use the JPEG quality of 60, 40 and 20, following the same
+quality values used by Romero \cite{jma12clas}.  This produces 3 JPEG images
+for each of the 18 PGM images, giving a total of 54 JPEG compressed images for
+each image in the dataset.
+
+The Kolmogorov complexity is estimated by dividing the size (in bytes) of the
+PGM image by each of it's correspondent JPEG compressed images.  This procedure
+generates 54 features for each image in the dataset.
 
 % We did not use any form of fractal compression.
 
@@ -522,8 +844,8 @@ to the right is the \emph{Canny filter} applied to this channel.}
 \includegraphics[width=0.30\textwidth]{CS_rembrandt_eu_464}
 \includegraphics[width=0.30\textwidth]{sobel_CS_rembrandt_eu_464}
 \includegraphics[width=0.30\textwidth]{canny_CS_rembrandt_eu_464}
-\caption[Canny and Sobel filters of Colourfullness]{Canny and Sobel filters of
-Colourfullness.  Again, to the left is the original image, in the centre the
+\caption[Canny and Sobel filters of Colourfulness]{Canny and Sobel filters of
+Colourfulness.  Again, to the left is the original image, in the centre the
 \emph{Sobel filter} is applied and to the right the \emph{Canny filter} is
 applied.}
 \label{fig:cannysobelcs}
@@ -660,9 +982,9 @@ Contrast of saturation x2 (HSV and HSL)
 
 Contrast of light and dark x2 (Lightness and value)
 
-Contrast of Hue x2 (Hue and Colourfullness)
+Contrast of Hue x2 (Hue and Colourfulness)
 
-Contrast of Complements x2 (Hue and Colourfullness) here we also consider only
+Contrast of Complements x2 (Hue and Colourfulness) here we also consider only
 the most prominent hues.  Hues amounting for less than 5\% of colours are
 ignored.
 
@@ -670,7 +992,7 @@ When contrast of hue or of complements is done over the watershed segmented
 image we take the number of high contrasts (two regions that have a high
 contrast between themselves).  For the contrast on the hue channel we count a
 contrast each time we find two regions with a contrast of more than 160 degrees
-(remember it's a circle), and for the contrast on the colourfullness channel we
+(remember it's a circle), and for the contrast on the colourfulness channel we
 count a contrast for every two regions with more than 125 degrees (because the
 contrast is damped by the saturation).
 
@@ -1108,7 +1430,7 @@ before the extraction of features:
 \begin{Verbatim}[frame=leftline]
 ./step01-normalise.sh      # normalise to ~300 000 pixels
 ./step02-hsl-hsv.sh        # separates the channels
-./step03-colourfulness.sh  # calculates the colourfullness
+./step03-colourfulness.sh  # calculates the colourfulness
 ./step04-sobel.sh          # applies the Sobel filter
 ./step05-canny.sh          # applies the Canny filter
 ./step06-jpeg.sh           # compress the images
@@ -1233,16 +1555,11 @@ Usage: jcut [-chrlV] [-f field,field,...] [<file> ...]
 
 \section{jsed}
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+A simplified implementation of \texttt{sed} command that works on a JSONS
+stream.  It implements the \texttt{s///} substitution command for several
+combinations of key and value pair combinations.  Both keys and values can be
+matched and/or changed using substitution regular expressions.  The usage of
+\texttt{jsed}, including some examples follows:
 
 {\small
 \begin{verbatim}
@@ -1440,10 +1757,18 @@ Also, a mentioned in Appendix \ref{chap:unixjsons}, the code for
 git clone https://github.com/grochmal/unixjsons.git
 \end{verbatim}
 
+\newpage
+\null
+\thispagestyle{empty}
+\newpage
+
 \chapter{Feature Values}
 \label{chap:glossary}
 
-Tables \ref{tab:glossary}, \ref{tab:bigtop} and \ref{tab:bigbot}.
+Table \ref{tab:glossary} present a glossary of all features used, this shall be
+used as a reference for reading the legends and graphs.  Tables
+\ref{tab:bigtop} and \ref{tab:bigbot} show mean values of each feature
+aggregated by the art school.
 
 \begin{center}
 \footnotesize
@@ -1460,225 +1785,227 @@ Tables \ref{tab:glossary}, \ref{tab:bigtop} and \ref{tab:bigbot}.
 \endfoot
 
 \bottomrule
-\caption{Glossary}
+\caption[Feature glossary]{Glossary of all features, divided into the feature
+groups described.  For each feature the short name used in legends and tables
+is shown, as well as the id (number) of the feature used in graphs.}
 \label{tab:glossary}
 \endlastfoot
 
 \midrule
 \multicolumn{3}{c}{Komogorov Complexity for$\ldots$} \\
 \midrule
-Colourfullness (quality 60) & 0 & nofilter-cs60 \\
-Colourfullness (quality 40) & 1 & nofilter-cs40 \\
-Colourfullness (quality 20) & 2 & nofilter-cs20 \\
-Hue (quality 60) & 3 & nofilter-h60 \\
-Hue (quality 40) & 4 & nofilter-h40 \\
-Hue (quality 20) & 5 & nofilter-h20 \\
-Lightness (quality 60) & 6 & nofilter-l60 \\
-Lightness (quality 40) & 7 & nofilter-l40 \\
-Lightness (quality 20) & 8 & nofilter-l20 \\
-Saturation$_{HSV}$ (quality 60) & 9 & nofilter-shsv60 \\
-Saturation$_{HSV}$ (quality 40) & 10 & nofilter-shsv40 \\
-Saturation$_{HSV}$ (quality 20) & 11 & nofilter-shsv20 \\
-Saturation$_{HSL}$ (quality 60) & 12 & nofilter-shsl60 \\
-Saturation$_{HSL}$ (quality 40) & 13 & nofilter-shsl40 \\
-Saturation$_{HSL}$ (quality 20) & 14 & nofilter-shsl20 \\
-Value (quality 60) & 15 & nofilter-v60 \\
-Value (quality 40) & 16 & nofilter-v40 \\
-Value (quality 20) & 17 & nofilter-v20 \\
-Sobel filter of Colourfullness (quality 60) & 18 & sobel-cs60 \\
-Sobel filter of Colourfullness (quality 40) & 19 & sobel-cs40 \\
-Sobel filter of Colourfullness (quality 20) & 20 & sobel-cs20 \\
-Sobel filter of Hue (quality 60) & 21 & sobel-h60 \\
-Sobel filter of Hue (quality 40) & 22 & sobel-h40 \\
-Sobel filter of Hue (quality 20) & 23 & sobel-h20 \\
-Sobel filter of Lightness (quality 60) & 24 & sobel-l60 \\
-Sobel filter of Lightness (quality 40) & 25 & sobel-l40 \\
-Sobel filter of Lightness (quality 20) & 26 & sobel-l20 \\
-Sobel filter of Saturation$_{HSV}$ (quality 60) & 27 & sobel-shsv60 \\
-Sobel filter of Saturation$_{HSV}$ (quality 40) & 28 & sobel-shsv40 \\
-Sobel filter of Saturation$_{HSV}$ (quality 20) & 29 & sobel-shsv20 \\
-Sobel filter of Saturation$_{HSL}$ (quality 60) & 30 & sobel-shsl60 \\
-Sobel filter of Saturation$_{HSL}$ (quality 40) & 31 & sobel-shsl40 \\
-Sobel filter of Saturation$_{HSL}$ (quality 20) & 32 & sobel-shsl20 \\
-Sobel filter of Value (quality 60) & 33 & sobel-v60 \\
-Sobel filter of Value (quality 40) & 34 & sobel-v40 \\
-Sobel filter of Value (quality 20) & 35 & sobel-v20 \\
-Canny filter of Colourfullness (quality 60) & 36 & canny-cs60 \\
-Canny filter of Colourfullness (quality 40) & 37 & canny-cs40 \\
-Canny filter of Colourfullness (quality 20) & 38 & canny-cs20 \\
-Canny filter of Hue (quality 60) & 39 & canny-h60 \\
-Canny filter of Hue (quality 40) & 40 & canny-h40 \\
-Canny filter of Hue (quality 20) & 41 & canny-h20 \\
-Canny filter of Lightness (quality 60) & 42 & canny-l60 \\
-Canny filter of Lightness (quality 40) & 43 & canny-l40 \\
-Canny filter of Lightness (quality 20) & 44 & canny-l20 \\
-Canny filter of Saturation$_{HSV}$ (quality 60) & 45 & canny-shsv60 \\
-Canny filter of Saturation$_{HSV}$ (quality 40) & 46 & canny-shsv40 \\
-Canny filter of Saturation$_{HSV}$ (quality 20) & 47 & canny-shsv20 \\
-Canny filter of Saturation$_{HSL}$ (quality 60) & 48 & canny-shsl60 \\
-Canny filter of Saturation$_{HSL}$ (quality 40) & 49 & canny-shsl40 \\
-Canny filter of Saturation$_{HSL}$ (quality 20) & 50 & canny-shsl20 \\
-Canny filter of Value (quality 60) & 51 & canny-v60 \\
-Canny filter of Value (quality 40) & 52 & canny-v40 \\
-Canny filter of Value (quality 20) & 53 & canny-v20 \\
+Colourfulness (quality 60)                      &  0 & nofilter-cs60   \\
+Colourfulness (quality 40)                      &  1 & nofilter-cs40   \\
+Colourfulness (quality 20)                      &  2 & nofilter-cs20   \\
+Hue (quality 60)                                &  3 & nofilter-h60    \\
+Hue (quality 40)                                &  4 & nofilter-h40    \\
+Hue (quality 20)                                &  5 & nofilter-h20    \\
+Lightness (quality 60)                          &  6 & nofilter-l60    \\
+Lightness (quality 40)                          &  7 & nofilter-l40    \\
+Lightness (quality 20)                          &  8 & nofilter-l20    \\
+Saturation$_{HSV}$ (quality 60)                 &  9 & nofilter-shsv60 \\
+Saturation$_{HSV}$ (quality 40)                 & 10 & nofilter-shsv40 \\
+Saturation$_{HSV}$ (quality 20)                 & 11 & nofilter-shsv20 \\
+Saturation$_{HSL}$ (quality 60)                 & 12 & nofilter-shsl60 \\
+Saturation$_{HSL}$ (quality 40)                 & 13 & nofilter-shsl40 \\
+Saturation$_{HSL}$ (quality 20)                 & 14 & nofilter-shsl20 \\
+Value (quality 60)                              & 15 & nofilter-v60    \\
+Value (quality 40)                              & 16 & nofilter-v40    \\
+Value (quality 20)                              & 17 & nofilter-v20    \\
+Sobel filter of Colourfulness (quality 60)      & 18 & sobel-cs60      \\
+Sobel filter of Colourfulness (quality 40)      & 19 & sobel-cs40      \\
+Sobel filter of Colourfulness (quality 20)      & 20 & sobel-cs20      \\
+Sobel filter of Hue (quality 60)                & 21 & sobel-h60       \\
+Sobel filter of Hue (quality 40)                & 22 & sobel-h40       \\
+Sobel filter of Hue (quality 20)                & 23 & sobel-h20       \\
+Sobel filter of Lightness (quality 60)          & 24 & sobel-l60       \\
+Sobel filter of Lightness (quality 40)          & 25 & sobel-l40       \\
+Sobel filter of Lightness (quality 20)          & 26 & sobel-l20       \\
+Sobel filter of Saturation$_{HSV}$ (quality 60) & 27 & sobel-shsv60    \\
+Sobel filter of Saturation$_{HSV}$ (quality 40) & 28 & sobel-shsv40    \\
+Sobel filter of Saturation$_{HSV}$ (quality 20) & 29 & sobel-shsv20    \\
+Sobel filter of Saturation$_{HSL}$ (quality 60) & 30 & sobel-shsl60    \\
+Sobel filter of Saturation$_{HSL}$ (quality 40) & 31 & sobel-shsl40    \\
+Sobel filter of Saturation$_{HSL}$ (quality 20) & 32 & sobel-shsl20    \\
+Sobel filter of Value (quality 60)              & 33 & sobel-v60       \\
+Sobel filter of Value (quality 40)              & 34 & sobel-v40       \\
+Sobel filter of Value (quality 20)              & 35 & sobel-v20       \\
+Canny filter of Colourfulness (quality 60)      & 36 & canny-cs60      \\
+Canny filter of Colourfulness (quality 40)      & 37 & canny-cs40      \\
+Canny filter of Colourfulness (quality 20)      & 38 & canny-cs20      \\
+Canny filter of Hue (quality 60)                & 39 & canny-h60       \\
+Canny filter of Hue (quality 40)                & 40 & canny-h40       \\
+Canny filter of Hue (quality 20)                & 41 & canny-h20       \\
+Canny filter of Lightness (quality 60)          & 42 & canny-l60       \\
+Canny filter of Lightness (quality 40)          & 43 & canny-l40       \\
+Canny filter of Lightness (quality 20)          & 44 & canny-l20       \\
+Canny filter of Saturation$_{HSV}$ (quality 60) & 45 & canny-shsv60    \\
+Canny filter of Saturation$_{HSV}$ (quality 40) & 46 & canny-shsv40    \\
+Canny filter of Saturation$_{HSV}$ (quality 20) & 47 & canny-shsv20    \\
+Canny filter of Saturation$_{HSL}$ (quality 60) & 48 & canny-shsl60    \\
+Canny filter of Saturation$_{HSL}$ (quality 40) & 49 & canny-shsl40    \\
+Canny filter of Saturation$_{HSL}$ (quality 20) & 50 & canny-shsl20    \\
+Canny filter of Value (quality 60)              & 51 & canny-v60       \\
+Canny filter of Value (quality 40)              & 52 & canny-v40       \\
+Canny filter of Value (quality 20)              & 53 & canny-v20       \\
 
 \midrule
 \multicolumn{3}{c}{Grey Level Co-occurence Matrix} \\
 \midrule
-Contrast of Colourfullness (each pixel) & 54 & glcm-cs-ct1 \\
-Contrast of Colourfullness (each 6 pixels) & 55 & glcm-cs-ct6 \\
-Contrast of Colourfullness (each 20 pixels) & 56 & glcm-cs-ct20 \\
-Energy of Colourfullness (each pixel) & 57 & glcm-cs-en1 \\
-Energy of Colourfullness (each 6 pixels) & 58 & glcm-cs-en6 \\
-Energy of Colourfullness (each 20 pixels) & 59 & glcm-cs-en20 \\
-Homogeneity of Colourfullness (each pixel) & 60 & glcm-cs-hm1 \\
-Homogeneity of Colourfullness (each 6 pixels) & 61 & glcm-cs-hm6 \\
-Homogeneity of Colourfullness (each 20 pixels) & 62 & glcm-cs-hm20 \\
-Correlation of Colourfullness (each pixel) & 63 & glcm-cs-cr1 \\
-Correlation of Colourfullness (each 6 pixels) & 64 & glcm-cs-cr6 \\
-Correlation of Colourfullness (each 20 pixels) & 65 & glcm-cs-cr20 \\
-Contrast of Hue (each pixel) & 66 & glcm-h-ct1 \\
-Contrast of Hue (each 6 pixels) & 67 & glcm-h-ct6 \\
-Contrast of Hue (each 20 pixels) & 68 & glcm-h-ct20 \\
-Energy of Hue (each pixel) & 69 & glcm-h-en1 \\
-Energy of Hue (each 6 pixels) & 70 & glcm-h-en6 \\
-Energy of Hue (each 20 pixels) & 71 & glcm-h-en20 \\
-Homogeneity of Hue (each pixel) & 72 & glcm-h-hm1 \\
-Homogeneity of Hue (each 6 pixels) & 73 & glcm-h-hm6 \\
-Homogeneity of Hue (each 20 pixels) & 74 & glcm-h-hm20 \\
-Correlation of Hue (each pixel) & 75 & glcm-h-cr1 \\
-Correlation of Hue (each 6 pixels) & 76 & glcm-h-cr6 \\
-Correlation of Hue (each 20 pixels) & 77 & glcm-h-cr20 \\
-Contrast of Lightness (each pixel) & 78 & glcm-l-ct1 \\
-Contrast of Lightness (each 6 pixels) & 79 & glcm-l-ct6 \\
-Contrast of Lightness (each 20 pixels) & 80 & glcm-l-ct20 \\
-Energy of Lightness (each pixel) & 81 & glcm-l-en1 \\
-Energy of Lightness (each 6 pixels) & 82 & glcm-l-en6 \\
-Energy of Lightness (each 20 pixels) & 83 & glcm-l-en20 \\
-Homogeneity of Lightness (each pixel) & 84 & glcm-l-hm1 \\
-Homogeneity of Lightness (each 6 pixels) & 85 & glcm-l-hm6 \\
-Homogeneity of Lightness (each 20 pixels) & 86 & glcm-l-hm20 \\
-Correlation of Lightness (each pixel) & 87 & glcm-l-cr1 \\
-Correlation of Lightness (each 6 pixels) & 88 & glcm-l-cr6 \\
-Correlation of Lightness (each 20 pixels) & 89 & glcm-l-cr20 \\
-Contrast of Saturation$_{HSL}$ (each pixel) & 90 & glcm-shsl-ct1 \\
-Contrast of Saturation$_{HSL}$ (each 6 pixels) & 91 & glcm-shsl-ct6 \\
-Contrast of Saturation$_{HSL}$ (each 20 pixels) & 92 & glcm-shsl-ct20 \\
-Energy of Saturation$_{HSL}$ (each pixel) & 93 & glcm-shsl-en1 \\
-Energy of Saturation$_{HSL}$ (each 6 pixels) & 94 & glcm-shsl-en6 \\
-Energy of Saturation$_{HSL}$ (each 20 pixels) & 95 & glcm-shsl-en20 \\
-Homogeneity of Saturation$_{HSL}$ (each pixel) & 96 & glcm-shsl-hm1 \\
-Homogeneity of Saturation$_{HSL}$ (each 6 pixels) & 97 & glcm-shsl-hm6 \\
-Homogeneity of Saturation$_{HSL}$ (each 20 pixels) & 98 & glcm-shsl-hm20 \\
-Correlation of Saturation$_{HSL}$ (each pixel) & 99 & glcm-shsl-cr1 \\
-Correlation of Saturation$_{HSL}$ (each 6 pixels) & 100 & glcm-shsl-cr6 \\
+Contrast of Colourfulness (each pixel)             &  54 & glcm-cs-ct1    \\
+Contrast of Colourfulness (each 6 pixels)          &  55 & glcm-cs-ct6    \\
+Contrast of Colourfulness (each 20 pixels)         &  56 & glcm-cs-ct20   \\
+Energy of Colourfulness (each pixel)               &  57 & glcm-cs-en1    \\
+Energy of Colourfulness (each 6 pixels)            &  58 & glcm-cs-en6    \\
+Energy of Colourfulness (each 20 pixels)           &  59 & glcm-cs-en20   \\
+Homogeneity of Colourfulness (each pixel)          &  60 & glcm-cs-hm1    \\
+Homogeneity of Colourfulness (each 6 pixels)       &  61 & glcm-cs-hm6    \\
+Homogeneity of Colourfulness (each 20 pixels)      &  62 & glcm-cs-hm20   \\
+Correlation of Colourfulness (each pixel)          &  63 & glcm-cs-cr1    \\
+Correlation of Colourfulness (each 6 pixels)       &  64 & glcm-cs-cr6    \\
+Correlation of Colourfulness (each 20 pixels)      &  65 & glcm-cs-cr20   \\
+Contrast of Hue (each pixel)                       &  66 & glcm-h-ct1     \\
+Contrast of Hue (each 6 pixels)                    &  67 & glcm-h-ct6     \\
+Contrast of Hue (each 20 pixels)                   &  68 & glcm-h-ct20    \\
+Energy of Hue (each pixel)                         &  69 & glcm-h-en1     \\
+Energy of Hue (each 6 pixels)                      &  70 & glcm-h-en6     \\
+Energy of Hue (each 20 pixels)                     &  71 & glcm-h-en20    \\
+Homogeneity of Hue (each pixel)                    &  72 & glcm-h-hm1     \\
+Homogeneity of Hue (each 6 pixels)                 &  73 & glcm-h-hm6     \\
+Homogeneity of Hue (each 20 pixels)                &  74 & glcm-h-hm20    \\
+Correlation of Hue (each pixel)                    &  75 & glcm-h-cr1     \\
+Correlation of Hue (each 6 pixels)                 &  76 & glcm-h-cr6     \\
+Correlation of Hue (each 20 pixels)                &  77 & glcm-h-cr20    \\
+Contrast of Lightness (each pixel)                 &  78 & glcm-l-ct1     \\
+Contrast of Lightness (each 6 pixels)              &  79 & glcm-l-ct6     \\
+Contrast of Lightness (each 20 pixels)             &  80 & glcm-l-ct20    \\
+Energy of Lightness (each pixel)                   &  81 & glcm-l-en1     \\
+Energy of Lightness (each 6 pixels)                &  82 & glcm-l-en6     \\
+Energy of Lightness (each 20 pixels)               &  83 & glcm-l-en20    \\
+Homogeneity of Lightness (each pixel)              &  84 & glcm-l-hm1     \\
+Homogeneity of Lightness (each 6 pixels)           &  85 & glcm-l-hm6     \\
+Homogeneity of Lightness (each 20 pixels)          &  86 & glcm-l-hm20    \\
+Correlation of Lightness (each pixel)              &  87 & glcm-l-cr1     \\
+Correlation of Lightness (each 6 pixels)           &  88 & glcm-l-cr6     \\
+Correlation of Lightness (each 20 pixels)          &  89 & glcm-l-cr20    \\
+Contrast of Saturation$_{HSL}$ (each pixel)        &  90 & glcm-shsl-ct1  \\
+Contrast of Saturation$_{HSL}$ (each 6 pixels)     &  91 & glcm-shsl-ct6  \\
+Contrast of Saturation$_{HSL}$ (each 20 pixels)    &  92 & glcm-shsl-ct20 \\
+Energy of Saturation$_{HSL}$ (each pixel)          &  93 & glcm-shsl-en1  \\
+Energy of Saturation$_{HSL}$ (each 6 pixels)       &  94 & glcm-shsl-en6  \\
+Energy of Saturation$_{HSL}$ (each 20 pixels)      &  95 & glcm-shsl-en20 \\
+Homogeneity of Saturation$_{HSL}$ (each pixel)     &  96 & glcm-shsl-hm1  \\
+Homogeneity of Saturation$_{HSL}$ (each 6 pixels)  &  97 & glcm-shsl-hm6  \\
+Homogeneity of Saturation$_{HSL}$ (each 20 pixels) &  98 & glcm-shsl-hm20 \\
+Correlation of Saturation$_{HSL}$ (each pixel)     &  99 & glcm-shsl-cr1  \\
+Correlation of Saturation$_{HSL}$ (each 6 pixels)  & 100 & glcm-shsl-cr6  \\
 Correlation of Saturation$_{HSL}$ (each 20 pixels) & 101 & glcm-shsl-cr20 \\
-Contrast of Saturation$_{HSV}$ (each pixel) & 102 & glcm-shsv-ct1 \\
-Contrast of Saturation$_{HSV}$ (each 6 pixels) & 103 & glcm-shsv-ct6 \\
-Contrast of Saturation$_{HSV}$ (each 20 pixels) & 104 & glcm-shsv-ct20 \\
-Energy of Saturation$_{HSV}$ (each pixel) & 105 & glcm-shsv-en1 \\
-Energy of Saturation$_{HSV}$ (each 6 pixels) & 106 & glcm-shsv-en6 \\
-Energy of Saturation$_{HSV}$ (each 20 pixels) & 107 & glcm-shsv-en20 \\
-Homogeneity of Saturation$_{HSV}$ (each pixel) & 108 & glcm-shsv-hm1 \\
-Homogeneity of Saturation$_{HSV}$ (each 6 pixels) & 109 & glcm-shsv-hm6 \\
+Contrast of Saturation$_{HSV}$ (each pixel)        & 102 & glcm-shsv-ct1  \\
+Contrast of Saturation$_{HSV}$ (each 6 pixels)     & 103 & glcm-shsv-ct6  \\
+Contrast of Saturation$_{HSV}$ (each 20 pixels)    & 104 & glcm-shsv-ct20 \\
+Energy of Saturation$_{HSV}$ (each pixel)          & 105 & glcm-shsv-en1  \\
+Energy of Saturation$_{HSV}$ (each 6 pixels)       & 106 & glcm-shsv-en6  \\
+Energy of Saturation$_{HSV}$ (each 20 pixels)      & 107 & glcm-shsv-en20 \\
+Homogeneity of Saturation$_{HSV}$ (each pixel)     & 108 & glcm-shsv-hm1  \\
+Homogeneity of Saturation$_{HSV}$ (each 6 pixels)  & 109 & glcm-shsv-hm6  \\
 Homogeneity of Saturation$_{HSV}$ (each 20 pixels) & 110 & glcm-shsv-hm20 \\
-Correlation of Saturation$_{HSV}$ (each pixel) & 111 & glcm-shsv-cr1 \\
-Correlation of Saturation$_{HSV}$ (each 6 pixels) & 112 & glcm-shsv-cr6 \\
+Correlation of Saturation$_{HSV}$ (each pixel)     & 111 & glcm-shsv-cr1  \\
+Correlation of Saturation$_{HSV}$ (each 6 pixels)  & 112 & glcm-shsv-cr6  \\
 Correlation of Saturation$_{HSV}$ (each 20 pixels) & 113 & glcm-shsv-cr20 \\
-Contrast of Value (each pixel) & 114 & glcm-v-ct1 \\
-Contrast of Value (each 6 pixels) & 115 & glcm-v-ct6 \\
-Contrast of Value (each 20 pixels) & 116 & glcm-v-ct20 \\
-Energy of Value (each pixel) & 117 & glcm-v-en1 \\
-Energy of Value (each 6 pixels) & 118 & glcm-v-en6 \\
-Energy of Value (each 20 pixels) & 119 & glcm-v-en20 \\
-Homogeneity of Value (each pixel) & 120 & glcm-v-hm1 \\
-Homogeneity of Value (each 6 pixels) & 121 & glcm-v-hm6 \\
-Homogeneity of Value (each 20 pixels) & 122 & glcm-v-hm20 \\
-Correlation of Value (each pixel) & 123 & glcm-v-cr1 \\
-Correlation of Value (each 6 pixels) & 124 & glcm-v-cr6 \\
-Correlation of Value (each 20 pixels) & 125 & glcm-v-cr20 \\
+Contrast of Value (each pixel)                     & 114 & glcm-v-ct1     \\
+Contrast of Value (each 6 pixels)                  & 115 & glcm-v-ct6     \\
+Contrast of Value (each 20 pixels)                 & 116 & glcm-v-ct20    \\
+Energy of Value (each pixel)                       & 117 & glcm-v-en1     \\
+Energy of Value (each 6 pixels)                    & 118 & glcm-v-en6     \\
+Energy of Value (each 20 pixels)                   & 119 & glcm-v-en20    \\
+Homogeneity of Value (each pixel)                  & 120 & glcm-v-hm1     \\
+Homogeneity of Value (each 6 pixels)               & 121 & glcm-v-hm6     \\
+Homogeneity of Value (each 20 pixels)              & 122 & glcm-v-hm20    \\
+Correlation of Value (each pixel)                  & 123 & glcm-v-cr1     \\
+Correlation of Value (each 6 pixels)               & 124 & glcm-v-cr6     \\
+Correlation of Value (each 20 pixels)              & 125 & glcm-v-cr20    \\
 
 \midrule
 \multicolumn{3}{c}{Itten Colours} \\
 \midrule
-Amount of Red & 126 & it12-r \\
-Amount of Orange Red & 127 & it12-or \\
-Amount of Orange & 128 & it12-o \\
+Amount of Red           & 126 & it12-r  \\
+Amount of Orange Red    & 127 & it12-or \\
+Amount of Orange        & 128 & it12-o  \\
 Amount of Orange Yellow & 129 & it12-oy \\
-Amount of Yellow & 130 & it12-y \\
-Amount of Green Yellow & 131 & it12-gy \\
-Amount of Green & 132 & it12-g \\
-Amount of Green Blue & 133 & it12-gb \\
-Amount of Blue & 134 & it12-b \\
-Amount of Purple Blue & 135 & it12-pb \\
-Amount of Purple & 136 & it12-p \\
-Amount of Purple Red & 137 & it12-pr \\
+Amount of Yellow        & 130 & it12-y  \\
+Amount of Green Yellow  & 131 & it12-gy \\
+Amount of Green         & 132 & it12-g  \\
+Amount of Green Blue    & 133 & it12-gb \\
+Amount of Blue          & 134 & it12-b  \\
+Amount of Purple Blue   & 135 & it12-pb \\
+Amount of Purple        & 136 & it12-p  \\
+Amount of Purple Red    & 137 & it12-pr \\
 
 \midrule
 \multicolumn{3}{c}{Rule of Thirds} \\
 \midrule
-Average of central Colourfullness & 138 & r3-cs-avg \\
-Standard Deviation of central Colourfullness & 139 & r3-cs-std \\
-Average of central Hue & 140 & r3-h-avg \\
-Standard Deviation of central Hue & 141 & r3-h-std \\
-Average of central Lightness & 142 & r3-l-avg \\
-Standard Deviation of central Lightness & 143 & r3-l-std \\
-Average of central Saturation$_{HSL}$ & 144 & r3-shsl-avg \\
+Average of central Colourfulness                 & 138 & r3-cs-avg   \\
+Standard Deviation of central Colourfulness      & 139 & r3-cs-std   \\
+Average of central Hue                           & 140 & r3-h-avg    \\
+Standard Deviation of central Hue                & 141 & r3-h-std    \\
+Average of central Lightness                     & 142 & r3-l-avg    \\
+Standard Deviation of central Lightness          & 143 & r3-l-std    \\
+Average of central Saturation$_{HSL}$            & 144 & r3-shsl-avg \\
 Standard Deviation of central Saturation$_{HSL}$ & 145 & r3-shsl-std \\
-Average of central Saturation$_{HSV}$ & 146 & r3-shsv-avg \\
+Average of central Saturation$_{HSV}$            & 146 & r3-shsv-avg \\
 Standard Deviation of central Saturation$_{HSV}$ & 147 & r3-shsv-std \\
-Average of central Value & 148 & r3-v-avg \\
-Standard Deviation of central Value & 149 & r3-v-std \\
+Average of central Value                         & 148 & r3-v-avg    \\
+Standard Deviation of central Value              & 149 & r3-v-std    \\
 
 \midrule
 \multicolumn{3}{c}{Itten Contrast of$\ldots$} \\
 \midrule
-Saturation$_{HSL}$ (rule of thirds) & 150 & itct-sat-sl-r3 \\
-Saturation$_{HSL}$ (rule of sevenths) & 151 & itct-sat-sl-r7 \\
-Saturation$_{HSL}$ (watershed) & 152 & itct-sat-sl-sg \\
-Saturation$_{HSV}$ (rule of thirds) & 153 & itct-sat-sv-r3 \\
-Saturation$_{HSV}$ (rule of sevenths) & 154 & itct-sat-sv-r7 \\
-Saturation$_{HSV}$ (watershed) & 155 & itct-sat-sv-sg \\
-Light and Dark of Lightness (rule of thirds) & 156 & itct-lightdark-l-r3 \\
-Light and Dark of Lightness (rule of sevenths) & 157 & itct-lightdark-l-r7 \\
-Light and Dark of Lightness (watershed) & 158 & itct-lightdark-l-sg \\
-Light and Dark of Value (rule of thirds) & 159 & itct-lightdark-v-r3 \\
-Light and Dark of Value (rule of sevenths) & 160 & itct-lightdark-v-r7 \\
-Light and Dark of Value (watershed) & 161 & itct-lightdark-v-sg \\
-Hue (rule of thirds) & 162 & itct-hue-h-r3 \\
-Hue (rule of sevenths) & 163 & itct-hue-h-r7 \\
-Hue (watershed) & 164 & itct-hue-h-sg \\
-Hue Colourfullness (rule of thirds) & 165 & itct-hue-cs-r3 \\
-Hue Colourfullness (rule of sevenths) & 166 & itct-hue-cs-r7 \\
-Hue Colourfullness (watershed) & 167 & itct-hue-cs-sg \\
-Warm and Cold of Hue (rule of thirds) & 168 & itct-warmcold-h-r3 \\
-Warm and Cold of Hue (rule of sevenths) & 169 & itct-warmcold-h-r7 \\
-Warm and Cold of Hue (watershed) & 170 & itct-warmcold-h-sg \\
-Warm and Cold of Colourfullness (rule of thirds) & 171 & itct-warmcold-cs-r3 \\
-Warm and Cold of Colourfullness (rule of sevenths) & 172 & itct-warmcold-cs-r7 \\
-Warm and Cold of Colourfullness (watershed) & 173 & itct-warmcold-cs-sg \\
-Complements of Hue (rule of thirds) & 174 & itct-comp-h-r3 \\
-Complements of Hue (rule of sevenths) & 175 & itct-comp-h-r7 \\
-Complements of Hue (watershed) & 176 & itct-comp-h-sg \\
-Complements of Colourfullness (rule of thirds) & 177 & itct-comp-cs-r3 \\
-Complements of Colourfullness (rule of sevenths) & 178 & itct-comp-cs-r7 \\
-Complements of Colourfullness (watershed) & 179 & itct-comp-cs-sg \\
+Saturation$_{HSL}$ (rule of thirds)              & 150 & itct-sat-sl-r3      \\
+Saturation$_{HSL}$ (rule of sevenths)            & 151 & itct-sat-sl-r7      \\
+Saturation$_{HSL}$ (watershed)                   & 152 & itct-sat-sl-sg      \\
+Saturation$_{HSV}$ (rule of thirds)              & 153 & itct-sat-sv-r3      \\
+Saturation$_{HSV}$ (rule of sevenths)            & 154 & itct-sat-sv-r7      \\
+Saturation$_{HSV}$ (watershed)                   & 155 & itct-sat-sv-sg      \\
+Light and Dark of Lightness (rule of thirds)     & 156 & itct-lightdark-l-r3 \\
+Light and Dark of Lightness (rule of sevenths)   & 157 & itct-lightdark-l-r7 \\
+Light and Dark of Lightness (watershed)          & 158 & itct-lightdark-l-sg \\
+Light and Dark of Value (rule of thirds)         & 159 & itct-lightdark-v-r3 \\
+Light and Dark of Value (rule of sevenths)       & 160 & itct-lightdark-v-r7 \\
+Light and Dark of Value (watershed)              & 161 & itct-lightdark-v-sg \\
+Hue (rule of thirds)                             & 162 & itct-hue-h-r3       \\
+Hue (rule of sevenths)                           & 163 & itct-hue-h-r7       \\
+Hue (watershed)                                  & 164 & itct-hue-h-sg       \\
+Hue Colourfulness (rule of thirds)               & 165 & itct-hue-cs-r3      \\
+Hue Colourfulness (rule of sevenths)             & 166 & itct-hue-cs-r7      \\
+Hue Colourfulness (watershed)                    & 167 & itct-hue-cs-sg      \\
+Warm and Cold of Hue (rule of thirds)            & 168 & itct-warmcold-h-r3  \\
+Warm and Cold of Hue (rule of sevenths)          & 169 & itct-warmcold-h-r7  \\
+Warm and Cold of Hue (watershed)                 & 170 & itct-warmcold-h-sg  \\
+Warm and Cold of Colourfulness (rule of thirds)  & 171 & itct-warmcold-cs-r3 \\
+Warm and Cold of Colourfulness (rule of sevenths)& 172 & itct-warmcold-cs-r7 \\
+Warm and Cold of Colourfulness (watershed)       & 173 & itct-warmcold-cs-sg \\
+Complements of Hue (rule of thirds)              & 174 & itct-comp-h-r3      \\
+Complements of Hue (rule of sevenths)            & 175 & itct-comp-h-r7      \\
+Complements of Hue (watershed)                   & 176 & itct-comp-h-sg      \\
+Complements of Colourfulness (rule of thirds)    & 177 & itct-comp-cs-r3     \\
+Complements of Colourfulness (rule of sevenths)  & 178 & itct-comp-cs-r7     \\
+Complements of Colourfulness (watershed)         & 179 & itct-comp-cs-sg     \\
 
 \midrule
 \multicolumn{3}{c}{Image Averages} \\
 \midrule
-Average of Colourfullness & 180 & cs-avg \\
-Standard Deviation of Colourfullness & 181 & cs-std \\
-Average of Hue & 182 & h-avg \\
-Standard Deviation of Hue & 183 & h-std \\
-Average of Lightness & 184 & l-avg \\
-Standard Deviation of Lightness & 185 & l-std \\
-Average of Saturation$_{HSL}$ & 186 & shsl-avg \\
+Average of Colourfulness                 & 180 & cs-avg   \\
+Standard Deviation of Colourfulness      & 181 & cs-std   \\
+Average of Hue                           & 182 & h-avg    \\
+Standard Deviation of Hue                & 183 & h-std    \\
+Average of Lightness                     & 184 & l-avg    \\
+Standard Deviation of Lightness          & 185 & l-std    \\
+Average of Saturation$_{HSL}$            & 186 & shsl-avg \\
 Standard Deviation of Saturation$_{HSL}$ & 187 & shsl-std \\
-Average of Saturation$_{HSV}$ & 188 & shsv-avg \\
+Average of Saturation$_{HSV}$            & 188 & shsv-avg \\
 Standard Deviation of Saturation$_{HSV}$ & 189 & shsv-std \\
-Average of Value & 190 & v-avg \\
-Standard Deviation of Value & 191 & v-std \\
+Average of Value                         & 190 & v-avg    \\
+Standard Deviation of Value              & 191 & v-std    \\
 \bottomrule
 \end{longtable}
 \end{center}
@@ -1700,12 +2027,16 @@ Standard Deviation of Value & 191 & v-std \\
 \endhead
 
 \midrule
+\multicolumn{3}{r}{} \\
 \multicolumn{3}{r}{{Continued on next page}} \\
+\multicolumn{3}{r}{} \\
 \midrule
 \endfoot
 
 \bottomrule
-\caption{Big table top}
+\caption[Feature values (first half)]{Mean and standard deviation of all
+features grouped by the art schools of renaissance, baroque and neoclassicism.
+The features are identified by the short names from table \ref{tab:glossary}.}
 \label{tab:bigtop}
 \endlastfoot
 
@@ -1731,12 +2062,17 @@ Standard Deviation of Value & 191 & v-std \\
 \endhead
 
 \midrule
+\multicolumn{3}{r}{} \\
 \multicolumn{3}{r}{{Continued on next page}} \\
+\multicolumn{3}{r}{} \\
 \midrule
 \endfoot
 
 \bottomrule
-\caption{Big table bottom}
+\caption[Feature values (second half)]{Mean and standard deviation of all
+features grouped by the art schools of romanticism and impressionism.  It also
+shows the values for mughal miniature paintings.  The features are identified
+by the short names from table \ref{tab:glossary}.}
 \label{tab:bigbot}
 \endlastfoot
 
@@ -1744,6 +2080,11 @@ Standard Deviation of Value & 191 & v-std \\
 \bottomrule
 \end{longtable}
 \end{center}
+
+\newpage
+\null
+\thispagestyle{empty}
+\newpage
 
 \chapter{Code}
 
