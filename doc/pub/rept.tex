@@ -1260,41 +1260,203 @@ the bottom is the \emph{Impressionist} painting "The Echo in the Woods" by
 
 \end{multicols}
 
-%Citations useful for the introduction (and for the remaining of the text too):
-%Romero \cite{jma12clas}, Romero \cite{rmc12ajs}, Chen (Yahoo) on JSONS
-%\cite{chen09yahoo}, Zirnhelt (generic artist classification)
-%\cite{zirnhelt07art}, Machajdik (affective) \cite{mach10clas}, Chih-Wei
-%(libsvm) \cite{hcl03svm}, DiMaggio (art classification) \cite{dimaggio87art}
-
 \chapter{Results}
 \label{chap:results}
 \begin{multicols}{2}
 
-% No PCA was done, we can say that the features are unrelated enough that we do
-% not need feature selection.
+All features extracted are joined together and joined to the metadata of each
+painting.  This creates a big dataset file over which classification can be
+performed.  In this chapter we perform a \emph{crude classification attempt}
+over the features extracted to evaluate whether the features are \emph{good
+measures of style}. 
 
-% PCA between pairs of authors, maybe?
+We first evaluate the \emph{correlation} between the extracted features, then
+use the \emph{libsvm}\footnote{\href{http://www.csie.ntu.edu.tw/~cjlin/libsvm/}
+{http://www.csie.ntu.edu.tw/~cjlin/libsvm/}} set of tools to perform the
+classification.  Before attempting classification, we needed to translate the
+data file with the features into a format understood by \emph{libsvm}
+classifiers.  We developed a script (\texttt{mksvmf.pl}) to transform the
+numerical data of features into the format read by libsvm, and to translate the
+painting metadata from its string values (e.g. "romantincism") into different
+numerical integers values.  For the classification of artists we use each
+artist from Table \ref{tab:style} as a class, but for the art school
+classification we ignore the "Watercolour" school as has too few paintings and
+we ignore the artist "Devi" as he's art is different from any other artist and
+cannot be assigned to any one of the art schools.
 
-% Pearson coefficient was not used, we do not have any categorical data instead
-% all data for correlation is numeric.
+% No PCA was done, it would be great if there was time to do though.
+
+% Pearson coefficient was not used, we do not have any categorical data.
+% Instead all data is numeric, correlation coefficient suffices.
 
 % Extrapolation towards, art movement/school is the most important part of this
 % chapter.
 
 \section{Correlation between features}
 
-Artists in the same art movement shall be close, in distinct movements shall be
-apart.
+\begin{figure*}[tbp]
+\centering
+\includegraphics[width=\textwidth]{corr-graph}
+\caption[Correlation]{Correlation Coefficient, here a second graph showing the
+distribution of all coefficients will be added.}
+\label{fig:corr}
+\end{figure*}
 
-The absolute value of the correlation coefficient on the scatter graph shall be
-good enough.  It can be seen on the graph that few correlation coefficients are
-above 0.7.
+\emph{Correlation coefficient} between all combinations of features is
+calculated, this is possible because all features are numerical in nature.
+Figure \ref{fig:corr} shows the distribution of the absolute value of the
+correlation coefficient between features.  Although there are few values above
+correlation 0.7 depicting that few features are \emph{strongly correlated},
+there are several values between 0.5 and 0.7 telling us that a good number of
+features is \emph{weakly correlated}.
 
 \section{Classification}
 
-How we calculated the correlation.  Most significant numbers from each table.
-A plethora of tables.  A graph with three most prominent features between each
-school.
+Multi-class classification of the paintings to artists was performed using a
+\emph{C-SVM} set of classifiers, using an \emph{RBF} kernel.  As suggested by
+Hsu in \cite{hcl03svm}, the best cost (C) and gamma ($\gamma$) parameters were
+searched on a grid.  The \emph{cost} parameter ranging from $2^{-5}$ to $2^2$
+and the $\gamma$ parameter ranging from $2^3$ to $2^{-2}$.  The SVM was tested
+using \emph{k-fold cross validation} with k = 12.  The precision of the
+classification for each artist is shown in Table \ref{tab:predart}.  TODO:
+total accuracy of classifier.
+
+\begin{table*}[tpb]
+\centering
+\rowcolors{1}{}{lightgray}
+\begin{tabular}{|l|r||l|r||l|r|}
+\toprule
+artist & prec. & artist & prec. & artist & prec. \\
+\midrule
+\input{art-predict.tex}
+\bottomrule
+\end{tabular}
+\caption[Multi-class artist classification]{Multi-class artist classification}
+\label{tab:predart}
+\end{table*}
+
+A similar classification was made for the art schools: using multi-class C-SVMs
+with an RDF kernel we classified the images across art schools they belonged
+to.  A grid search with the \emph{same parameters} was performed to find the
+best \emph{cost} and $\gamma$ parameters for the kernel, and the SVM was tested
+using k-fold cross validation.  For the art school classification we used k =
+36 in the k-fold cross validation as the number of classes is smaller and the
+number of \emph{items in each class bigger}.  The precision of the
+classification for each art school is shown in Table \ref{tab:predsch}.  TODO:
+transform this into a confusion matrix; TODO: total accuracy of classifier.
+
+\begin{table*}[ptb]
+\centering
+\begin{tabular}{|l|r||l|r|}
+\toprule
+school & prec. & school & prec. \\
+\midrule
+\input{sch-predict.tex}
+\bottomrule
+\end{tabular}
+\caption[Multi-class school classification]{Multi-class school classification;
+this will become a confusion matrix.}
+\label{tab:predsch}
+\end{table*}
+
+The classification of artists was \emph{not consistent}: although some artists
+can be found with high precision others fare poorly by the classifier.  The
+classification of art school is \emph{not consistent} as well, although the
+sample size for the art schools is bigger the classification performance is not
+better.  One interesting fact about the classification is that the \emph{Mughal
+miniature painting} could be classified perfectly from other art schools in the
+art school classifier, yet the \emph{artists of that school} (Basawan, Jagan,
+Kesav, La'l, Miskin and Tulsi) are poorly classified in the artist
+classification.  This might be explained by the fact that the Mughal miniature
+painting is a \emph{non-European form of art} whilst works on features for art,
+including Itten's work, are based almost exclusively on European art.  Mughal
+miniature painting can be told apart from European art well because its feature
+values are different from European art, but artist within the Mughal miniature
+painting cannot be told apart because there little variance on the features
+within the school.
+
+\section{Binary Classification}
+
+We perform several classifications using binary SVMs, the results from these
+classifications is more \emph{consistent} than the multi-class classification.
+Six artists are selected (Titian, Murillo, Rembrandt, Canaletto, Constable and
+Monticelli) and binary SVMs are used to classify \emph{each possible pair}.
+The binary SVM uses the RBF kernel, and a grid search is performed with the
+\emph{same parameters} to find the best cost and $\gamma$ parameters for the
+kernel.  k-fold cross validation with k = 12 is used, as previously for the
+artist classification, to evaluate the classifiers.  The accuracy of each
+classifier is shown in Table \ref{tab:foldart}.
+
+\begin{table*}[ptb]
+\centering
+\begin{tabular}{r||r|r|r|r|r}
+\toprule
+\input{art-compm.tex}
+\bottomrule
+\end{tabular}
+\caption[Two class artist classification]{Two class artist classification}
+\label{tab:foldart}
+\end{table*}
+
+An identical binary classification was performed between the art schools:
+binary SVM, RBF kernel, grid search.  As the multi-class classification, this
+\emph{art school classification} was evaluated with k-fold cross validation
+with k = 36.  The resulting accuracy of each classifier can be seen in Table
+\ref{tab:foldsch}.
+
+\begin{table*}[ptb]
+\centering
+\rowcolors{5}{}{lightgray}
+\begin{tabular}{r||r|r|r|r|r}
+\toprule
+\input{sch-compm.tex}
+\bottomrule
+\end{tabular}
+\caption[Two class school classification]{Two class school classification}
+\label{tab:foldsch}
+\end{table*}
+
+Art evolved with time therefore styles that are \emph{closer to each other in
+time} show more similarities.  We see from the binary school classification
+that art school that are closer to each other (Renaissance and Baroque, Baroque
+and Neoclassicism, Neoclassicism and Romanticism, Romanticism and
+Impressionism) are harder to tell apart than \emph{schools that are distant}.
+Moreover, in the binary artist classification we see that we can tell apart
+most artists with \emph{80-95\% accuracy}, but we cannot tell apart so well
+Titian, Rembrandt and Murillo.  Whilst all other artists are from different art
+schools Rembrandt and Murillo are both \emph{Baroque} painters, Titian is a
+late \emph{Renaissance} painter and many of his works can be considered part of
+the \emph{Baroque} school.
+
+Therefore we can tell apart easily artists that have very \emph{different
+styles}, but we struggle to tell apart artists with \emph{similar styles}.
+This means that the features extracted do convey the \emph{style of a
+painting}.
+
+\section{Feature evaluation}
+
+The features capture the \emph{style of the paintings}, although work is still
+needed to tell which of them capture more of it.  Principal Component Analysis
+(PCA) or other \emph{feature selection} technique shall be a next logical step
+to continue this work.  Depicting the differences between art schools Figure
+\ref{fig:school} shows the means of each feature for each art school.
+
+\begin{figure*}[tbp]
+\centering
+\includegraphics[width=\textwidth]{school-graph}
+\caption[Feature Values]{Feature values per School. Here another graph will be
+added with the values ordered to form a line.}
+\label{fig:school}
+\end{figure*}
+
+%\begin{figure*}[tbp]
+%\centering
+%\includegraphics[width=0.7\textwidth]{class-graph}
+%\caption[Classification]{Classification Accuracy}
+%\label{fig:class}
+%\end{figure*}
+
+\end{multicols}
 
 %\section{meeting: discussion on CBIR (Friday, 1st of July)}
 %
@@ -1310,86 +1472,6 @@ school.
 %
 %R library to explore data: ggplot2 (use it?).
 %
-
-\begin{table*}[ptb]
-\centering
-\rowcolors{1}{}{lightgray}
-\begin{tabular}{|l|r||l|r||l|r|}
-\toprule
-artist & acc. & artist & acc. & artist & acc. \\
-\midrule
-\input{art-predict.tex}
-\bottomrule
-\end{tabular}
-\caption[Multiclass artist classification]{Multiclass artist classification}
-\label{tab:predart}
-\end{table*}
-
-\begin{table*}[ptb]
-\centering
-\begin{tabular}{|l|r||l|r|}
-\toprule
-school & acc. & school & acc. \\
-\midrule
-\input{sch-predict.tex}
-\bottomrule
-\end{tabular}
-\caption[Multiclass school classification]{Multiclass school classification}
-\label{tab:predsch}
-\end{table*}
-
-\section{Cross Classification}
-
-When we take two classes only and run the classifiers between them the results
-are better.  This is because classification between two classes is easier as
-classifiers can concentrate on specific points that are different between those
-two classes.
-
-\begin{table*}[ptb]
-\centering
-\begin{tabular}{r||r|r|r|r|r}
-\toprule
-\input{art-compm.tex}
-\bottomrule
-\end{tabular}
-\caption[Two class artist classification]{Two class artist classification}
-\label{tab:foldart}
-\end{table*}
-
-\begin{table*}[ptb]
-\centering
-\rowcolors{5}{}{lightgray}
-\begin{tabular}{r||r|r|r|r|r}
-\toprule
-\input{sch-compm.tex}
-\bottomrule
-\end{tabular}
-\caption[Two class school classification]{Two class school classification}
-\label{tab:foldsch}
-\end{table*}
-
-\begin{figure*}[tbp]
-\centering
-\includegraphics[width=\textwidth]{corr-graph}
-\caption[Correlation]{Correlation Coefficient}
-\label{fig:corr}
-\end{figure*}
-
-\begin{figure*}[tbp]
-\centering
-\includegraphics[width=\textwidth]{school-graph}
-\caption[Feature Values]{Feature values per School}
-\label{fig:school}
-\end{figure*}
-
-\begin{figure*}[tbp]
-\centering
-\includegraphics[width=0.7\textwidth]{class-graph}
-\caption[Classification]{Classification Accuracy}
-\label{fig:class}
-\end{figure*}
-
-\end{multicols}
 
 \chapter{Conclusions}
 \begin{multicols}{2}
@@ -1407,9 +1489,10 @@ openness of Copyright rules for the dataset, and it shall then be published.
 
 The dataset and the extracted features being available openly allow future
 works to compare against this work, as several parts of this work can be
-improved.  A \emph{feature selection} process will certainly improve the
-classification, and allow for a better understanding of the most important
-feature for paintings among the features described.
+improved.  The features described are good measures of style, but a
+\emph{feature selection} process will certainly improve the classification and
+allow for a better understanding of the most important features for the style
+of paintings among all the features described.
 
 \end{multicols}
 
