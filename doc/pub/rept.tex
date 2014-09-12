@@ -1,7 +1,5 @@
-\documentclass[11pt,a4paper,draft]{report}
+\documentclass[11pt,a4paper,twoside,openright,draft]{report}
 
-% twoside,openright screws up sideways figure positioning, use empty pages
-% to force openright formating by hand.
 % The PDF must be named rep_grochmalm_act.pdf
 
 \usepackage[utf8]{inputenc}
@@ -200,15 +198,16 @@ photography are much easier to acquire than datasets of art, that is the major
 reason why the majority of work on style uses photography.
 
 Art paintings style is evident to humans, Figures \ref{fig:diff} and
-\ref{fig:similar} show an example of image similarity.  In Figure \ref{diff} we
-see paintings by Francesco Granacci and by Francesco Pesellino, these paintings
-contain similar object and depict a similar contex yet their \emph{style is
-different}.  Figure \ref{fig:similar} shows two paintings by Delacroix, in
-which the \emph{style is similar} although the scenes depicted are different.
-Using the correct features we shall be capable of identifying the firs two
-images as different and the last two as similar.  [The images are part of the
-public collection of the Victoria and Albert Museum in London, this collection
-is used as a dataset in this work.  See Chapter \ref{chap:data}.]
+\ref{fig:similar} show an example of image similarity.  In Figure
+\ref{fig:diff} we see paintings by Francesco Granacci and by Francesco
+Pesellino, these paintings contain similar object and depict a similar contex
+yet their \emph{style is different}.  Figure \ref{fig:similar} shows two
+paintings by Delacroix, in which the \emph{style is similar} although the
+scenes depicted are different.  Using the correct features we shall be capable
+of identifying the firs two images as different and the last two as similar.
+[The images are part of the public collection of the Victoria and Albert Museum
+in London, this collection is used as a dataset in this work.  See Chapter
+\ref{chap:data}.]
 
 To achieve such classification we follow works that detour from interest points
 or corner detection for general object identification as SIFT or MSER
@@ -318,7 +317,6 @@ the data and code used.
 
 \chapter{Data}
 \label{chap:data}
-
 \begin{multicols}{2}
 
 We use online art collections as the datasets for our classification,
@@ -581,7 +579,6 @@ significantly.
 
 \chapter{Approach}  % Why not "Methodology"?
 \label{chap:approach}
-
 \begin{multicols}{2}
 
 With the datasets downloaded and organised we join them to achieve the number
@@ -593,7 +590,7 @@ co-occurrence matrix}, \emph{amount of Itten colours}, \emph{rule of thirds},
 \emph{Itten contrasts} and \emph{image averages}.  A separate feature extractor
 for each group of features was built.
 
-Later (in chapter \ref{chap:results}) we join all features together and run the
+Later (in Chapter \ref{chap:results}) we join all features together and run the
 classifiers over the joined data.
 
 \section{Normalisation and separation}
@@ -759,12 +756,6 @@ scaled as seen in equation \ref{eq:cs}.}
 \label{fig:cs}
 \end{figure*}
 
-%Citations useful for the introduction (and for the remaining of the text too):
-%Romero \cite{jma12clas}, Romero \cite{rmc12ajs}, Chen (Yahoo) on JSONS
-%\cite{chen09yahoo}, Zirnhelt (generic artist classification)
-%\cite{zirnhelt07art}, Machajdik (affective) \cite{mach10clas}, Chih-Wei
-%(libsvm) \cite{hcl03svm}, DiMaggio (art classification) \cite{dimaggio87art}
-
 \section{Basic Features}
 
 Some features shall be retrieved from each of the six image channels.  From
@@ -776,8 +767,8 @@ Matrix} of each channel.  The \emph{average and standard deviation of all
 pixels} in each of the channels is a common feature used across all three works
 \cite{jma12clas,zirnhelt07art,mach10clas}.  Machajdik \cite{mach10clas} also
 proposes to use the average and standard deviation of the pixels in the central
-rectangle of the image when it is divided into three parts on it's width and
-three parts on it's height, a \emph{Rule of thirds} of the image framing.
+rectangle of the image when it is divided into three parts on its width and
+three parts on its height, a \emph{Rule of thirds} of the image framing.
 
 For each of these groups of features a feature extractor was built and run over
 all images in the dataset.
@@ -800,26 +791,30 @@ Canny filtered uncompressed channel (also in PGM format).  This totals for 18
 PGM images for each image in the dataset.
 
 Next, we compress each of the 18 images with JPEG compression with different
-quality values.  We use the JPEG quality of 60, 40 and 20, following the same
-quality values used by Romero \cite{jma12clas}.  This produces 3 JPEG images
-for each of the 18 PGM images, giving a total of 54 JPEG compressed images for
-each image in the dataset.
+quality values.  We use the \emph{JPEG quality} of 60, 40 and 20, following the
+same quality values used by Romero \cite{jma12clas}.  This produces 3 JPEG
+images for each of the 18 PGM images, giving a total of 54 JPEG compressed
+images for each image in the dataset.
 
 The Kolmogorov complexity is estimated by dividing the size (in bytes) of the
 PGM image by each of it's correspondent JPEG compressed images.  This procedure
-generates 54 features for each image in the dataset.
+generates \emph{54 features} for each image in the dataset.
 
 % We did not use any form of fractal compression.
 
 \subsection{Grey Level Co-occurrence Matrix}
 
-All features of texture coming from that.
-
-For each channel we build three GLCMs, one using neighbouring pixels (next
-pixel to the left), one using the next 6th pixel to the left and one using the
-next 20th pixel to the left.  For each of these GLCM we calculate the contrast,
-energy, homogeneity and correlation of the texture.  Correlation is not always
-possible to calculate, in such cases we consider the texture correlation as 1.
+GLCM is a well established technique to produce features based on the texture
+of an image, used by Machajdik \cite{mach10clas} and Zirnhelt
+\cite{zirnhelt07art} for this exact purpose.  Using scripts that call the
+subroutines from the \texttt{skimage.feature} python library we produce three
+GLCMs for each channel: using the neighbouring pixel on the right of each
+pixel, using the 6th pixel to the right and using 20th pixel to the right.  For
+each of these GLCMs we calculate the contrast, the energy, the homogeneity and
+the correlation of the texture.  Correlation is not always possible to
+calculate, in such cases we consider the texture correlation as 1.0.  The
+texture features using the GLCM result in a total of \emph{72 features} (6
+channels times 3 GLCMs times 4 features).
 
 \begin{figure*}[tbp]
 \centering
@@ -851,64 +846,175 @@ applied.}
 \label{fig:cannysobelcs}
 \end{figure*}
 
-\subsection{Rule of Thirds}
-
-Same averages on the central rectangle.
-
-Average per channel, Standard deviation per channel on the central rectangle
-only.
-
 \subsection{Image Averages}
 
-Std and average, super simple.
+A simple set of features is the \emph{pixel value average} of each channel of
+the image, and the \emph{standard deviation of the value of each pixel} of each
+channel.  Both Romero \cite{jma12clas} and Machajdik \cite{mach10clas} use
+these measures as features.  The average and standard deviation of each channel
+produces \emph{12 features} for each image.
 
-Average per channel, Standard deviation per channel.
+\subsection{Rule of Thirds}
+
+Enhancing the basic image averages Machajdik \cite{mach10clas} uses features of
+the framing of the image.  The image is divided in three parts on width and
+height to produce \emph{nine rectangles of equal sizes}.  The value of the
+average of the value of each pixel and the standard deviation of the value of
+each pixel from the central rectangle only is taken as a feature.  These are
+calculated for the central rectangle on each of the channels of the image,
+resulting in \emph{12 features} per image.
+
+\begin{figure*}[tbp]
+\centering
+\includegraphics[width=0.48\textwidth]{r3_L_caravaggio_1962_139_1}
+\includegraphics[width=0.48\textwidth]{r7_L_caravaggio_1962_139_1}
+\caption[Rule of thirds]{Rule of \emph{thirds} consist of dividing the image
+into three equal parts on each axis, as seen on the image on the left.  It is
+common that the colours and objects in the central region are the most
+important for the scene painted.  A rule of \emph{sevenths}, figure on the
+right, was also used in the segmentation process.  Dividing into seven equal
+parts on each axis produce smaller regions than the rule of thirds but big
+enough to be noticeable for the contrast of the image.}
+\label{fig:r3}
+\end{figure*}
 
 \section{Itten Colours}
 
-Stuff based on itten colours
+Johannes Itten cited in \cite{mach10clas} studied colours int the context of
+art and their emotional effects on a person looking at a piece of art.  He
+defined several \emph{contrasts and combination of colours} that produced
+harmonious or other emotional effects when looked upon.  Itten used Hue,
+Saturation and Luminance to describe colours in his study, yet Machajdik
+\cite{mach10clas} simplified some of the work to use Hue, Saturation and
+Lightness.
+
+Features derived from the Itten colours are used in Affective Image retrieval
+\cite{mach10clas}.  Yet art is closely related to the affective effect of
+images, therefore it does make sense to use affective features to distinguish
+art.  We use aggregation of colours to \emph{Itten colours} as features of the
+image, and we also use several of the contrasts defined by Itten: contrast of
+\emph{Saturation}, contrast of \emph{Light and Dark}, contrast of \emph{Hue},
+contrast of \emph{Warm and Cold}, contrast of \emph{Complements}.
 
 \subsection{Amount of each colour}
 
-Only the colours above the image average get counted.
+There are 12 Itten colours.  Considering the hue channel as a circle
+with $360^{\circ}$ we can say that each $30^{\circ}$ we have an Itten colour,
+starting from the red colour at $0^{\circ}$.  The Itten colours are therefore:
+\emph{red}    ($0^{\circ}$),   \emph{orange red}    ($30^{\circ}$),
+\emph{orange} ($60^{\circ}$),  \emph{orange yellow} ($90^{\circ}$),
+\emph{yellow} ($120^{\circ}$), \emph{green yellow}  ($150^{\circ}$),
+\emph{green}  ($180^{\circ}$), \emph{green blue}    ($210^{\circ}$),
+\emph{blue}   ($240^{\circ}$), \emph{purple blue}   ($270^{\circ}$),
+\emph{purple} ($300^{\circ}$) and \emph{purple red} ($330^{\circ}$).
 
-Scale 0-255 into 0-360 and add 15 degrees to account for red being centered
-at zero.  After this we have the following 12 bins:
+To get the amount of each colour we count the number of pixels $15^{\circ}$ in
+each direction (clockwise and counterclockwise) from the Itten colour.  We
+scale the \emph{hue channel} of the image to the range 0 to 360 and add 15 to
+all pixels and take modulus 360 from the result, this ensures that all pixels
+$15^{\circ}$ from the \emph{red colour} are in the range 0 to 30.  Then we
+construct a histogram with 12 bins, spamming $30^{\circ}$ each, from all pixels
+in the hue channel.
 
-\begin{verbatim}
-red           (r)
-orange red    (or)
-orange        (o)
-orange yellow (oy)
-yellow        (y)
-green yellow  (gy)
-green         (g)
-green blue    (gb)
-blue          (b)
-purple blue   (pb)
-purple        (p)
-purple red    (pr)
-\end{verbatim}
-
-Most prominent colours only.  All colours below the average of colours are
-taken to be zero.
+To generate the features we take only the most prominent colours.  From each of
+the 12 bins we subtract the average of all the bins, then every bin with a
+positive value is taken as a feature and every bin with a value of zero or a
+negative value is left and a 0 is written out as the feature value for that
+colour.  A total of \emph{12 features} is generated for each image, one for
+each Itten colour.
 
 \subsection{Segmentation}
 
-To measure contrasts we need to segment the image.  Rule of thirds, rule of
-sevenths, watershed segmentation.
+To measure contrasts (Itten contrasts) we need two different areas of the image
+to measure the contrast between them.  i.e. we need to divide the image into
+different areas, it is know as \emph{segmenting the image}.  A simple way of
+segmenting the image is to use Machajdik's rule of thirds \cite{mach10clas} and
+consider each of the nine rectangles as areas we calculate contrast between.
+We, therefore, use the \emph{rule of thirds} as one of the segmentations of the
+image.  Yet the rule of thirds can be extended to a \emph{rule of sevenths} in
+which the image is divided into seven pieces on its width nd height producing
+49 equal size rectangles, we use this rule as another segmentation technique.
 
-In rule of thirds and rule of sevenths we contrast all regions against all
-other regions, but in the watershed segmentation we ignore the smallest
-regions that are found.
+A more elaborate segmentation of the image is the \emph{watershed
+segmentation}, in which we divide the image based on the continuous regions and
+the edges between the regions.  The \texttt{skimage.morph} python library was
+used to perform watershed segmentation on the channels of the images.
+Watershed segmentation produces several regions of different sizes and shapes
+over the image channel.  Several of the regions are very small and irrelevant
+to a contrast that shall be \emph{perceived by the human eye}, we eliminate
+these small regions by removing from the result of the watershed segmentation
+all regions smaller than 548 pixels (548 is the square root of 300 000, which
+is the number of pixels we normalised all images to).  An example of watershed
+segmentation is shown in Figure \ref{fig:segm}.
+
+Segmented regions are assumed to be homogeneous and have the value of the mean
+of all pixels of the region.  The regions segmented have the same sizes in the
+rule of thirds and rule of sevenths techniques, but in the watershed
+segmentation the resulting regions are of \emph{different sizes}.  To make for
+the difference in sizes the contrast value calculated from a region is scaled
+by the region's size.
+
+To calculate each of the Itten contrasts across the regions resulting from
+either the segmentation by rule of thirds, rule of sevenths or watershed
+segmentation, we apply a contrast function between \emph{all regions} or
+between all \emph{combinations of two regions} (e.g. a total of $9^2$
+combinations for the rule of thirds) depending of the type of contrast.  The
+result of applying the contrast function to each combination produces a set of
+contrast results which need to be processed further.  The scaling by the size
+of the region used when calculating the contrast is done on \emph{individual
+regions} when the contrast is calculated over all regions, or is done on the
+result of the contrast function applied to two regions and scaled on the
+\emph{sum of both regions size}.
+
+A contrast over all regions result in a single value, the standard deviation
+between all regions, and is taken as a feature.  But contrast between pairs of
+regions result in a \emph{set of contrasts}, these are evaluated using a
+threshold or a maximum function depending on the Itten contrast to produxe a
+feature value.
+
+\begin{sidewaysfigure*}[p]
+\centering
+\includegraphics[width=0.9\textwidth]{segm_rembrandt_eu_464}
+\caption[Watershed segmentation example]{Watershed segmentation example.  The
+images at the top show the steps for the segmentation of the image.  The
+original image, a denoised image on which the segmentation is actually made,
+the gradient magnitude, and the original places of the markers.  Next the
+markers \emph{flow as water} filling the regions, this is shown on the next
+image.  Finally, the last image in the first row shows how the found regions
+are distributed over the original image.  The second row show the five biggest
+regions found as a mask over the image.  The last row show the mask generated
+by each of the five biggest regions applied to the image and cropped.}
+\label{fig:segm}
+\end{sidewaysfigure*}
 
 \subsection{Itten Contrasts}
 
-Contrast of hue, saturation, light and dark, warm and cold colours,
-complements.
+Each Itten contrast is evaluated in each of the three segmentations, and over
+two channels of the original image.  We perform the contrast of \emph{Light and
+Dark} over the value and lightness channels, the contras of \emph{Saturation}
+over the HSV saturation channel and over the HSL saturation channel, and
+perform the contrasts of \emph{Hue}, \emph{Warm and Cold} and
+\emph{Complements} over the hue and colourfulness channels.  In total we
+extract \emph{30 features} (3 segmentations times 5 contrasts times 2
+channels).
 
-In watershed segmentation contrast only regions bigger than 548 pixels (square
-root of 300 000)
+Contrast of \emph{Light and Dark} is applied to the \emph{Lightness} channel
+and to the \emph{Value} channel. The value of the contrast is the standard
+deviation between the homogeneous regions in the channel (the contribution of
+each region is also scaled by the regions size).
+
+Contrast of \emph{Saturation} is applied to the \emph{Saturation} channel,
+separately to the saturation from the HSV colour space and to the saturation
+from the HSL colour space.  Just like the contrast of Light and Dark, the value
+of the contrast of Saturation is the standard deviation between the regions.
+
+Contrast of \emph{Hue} is applied to the \emph{Hue} channel and also to the
+\emph{Colourfulness} channel as it is a Hue damped by Saturation.  It is again
+similar to the contrast of Light and Dark and to the contrast of Saturation as
+it takes the standard deviation between the regions.  Yet, the Hue and
+Colourfulness channels are scaled to the range of 0 to 360 before calculating
+the contrast (instead of the range 0 to 255, which is used in Light and Dark
+and Saturation contrasts).
 
 \begin{figure*}[!htb]
 \begin{equation}
@@ -948,133 +1054,104 @@ D = min( \lvert H_1 - H_2 \rvert , 360 - \lvert H_1 - H_2 \rvert )
 \end{equation}
 \end{figure*}
 
-Warm and cold contrast is represented by the value of warm colours, cold
-colours and a value of neutrality which is 1 minus the scaled amount of warm
-and cold colours.
+Contrast of \emph{Warm and Cold} is a combination of the ratio of warm colours
+(\emph{warmth}), ratio cold colours (\emph{coldness}) and a value of colour
+\emph{neutrality} between two regions.  Warmth of a region is the number of
+pixels of the region containing warm colours divided by the total number of
+pixels of the region, coldness is the total number of pixels of the region
+containing cold colours divided by the total number of pixels of the region and
+colour neutrality is 1 minus warmth and coldness.  Therefore values for warmth,
+coldness and neutrality are always between 0 and 1 for any given region.
 
-\begin{verbatim}
-red           (r)  --\
-orange red    (or)   |  warm
-orange        (o)    | colours
-orange yellow (oy) --/
-yellow        (y)
-green yellow  (gy)
-green         (g)  --\
-green blue    (gb)   |  cold
-blue          (b)    | colours
-purple blue   (pb) --/
-purple        (p)
-purple red    (pr)
-\end{verbatim}
+\emph{Warm colours} and \emph{Cold colours} are defined as part of the Itten
+colours.  Warm colours are: red, range red, orange and orange yellow; cold
+colours are: green, green blue, blue and purple blue.  Not that the Itten
+colours yellow, green yellow, purple and purple red are not included in neither
+warm or cold colours.
+
+\begin{table*}[pht]  % table* instead of table because of multicols
+\centering
+\rowcolors{2}{}{lightgray}
+\begin{tabular}{l|r|r|r|r|r|r}
+\toprule
+\multirow{2}{*}{Test ID}
+  & \multicolumn{2}{c}{region 1}
+  & \multicolumn{2}{c}{region 2}
+  & \multirow{2}{*}{Eq. \ref{eq:mach}}
+  & \multirow{2}{*}{Eq. \ref{eq:coldwarm}}
+  \\
+\cline{2-5}
+& warmth & coldness & warmth & coldness \\
+\midrule
+1 & 0.5 & 0.5 & 0.3 & 0.3 & 1.00 & 0.00  \\
+2 & 0.7 & 0.1 & 0.1 & 0.3 & 0.28 & 55.56 \\
+3 & 0.6 & 0.1 & 0.1 & 0.3 & 0.39 & 31.48 \\
+4 & 0.5 & 0.1 & 0.1 & 0.3 & 0.55 & 19.44 \\
+5 & 0.1 & 0.1 & 0.1 & 0.3 & 1.23 & 4.17  \\
+6 & 0.7 & 0.1 & 0.1 & 0.5 & 0.34 & 85.00 \\
+7 & 0.5 & 0.1 & 0.1 & 0.7 & 0.59 & 85.00 \\
+\bottomrule
+\end{tabular}
+\caption[Contrast of Warm and Cold]{Contrast of Warm and Cold evaluated by
+Equations \ref{eq:mach} and \ref{eq:coldwarm}.  From test 1 we see that
+Equation \ref{eq:mach} results in a value for contrast different than zero when
+the amount of warmth and coldness is exactly the same for both regions, this
+does not happen when using Equation \ref{eq:coldwarm}.  From tests 2, 3 and 4
+we see that Equation \ref{eq:mach} is not consistent when only one parameter
+change, although the difference between the warmths of the regions reduces the
+contrast value produced increases.  Test 5, 6 and 7 show that Equation
+\ref{eq:coldwarm} produces high values for contrast when regions are very
+different and small values for contrast when regions are similar.}
+\label{tab:cweq}
+\end{table*}
+
+Machajdik \cite{mach10clas} proposes an equation for the contrast of Warm and
+Cold that results in a high value for contrast when the \emph{amount of warm an
+cold colours vary} between the regions contrasted, Equation \ref{eq:mach} show
+Machajidik's approach to the contrast of Warm and Cold.  Yet, Machajidik's
+equation performs poorly as a measure of contrast because of it's inconsistency
+when only one of the four factors (warmth of region 1, coldness of region 1,
+warmth of region 2, coldness of region 2) changes when the other three factors
+remain the same.  To work around this issue we developed a \emph{different
+equation} for the contrast of Warm and Cold, Equation \ref{eq:coldwarm}.  The
+contrast by this equation scales up when one region is highly warm and the
+other highly cold, also there is a hard limit for the neutrality of a region
+which cannot be come less than 0.1.  A simple comparison between the two
+equations can be seen in Table \ref{tab:cweq}.
+
+Finally, we apply Equation \ref{eq:coldwarm} between all combinations of
+regions to retrieve a set of \emph{contrast values}.  The value for the feature
+of contrast of Warm and Cold is the \emph{maximum} contrast value from that
+set.  Contrast of Warm and Cold is applied to the \emph{Hue} channel and to the
+\emph{Colourfulness} channel, similar to the contrast of Hue.
+
+Contrast of \emph{Complements} is also applied to the \emph{Hue} channel and
+the \emph{Colourfulness} channel, it searches for contrast between
+complementary colours.  \emph{Complementary colours} are colour on opposite
+side of the Hue wheel.  We scale the channel to the range 0 to 360 and apply
+the contrast function described in Equation \ref{eq:wheel} between all
+combinations of two regions resulting is a set of contrasts.  Equation
+\ref{eq:wheel} account for the \emph{hue wheel problem} and finds the closest
+distance between the colours of two regions, each resulting contrast in the
+contrast set is in th range 0 to 180.
+
+For segmentation with the rule of thirds and rule of sevenths we take the value
+of the contrast of Complements to be the \emph{number of contrasts from the
+contrast set above a threshold}.  The threshold is 160 for the Hue channel and
+125 for the Colourfulness channel (as this channel is damped).  On the
+watershed segmentation we take the contrast of Complements to be the
+\emph{maximum contrast value} in the set (remember that in the watershed
+segmentation the value of the contrast is scaled by the size of the regions,
+therefore a fixed threshold would not work for any image).
+
+For reference, all features are named and numbered in Table \ref{tab:glossary}
+in Appendix \ref{chap:glossary}.
 
 % We did not do the contrast of extension, as it was not described.  Also we
-% did not perform the Itten Harmony as it is the absence of contrast of
+% did not perform the Itten Harmony as it is just the absence of contrast of
 % complements.
 
-The contrast is: the average of the region scaled by the size of the region and
-then contrasted against all other regions.  We then take the biggest contrast
-value from all contrasts (not in contrast of hue and complements when watershed
-segmentation is used, in this case we use another technique).  Calculating the
-contrast value is done in many ways: warm vs cold, complements of colours,
-saturation, lightness or value.
-
-Contrast of saturation x2 (HSV and HSL)
-
-Contrast of light and dark x2 (Lightness and value)
-
-Contrast of Hue x2 (Hue and Colourfulness)
-
-Contrast of Complements x2 (Hue and Colourfulness) here we also consider only
-the most prominent hues.  Hues amounting for less than 5\% of colours are
-ignored.
-
-When contrast of hue or of complements is done over the watershed segmented
-image we take the number of high contrasts (two regions that have a high
-contrast between themselves).  For the contrast on the hue channel we count a
-contrast each time we find two regions with a contrast of more than 160 degrees
-(remember it's a circle), and for the contrast on the colourfulness channel we
-count a contrast for every two regions with more than 125 degrees (because the
-contrast is damped by the saturation).
-
-The equation for contrast of cold and warm in Machajidik's work \ref{eq:mach}
-represents well contrasts when the amount of cold and warm colours varies
-across the regions we calculate the contrast.  Yet Machajidik's equation
-performs a poor estimate when one region is completely warm and another region
-completely cold, in this case the equation results in a contrast value smaller
-than if the regions had less warmth and coldness.  To work around this issue we
-developed another equation for the cold and warm contrast \ref{eq:coldwarm}.
-The contrast by this equation scales up when one region is highly warm and the
-other highly cold, also there is a hard limit for the neutrality of a region
-which cannot be come less than 0.1.
-
-\begin{figure*}[tbp]
-\centering
-\includegraphics[width=0.48\textwidth]{r3_L_caravaggio_1962_139_1}
-\includegraphics[width=0.48\textwidth]{r7_L_caravaggio_1962_139_1}
-\caption[Rule of thirds]{Rule of \emph{thirds} consist of dividing the image
-into three equal parts on each axis, as seen on the image on the left.  It is
-common that the colours and objects in the central region are the most
-important for the scene painted.  A rule of \emph{sevenths}, figure on the
-right, was also used in the segmentation process.  Dividing into seven equal
-parts on each axis produce smaller regions than the rule of thirds but big
-enough to be noticeable for the contrast of the image.}
-\label{fig:r3}
-\end{figure*}
-
-\begin{sidewaysfigure*}[p]
-\centering
-\includegraphics[width=0.9\textwidth]{segm_rembrandt_eu_464}
-\caption[Watershed segmentation example]{Watershed segmentation example.  The
-images at the top show the steps for the segmentation of the image.  The
-original image, a denoised image on which the segmentation is actually made,
-the gradient magnitude, and the original places of the markers.  Next the
-markers \emph{flow as water} filling the regions, this is shown on the next
-image.  Finally, the last image in the first row shows how the found regions
-are distributed over the original image.  The second row show the five biggest
-regions found as a mask over the image.  The last row show the mask generated
-by each of the five biggest regions applied to the image and cropped.}
-\label{fig:segm}
-\end{sidewaysfigure*}
-
-\section{Extra Metadata}
-
-It was needed to classify the artists into art movements, some of this data
-could be found on the museum website yet most of it needed to be evaluated by
-hand.  The life period and country where the artist worked were the most
-important points to classify him into an art movement.
-
-\end{multicols}
-
-\chapter{Results}
-\label{chap:results}
-
-% No PCA was done, we can say that the features are unrelated enough that we do
-% not need feature selection.
-
-% Pearson coefficient was not used, we do not have any categorical data instead
-% all data for correlation is numeric.
-
-% Extrapolation towards, art movement/school is the most important part of this
-% chapter.
-
-\begin{multicols}{2}
-
-\section{Correlation between features}
-
-Artists in the same art movement shall be close, in distinct movements shall be
-apart.
-
-The absolute value of the correlation coefficient on the scatter graph shall be
-good enough.  It can be seen on the graph that few correlation coefficients are
-above 0.7.
-
-\section{Classification}
-
-How we calculated the correlation.  Most significant numbers from each table.
-A plethora of tables.  A graph with three most prominent features between each
-school.
-
-\begin{table*}[htp]  % table* instead of table because of multicols
+\begin{table*}[htp]
 \centering
 \begin{tabular}{|l|l|}
 \toprule
@@ -1127,12 +1204,97 @@ miniature painting style}) or using different materials (\emph{Watercolour}).}
 \label{tab:style}
 \end{table*}
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+\section{Extra Metadata}
+
+For the extrapolation of artist classification into \emph{art school} (or art
+movement) extra metadata is needed.  Each image must link to an art school
+apart from linking to an artist.  To make this possible we classified each
+artist into a specific art school.  This is a big simplification of the reality
+as artists moved between art schools/movements during their lifetimes, yet the
+assignment was made based on the majority of the work by the artist.  Most of
+the information needed to assign an art school to an artist could be collected
+directly from the VAM and NIRP collections, yet it was a manual process.
+
+Art classification into schools or movements is always \emph{subjective}
+\cite{dimaggio87art}, therefore VAM classification and NIRP classification do
+not match each other.  We added several simplifications to make the assignment
+of an art school to an artist easier and to make the number of art schools in
+the dataset smaller.  The general \emph{Italian Renaissance} and the
+\emph{Venetian school} were both put under the same banner: \emph{Renaissance}.
+\emph{Mannerism}, the \emph{Dutch golden age} of paintings were both put under
+the banner of \emph{Baroque}.  \emph{Realism}, \emph{Symbolism}, the
+\emph{Barbizon school} were all put under \emph{Romanticism}.  And both
+\emph{Post-Impressionism} and \emph{Neo-Impressionism} were assigned simply to
+\emph{Impressionism}.  Table \ref{tab:style} shows all art schools and the
+artists assigned to them after all simplifications.
+
+With each artist assigned to an art school, we added to the extracted features
+the metadata containing the artist's surname, the art school and the country in
+which the artist was active.  The country is not used in this work, yet it is
+an interesting piece of metadata that might be used in future work.
+
+\begin{figure*}[tbp]
+\centering
+\includegraphics[width=0.29\textwidth]{basawan_2009BX3686}
+\includegraphics[width=0.29\textwidth]{titian_eu_741}
+\includegraphics[width=0.29\textwidth]{murillo_1974p24}
+\includegraphics[width=0.33\textwidth]{kauffmann_va_pc_2006an1773}
+\includegraphics[width=0.33\textwidth]{loutherbourg_k264}
+\includegraphics[width=0.26\textwidth]{monticelli_300}
+\caption[Examples of paintings in art movements/schools]{Examples of paintings
+in the movements/schools used.  Upper left is an example of Mughal miniature
+paintings, it is the painting "Mu'nim Khan and Khwaja Jahan" by \emph{Basawan},
+it is the only example of non-european style.  All following paintings in the
+example depict the historical evolution of art movements in Europe: at the top
+in the centre is the \emph{Renaissance} period painting "Virgin and Child with
+Saint Catherine" by \emph{Titian};  top right it the \emph{Baroque} painting
+"Vision of St Anthony of Padua" by \emph{Bartolom\'e Esteb\`an Murillo};  in
+the middle to the left is the painting from the \emph{Neoclassicism} school "A
+Sleeping Nymph Watched by a Shepherd" by \emph{Angelica Kauffmann}; in the
+middle to the right is the \emph{Romantic} painting "The Cutting Out of the
+French Corvette 'La Chevrette'" by \emph{Philip James de Loutherbourg}; and at
+the bottom is the \emph{Impressionist} painting "The Echo in the Woods" by
+\emph{Adolphe Joseph Thomas Monticelli}.}
+\label{fig:styles}
+\end{figure*}
+
+\end{multicols}
+
+%Citations useful for the introduction (and for the remaining of the text too):
+%Romero \cite{jma12clas}, Romero \cite{rmc12ajs}, Chen (Yahoo) on JSONS
+%\cite{chen09yahoo}, Zirnhelt (generic artist classification)
+%\cite{zirnhelt07art}, Machajdik (affective) \cite{mach10clas}, Chih-Wei
+%(libsvm) \cite{hcl03svm}, DiMaggio (art classification) \cite{dimaggio87art}
+
+\chapter{Results}
+\label{chap:results}
+\begin{multicols}{2}
+
+% No PCA was done, we can say that the features are unrelated enough that we do
+% not need feature selection.
+
+% PCA between pairs of authors, maybe?
+
+% Pearson coefficient was not used, we do not have any categorical data instead
+% all data for correlation is numeric.
+
+% Extrapolation towards, art movement/school is the most important part of this
+% chapter.
+
+\section{Correlation between features}
+
+Artists in the same art movement shall be close, in distinct movements shall be
+apart.
+
+The absolute value of the correlation coefficient on the scatter graph shall be
+good enough.  It can be seen on the graph that few correlation coefficients are
+above 0.7.
+
+\section{Classification}
+
+How we calculated the correlation.  Most significant numbers from each table.
+A plethora of tables.  A graph with three most prominent features between each
+school.
 
 %\section{meeting: discussion on CBIR (Friday, 1st of July)}
 %
@@ -1148,79 +1310,6 @@ batman
 %
 %R library to explore data: ggplot2 (use it?).
 %
-%%%%%%%%%%%%
-% Features %
-%%%%%%%%%%%%
-
-% Kolmogorov complexity (quality at: 60, 40, 20)
-%   JPEG compression: OK!
-%   Fractal compression: DON'T BOTHER
-
-% Itten colours
-%   saturation, light and dark, extension, complement,
-%   hue, warm and cold and simultaneous contrast:       OK!
-%
-%   harmony: OK!
-
-% Texture (GLCM): OK!
-% Edges (sobel and canny filters): OK!
-% Rule of thirds: OK!
-
-%%%%%%%%%%%%%%
-% Evaluation %
-%%%%%%%%%%%%%%
-
-% PCA between pairs of authors
-% Pearson correlation coefficient between pairs of authors
-
-%%%%%%%%%%%%%%%%%
-% Extrapolation %
-%%%%%%%%%%%%%%%%%
-
-% art period/school/movement classification
-
-
-%nofilter-cs60 nofilter-cs40 nofilter-cs20 nofilter-h60 nofilter-h40
-%nofilter-h20 nofilter-l60 nofilter-l40 nofilter-l20 nofilter-shsv60
-%nofilter-shsv40 nofilter-shsv20 nofilter-shsl60 nofilter-shsl40 nofilter-shsl20
-%nofilter-v60 nofilter-v40 nofilter-v20 sobel-cs60 sobel-cs40 sobel-cs20
-%sobel-h60 sobel-h40 sobel-h20 sobel-l60 sobel-l40 sobel-l20 sobel-shsv60
-%sobel-shsv40 sobel-shsv20 sobel-shsl60 sobel-shsl40 sobel-shsl20 sobel-v60
-%sobel-v40 sobel-v20 canny-cs60 canny-cs40 canny-cs20 canny-h60 canny-h40
-%canny-h20 canny-l60 canny-l40 canny-l20 canny-shsv60 canny-shsv40 canny-shsv20
-%canny-shsl60 canny-shsl40 canny-shsl20 canny-v60 canny-v40 canny-v20
-
-%\begin{sidewaystable*}[ptb]
-%\begin{table*}[ptb]
-%\centering
-%\begin{tabular}{l|ccccccccc|}
-%\large{\bf Correlation on Hue}
-%  & \rotatebox{270}{Kolmogorov raw 60}
-%  & \rotatebox{270}{Kolmogorov raw 40}
-%  & \rotatebox{270}{Kolmogorov raw 20}
-%  & \rotatebox{270}{Kolmogorov Sobel 60}
-%  & \rotatebox{270}{Kolmogorov Sobel 60}
-%  & \rotatebox{270}{Kolmogorov Sobel 40}
-%  & \rotatebox{270}{Kolmogorov Canny 20}
-%  & \rotatebox{270}{Kolmogorov Canny 40}
-%  & \rotatebox{270}{Kolmogorov Canny 20}
-%  \\
-%\hline
-%Kolmogorov raw 60  &1.01&2.01&3.01&4.01&5.01&6.01&7.01&8.01&9.01\\
-%Kolmogorov raw 40  &    &2.01&3.01&4.01&5.01&6.01&7.01&8.01&9.01\\
-%Kolmogorov raw 20  &    &    &3.01&4.01&5.01&6.01&7.01&8.01&9.01\\
-%Kolmogorov Sobel 60&    &    &    &4.01&5.01&6.01&7.01&8.01&9.01\\
-%Kolmogorov Sobel 40&    &    &    &    &5.01&6.01&7.01&8.01&9.01\\
-%Kolmogorov Sobel 20&    &    &    &    &    &6.01&7.01&8.01&9.01\\
-%Kolmogorov Canny 60&    &    &    &    &    &    &7.01&8.01&9.01\\
-%Kolmogorov Canny 40&    &    &    &    &    &    &    &8.01&9.01\\
-%Kolmogorov Canny 20&    &    &    &    &    &    &    &    &9.01\\
-%\hline
-%\end{tabular}
-%\caption{Artists in art movements}
-%\label{tab:corrstuff}
-%\end{sidewaystable*}
-%\end{table*}
 
 \begin{table*}[ptb]
 \centering
@@ -1255,13 +1344,6 @@ When we take two classes only and run the classifiers between them the results
 are better.  This is because classification between two classes is easier as
 classifiers can concentrate on specific points that are different between those
 two classes.
-
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
 
 \begin{table*}[ptb]
 \centering
@@ -1307,21 +1389,27 @@ batman
 \label{fig:class}
 \end{figure*}
 
-\begin{figure*}[tbp]
-\centering
-\includegraphics[width=0.30\textwidth]{basawan_2009BX3686}
-\includegraphics[width=0.30\textwidth]{titian_eu_741}
-\includegraphics[width=0.30\textwidth]{murillo_1974p24}
-\includegraphics[width=0.48\textwidth]{kauffmann_va_pc_2006an1773}
-\includegraphics[width=0.48\textwidth]{loutherbourg_k264}
-\includegraphics[width=0.40\textwidth]{monticelli_300}
-\caption[Examples of styles in art movements/schools]{Styles}
-\label{fig:styles}
-\end{figure*}
+\end{multicols}
 
 \chapter{Conclusions}
+\begin{multicols}{2}
 
-Whelp, it will be some time before I write this.
+One of the reasons for the small number of works in the field of classifying
+art by the \emph{style} or \emph{aesthetics} could possibly be the difficulty
+in finding big and consistent datasets of visual art.  Whilst on photography
+there are several photo sharing websites e.g. \texttt{panoramio.com} or
+\texttt{flickr.com}, with powerful APIs, consistent sets of metadata and
+millions of images;  a consistent datasets of thousands of art images is hard
+to acquire.  The dataset we created for this work is made of images in public
+collections only, and the Copyright of the images is permissible given the
+reduced size and number of images.  All effort is being made to ensure the
+openness of Copyright rules for the dataset, and it shall then be published.
+
+The dataset and the extracted features being available openly allow future
+works to compare against this work, as several parts of this work can be
+improved.  A \emph{feature selection} process will certainly improve the
+classification, and allow for a better understanding of the most important
+feature for paintings among the features described.
 
 \end{multicols}
 
@@ -1477,19 +1565,27 @@ Appendix \ref{chap:glossary}.
 \chapter{unixjsons}
 \label{chap:unixjsons}
 
+During the acquisition of the datasets from the VAM and NIRP collections the
+metadata for the paintings was stored in plain files containing a JSON object
+encoded on each line.  This file format was called JSONS and originates from
+the work by Chen in \cite{chen09yahoo}.  To process the metadata in this format
+as a stream several tools were developed: \texttt{jgrep}, \texttt{jcut},
+\texttt{jsed}, \texttt{jecho} and \texttt{jjoin}.  These tools are available
+from the \emph{unixjsons} repository at github, and can be retrieved with
+\emph{git} by cloning the repository:
+
+\begin{verbatim}
+git clone https://github.com/grochmal/unixjsons.git
+\end{verbatim}
+
+
 \section{jgrep}
 
-Amount of noise (by random sample) in the cleansed datasets.
-
-Start writing about dataset cleansing heuristics, plus some *descriptions* and
-*statistics*.
-
-Get some of the artists (with most paintings) and do some statistics over
-those.
-
-Histograms of features (especially itten colours) by different artists.
-
-R library to explore data: ggplot2 (use it?).
+An implementation of \texttt{grep} (and \texttt{egrep}) that works on a JSONS
+stream.  Instead of a single regular expression to search for in a stream it
+uses two separate regular expressions one to match against the \emph{key} in
+the JSONS stream and one to match against the \emph{value} of matched keys.
+The usage of \emph{jgrep} follows:
 
 % Inside \small Verbatim use 69 characters max to respect the margins
 {\small
@@ -1516,16 +1612,10 @@ Usage: jgrep [-n key] [-hVqviIHR] <key re> <value re> [<file> ...]
 
 \section{jcut}
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+An implementation of \texttt{cut} that works on a JSONS stream.  Contrary to
+the \texttt{cut} command the \texttt{-f} flag receives the names of the
+\emph{keys} in the stream, instead of numbers of the fields as in the normal
+\texttt{cut}.  The usage of \texttt{jcut} follows:
 
 {\small
 \begin{Verbatim}[samepage=true]
@@ -1668,16 +1758,10 @@ Usage: jsed [-hVqiI] [-f file | -e expr -e expr ...] [<file> ...]
 
 \section{jecho}
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+A combination of the \texttt{echo} and \texttt{cat} commands, implemented to
+work on JSONS streams.  \texttt{jecho} can both concatenate streams (as
+\texttt{cat}) and add new \emph{keys} and \emph{values} to the stream (as
+\texttt{echo}).  The usage of \emph{jecho} follows:
 
 {\small
 \begin{Verbatim}[samepage=true]
@@ -1703,16 +1787,11 @@ Usage: jecho [-hV] -f k:v [-f k:v -f k:v ...] [<file> ...]
 
 \section{jjoin}
 
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan nanan
-batman
+A combination of the \texttt{join} and \texttt{paste} commands that work on
+JSONS streams.  It works as \texttt{paste} if the \emph{keys} in the two
+streams are all different, but is a certain \emph{key} is found in both streams
+the \emph{values} for that key in both streams are joined (this is behaviour
+similar to \texttt{join}).  The usage for \texttt{jjoin} follows:
 
 {\small
 \begin{Verbatim}[samepage=true]
@@ -1735,7 +1814,7 @@ Usage: jjoin [-hVq] file1 file2
 \chapter{Resources on the CD}
 \label{chap:resources}
 
-The DVD contains the cleaned datasets and the code to run all experiments under
+The CD contains the cleaned datasets and the code to run all experiments under
 a directory called \texttt{capybara}.  That directory also contains a README.md
 file which mentions the Copyright (Copyleft) of the code and explains how to
 run it, in the same way as Appendix \ref{chap:runthecode}.  The CD also
@@ -1756,11 +1835,6 @@ Also, a mentioned in Appendix \ref{chap:unixjsons}, the code for
 \begin{verbatim}
 git clone https://github.com/grochmal/unixjsons.git
 \end{verbatim}
-
-\newpage
-\null
-\thispagestyle{empty}
-\newpage
 
 \chapter{Feature Values}
 \label{chap:glossary}
@@ -1975,9 +2049,9 @@ Light and Dark of Value (watershed)              & 161 & itct-lightdark-v-sg \\
 Hue (rule of thirds)                             & 162 & itct-hue-h-r3       \\
 Hue (rule of sevenths)                           & 163 & itct-hue-h-r7       \\
 Hue (watershed)                                  & 164 & itct-hue-h-sg       \\
-Hue Colourfulness (rule of thirds)               & 165 & itct-hue-cs-r3      \\
-Hue Colourfulness (rule of sevenths)             & 166 & itct-hue-cs-r7      \\
-Hue Colourfulness (watershed)                    & 167 & itct-hue-cs-sg      \\
+Hue of Colourfulness (rule of thirds)            & 165 & itct-hue-cs-r3      \\
+Hue of Colourfulness (rule of sevenths)          & 166 & itct-hue-cs-r7      \\
+Hue of Colourfulness (watershed)                 & 167 & itct-hue-cs-sg      \\
 Warm and Cold of Hue (rule of thirds)            & 168 & itct-warmcold-h-r3  \\
 Warm and Cold of Hue (rule of sevenths)          & 169 & itct-warmcold-h-r7  \\
 Warm and Cold of Hue (watershed)                 & 170 & itct-warmcold-h-sg  \\
@@ -2081,25 +2155,103 @@ by the short names from table \ref{tab:glossary}.}
 \end{longtable}
 \end{center}
 
-\newpage
-\null
-\thispagestyle{empty}
-\newpage
-
 \chapter{Code}
 
-In the electronic version only.
+The electronic version of this report contains below the most important pieces
+of the code used to perform the experiments.  The hard copy of the report
+contains a CD with the full code for the experiments and for this document.
+Appendix \ref{chap:resources} also explains how to acquire the resources on the
+CD if the CD is lost.
 
 {\footnotesize
-\centerline{\fbox{\large \texttt glcm.py: feature extractor}}
+\centerline{\fbox{\large \texttt{step01-normalise.sh: size normalises images}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/step01-normalise.sh}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{norm-size.pl: outputs new sizes for image}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/util/norm-size.pl}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{step02-hsl-hsv.sh: separates channels}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/step02-hsl-hsv.sh}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{sv2cs.py: calculates colourfulness}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/util/sv2cs.py}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{sobel.py: applies Sobel filter}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/util/sobel.py}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{canny.py: applies Canny filter}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/util/canny.py}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{step06-jpeg.sh: JPEG compression}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/step06-jpeg.sh}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{step07-kolmogorov.sh: feature extractor}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/step07-kolmogorov.sh}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{glcm.py: feature extractor}}}
 \VerbatimInput[ frame=leftline
               , numbers=left ]{../../src/util/glcm.py}
 }
-
 {\footnotesize
-\centerline{\fbox{\large \texttt step15-classify.sh: runs classifiers}}
+\centerline{\fbox{\large \texttt{imgavg.py: feature extractor}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/util/imgavg.py}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{chops.py: feature extractor}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/util/chops.py}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{colour.py: feature extractor}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/util/colour.py}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{itten.py: feature extractor}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/util/itten.py}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{step13-metadata.sh: extra metadata}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/step13-metadata.sh}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{util/mksvmf.pl: metadata translator}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/util/mksvmf.pl}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{step14-libsvm-format.sh: dataset joiner}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/step14-libsvm-format.sh}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{step15-classify.sh: runs classifiers}}}
 \VerbatimInput[ frame=leftline
               , numbers=left ]{../../src/step15-classify.sh}
+}
+{\footnotesize
+\centerline{\fbox{\large \texttt{util/table-compm.py: output table builder}}}
+\VerbatimInput[ frame=leftline
+              , numbers=left ]{../../src/util/table-compm.py}
 }
 
 \newpage
