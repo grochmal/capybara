@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper,twoside,openright,draft]{report}
+\documentclass[11pt,a4paper,twoside,openright]{report}
 
 % The PDF must be named rep_grochmalm_act.pdf
 
@@ -7,7 +7,7 @@
 \usepackage{textcomp}
 
 \usepackage{parskip}
-\usepackage{multicol}
+%\usepackage{multicol}  % not used anymore
 \usepackage{titlesec}
 \usepackage{fancyhdr}
 \usepackage{fancyvrb}
@@ -20,7 +20,7 @@
 \usepackage{multirow}
 \usepackage{booktabs}
 \usepackage{longtable}
-\usepackage[table]{xcolor}
+%\usepackage[table]{xcolor} % not used anymore
 
 % \label convention
 % chap:    chapter
@@ -51,10 +51,10 @@
 
 %\hyphenation{ge-ne-ric Ge-ne-ric Ro-me-ro Ma-ria}
 
-% fix adobe's PDF reader (it cannot stand xcolor)
-\definecolor{lightgray}{gray}{0.7}
-\setlength{\headheight}{16pt}
-\setlength{\arrayrulewidth}{0.6pt}
+% fix adobe's PDF reader (it cannot stand xcolor), not used anymore
+%\definecolor{lightgray}{gray}{0.7}
+%\setlength{\headheight}{16pt}
+%\setlength{\arrayrulewidth}{0.6pt}
 
 %\renewcommand{\chaptername}{Section}  % Not needed
 \renewcommand{\bibname}{References}
@@ -143,8 +143,8 @@ explicitly acknowledged.
 \phantomsection
 \addcontentsline{toc}{chapter}{Acknowledgements}
 \chapter*{Acknowledgements}
-Thanks to my family and my friend, for their patience with me not having the
-time to spend with them.
+Thanks to my family and my friends, for their patience with me not having the
+time to spend with them during the execution of this project.
 
 \newpage
 \null
@@ -156,63 +156,67 @@ time to spend with them.
 \pagenumbering{arabic}
 
 \chapter{Introduction}
-\begin{multicols}{2}
+%\begin{multicols}{2}
 
-Similar images are classified by Content Based Image Retrieval systems (CBIR
-systems) based on \emph{several features}.  The feature we use depend on one of
-the meanings (semantics) contained in the image, it could be one specific
-object present in the image, a combination of objects, a specific person or
-something even different.  One image has often much more than one meaning.
-e.g. we might query a collection of personal photos using a picture of our
-cousin holding a carnival mask in Venice.  For this query image we might ask:
-whether there are photos of our cousin in the collection, or whether there are
-photos of venetian carnival masks, or photos with a specific building or
-location in Venice in the background.
+Similar images are classified into a single class and different images into
+distinct classes by Content Based Image Retrieval systems (CBIR systems), based
+on \emph{several features}.  The features used depend on \emph{one} of the
+meanings (semantics) contained in the images: it can be one specific object
+present in the image, a combination of objects, a specific person or something
+even different.  One image often has more than one meaning.  e.g. we might
+query a collection of personal photos using a picture of our cousin holding a
+carnival mask in Venice.  For this query image we might ask: whether there are
+other photos of our cousin in the collection, or whether there are other photos
+of venetian carnival masks, or photos with a specific building or location in
+Venice in the background.
 
 Different \emph{sets of features} are needed for different semantics and
-different collections.  In this work we will search for features related to the
-\emph{artistic style} between different artists and, more generally between
-different art schools (aka. art movements).  We will focus on \emph{aesthetics}
-of an image as it is related to the concept of art \cite{rmc12ajs}, and on the
-\emph{emotions} an image can provoke on the viewer as it is one of the purposes
-of art \cite{mach10clas}.
+different types of collections.  In this work, we will evaluate features that
+describe the \emph{artistic style} to differentiate between artists and, more
+generally, between art schools (aka. art movements).  We will focus on
+\emph{aesthetics} of an image as it is related to the concept of art
+\cite{rmc12ajs}, and on the \emph{emotions} an image can provoke on the viewer
+as it is one of the purposes of art \cite{mach10clas}.
 
-CBIR systems for artwork \cite{cfsp12air,isv12mpeg,ymvz03tree} can benefit from
-extra features and from a better understanding of current features.  Museum
-collection can also benefit from better classification of art images:  Several
-images in these collections miss some or all metadata, by finding similar
-images we could fill in the missing metadata.
+CBIR systems for artwork \cite{cfsp12air,isv12mpeg,ymvz03tree} use \emph{only a
+handful} of the features described in this work, these systems can likely
+benefit from some of the other features described.  Museum collection can also
+benefit from \emph{better classification of art images}:  Several images in
+these collections miss some or all metadata, by finding similar images we could
+fill in the missing metadata.
 
 \section{Background}
 
-Features that are independent for objects in the image (or at least as
+Features that are independent from the objects in the image (or at least as
 independent as possible) need to be used to evaluate the art style.  Work by
 Zirnhelt \cite{zirnhelt07art} present a limited number of such features in the
 \emph{context of art}.  Works by Machaijdik \cite{mach10clas} and Romero
 \cite{rmc12ajs} present more features independent from objects, but most of the
-features tried were tested on illustration and photography only.  Romero in
-\cite{rmc12ajs} tests some of the features on a very limited number of art
-paintings.  Thanks to photo web sharing (\texttt{photo.net},
-\texttt{panoramio.com} or \texttt{flickr.com}) consistent datasets of
-photography are much easier to acquire than datasets of art, that is the major
-reason why the majority of work on style uses photography.
+features tried in these works were tested on collections of photography only.
+Although in \cite{rmc12ajs}, Romero tests some of the features on a very
+limited number of art paintings.  Thanks to photo sharing websites
+(\texttt{photo.net}, \texttt{panoramio.com} or \texttt{flickr.com}) consistent
+datasets of photography are much easier to acquire than datasets of art, that
+is the major reason why the majority of works on the concept of style uses
+photography collections.
 
-Art paintings style is evident to humans, Figures \ref{fig:diff} and
-\ref{fig:similar} show an example of image similarity.  In Figure
-\ref{fig:diff} we see paintings by Francesco Granacci and by Francesco
-Pesellino, these paintings contain similar object and depict a similar contex
-yet their \emph{style is different}.  Figure \ref{fig:similar} shows two
-paintings by Delacroix, in which the \emph{style is similar} although the
-scenes depicted are different.  Using the correct features we shall be capable
-of identifying the firs two images as different and the last two as similar.
-[The images are part of the public collection of the Victoria and Albert Museum
-in London, this collection is used as a dataset in this work.  See Chapter
-\ref{chap:data}.]
+A painting's style is evident to humans, Figures \ref{fig:diff} and
+\ref{fig:similar} show an example of this.  In Figure \ref{fig:diff} we see
+paintings by Francesco Granacci and by Francesco Pesellino, these paintings
+contain similar objects and depict a similar context yet their \emph{style is
+different}.  Figure \ref{fig:similar} shows two paintings by Delacroix, in
+which the \emph{style is similar} although the scenes depicted are different.
+With the correct features we shall be capable of identifying the first two
+images as different and the last two as similar.  [The images are part of the
+public collection of the Victoria and Albert Museum in London, this collection
+is used as a dataset in this work.  See Chapter \ref{chap:data}.]
 
-To achieve such classification we follow works that detour from interest points
-or corner detection for general object identification as SIFT or MSER
-techniques \cite{szel11book}.  Such features describe the content of the image
-instead of it's style.
+To achieve the classification based on the artistic style we follow the works
+of Machaijdik \cite{mach10clas} and Romero \cite{rmc12ajs}.  These works detour
+from typical features used in image classification e.g.  corner detection or
+interest points for general object identification as SIFT or MSER techniques
+\cite{szel11book}.  Such features describe the content of the image instead of
+its style.
 
 \begin{figure*}[tb]  % figure* instead of figure because of multicols
 \centering
@@ -241,59 +245,61 @@ different.}
 
 \section{Features in the previous works}
 
-A richer sets of features can be found in works that explore style in
-photography \cite{jma12clas,cmrc13fs,rmc12ajs,mach10clas}.  \emph{Image
-complexity} based on lossy compression, \emph{standard deviation} and
-\emph{average} over components of \emph{HSV} and/or \emph{HSL} colour
-representation, \emph{Itten colours and contrasts} and weighted importance of
-all these feature in the center of the image.  Other works propose histograms
-of black and white on drawing classification \cite{kroner98draw} or MPEG-7
-descriptors as features.
+A rich set of features on style can be found in works that explore style in
+photography \cite{jma12clas,cmrc13fs,rmc12ajs,mach10clas}.  Some of these
+features are the \emph{image complexity} based on lossy compression,
+\emph{standard deviation} and \emph{average} over components of the \emph{HSV}
+and/or \emph{HSL} colour representation, \emph{Itten colours and contrasts} and
+framing of important elements in the center of the image.  Other works propose
+histograms of black and white in classification of drawings \cite{kroner98draw}
+or MPEG-7 descriptors as features \cite{isv12mpeg}.
 
-Size normalisation of all images is needed as all these features are
-\emph{scale dependent} \cite{jma12clas,mach10clas}.  Also, several of the works
-(\cite{jma12clas,cmrc13fs,rmc12ajs}) perform colour normalisation to eliminate
-the differences of illumination between images.  RGB colour space do not
-represent well the human perception of the image \cite{mach10clas} therefore
+Size normalisation of all images is needed as all style related features are
+\emph{scale dependent} \cite{jma12clas,mach10clas}.  Several of the works that
+explore style \cite{jma12clas,cmrc13fs,rmc12ajs} also perform colour
+normalisation to eliminate the differences of illumination between images,
+therefore we too perform colour normalisation.  RGB colour space do not
+represent well the human perception of the image \cite{mach10clas}, therefore
 the features are extracted from the \emph{HSV} and \emph{HSL} colour
 representations of the image.
 
-In this work, to the features used by Romero in \cite{rmc12ajs} we add many
-features described by Machajdik in \cite{mach10clas}.  Although we ignore some
-of Machajdik's features that are directly related to object recognition as we
-need features that are as independent as possible form the objects in the
-image.  From \emph{Romero's work} we use Kolmogorov complexity features and
-image averages, from \emph{Machajdik's work} we use Itten colours, Itten
-contrasts, grey level co-occurrence matrix and the rule of thirds.  The most
-complex of these features to implement are the Itten contrasts.  In Romero's
-and Machajdik's work the task of author classification is not the main focus,
-we use their features on a much bigger collection as a main focus of this work.
-We also extrapolate the \emph{feature extraction and classification} to
-classify on artistic schools.
+In this work, we use all features used by Romero in \cite{rmc12ajs} and we add
+many of the features described by Machajdik in \cite{mach10clas}.  Yet, we
+ignore some of Machajdik's features that are directly related to object
+recognition because we are only interested in features that are
+\emph{independent form the objects} in the image.  From \emph{Romero's work} we
+use Kolmogorov complexity features and image averages, from \emph{Machajdik's
+work} we use Itten colours, Itten contrasts, grey level co-occurrence matrix
+and the rule of thirds.  The most complex of these features to implement are
+the Itten contrasts.  The task of author classification is not the main focus
+in Romero's and Machajdik's work, we use their features on a much bigger
+collection and try author classification as the main classification task.  We
+also extrapolate the \emph{feature extraction and classification} to classify
+on artistic schools.
 
 \section{Project execution}
 
-Time and effort to acquire the datasets proved to be the most complicated part
-of the work.  It is not surprising that the number of works that explore art
-collections is small given that big and consistent datasets are hard to
-acquire.  The remaining of the time of the project was spent on feature
+The effort to \emph{acquire the datasets} proved to be the most complicated
+part of the work.  It is not surprising that the number of works that explore
+art collections is small given that big and \emph{consistent datasets of art}
+are hard to acquire.  The remaining of the project time was spent on feature
 extraction, classification and write up.
 
 The \emph{13 weeks} of the project were executed as follows: First 7 weeks were
-used for dataset acquisition and cleansing, next 3 week for feature extraction,
-one week of holiday, 1 week of classification and 1 week for write up.  The
-dataset acquisition work can be subdivided into: \emph{1st week}: reading the
-VAM JSON API and building scripts for the VAM dataset crawlers; \emph{2nd
-week}: organisation of VAM data, removing inexistent, duplicated, misclassified
-paintings and unknown artists;  \emph{3rd week}: writing crawlers for the NIRP
-dataset, crawlers over artist indexes and painting indexes which are then
-compared against each other;  \emph{4th week}: Word count and manual selection
-of artists from the NIRP dataset;  \emph{5th week}: Recording of data from NIRP
-dataset, including manual intervention with encoding issues;  \emph{6th week}:
-writing unixjsons tools (see Appendix \ref{chap:unixjsons} to deal with data
-organisation;  \emph{7th week}: using unixjsons tools to filter only the images
-of artists that have a sizeable amount of paintings, also a manual check on the
-resulting images.
+used for the dataset acquisition and cleansing, next 3 week for feature
+extraction, one week for holiday, 1 week for classification and 1 week for
+write up.  The dataset acquisition work can be subdivided into: \emph{1st
+week}: reading the VAM JSON API and building scripts for the VAM dataset
+crawlers; \emph{2nd week}: organisation of VAM data by removing inexistent,
+duplicated, misclassified paintings and unknown artists;  \emph{3rd week}:
+writing crawlers for the NIRP dataset, crawlers over artist indexes and
+painting indexes which are then compared against each other;  \emph{4th week}:
+Word count and manual selection of artists from the NIRP dataset;  \emph{5th
+week}: Recording of data from NIRP dataset, including manual intervention with
+encoding issues;  \emph{6th week}: writing unixjsons tools (see Appendix
+\ref{chap:unixjsons} to deal with data organisation;  \emph{7th week}: using
+unixjsons tools to filter only the images of artists that have a sizeable
+amount of paintings, also a manual check on the resulting images.
 
 Feature extraction can be subdivided into: \emph{8th week}: normalisation,
 separation and Kolmogorov complexity features;  \emph{9th week}: GLCM features,
@@ -313,11 +319,11 @@ process as an example of how these features can be used.  Appendices show how
 to use the code accompanying this report and show the most important parts of
 the data and code used.
 
-\end{multicols}
+%\end{multicols}
 
 \chapter{Data}
 \label{chap:data}
-\begin{multicols}{2}
+%\begin{multicols}{2}
 
 We use online art collections as the datasets for our classification,
 unfortunately such art collections are far from being machine readable inputs
@@ -417,7 +423,7 @@ Table \ref{tab:crawl} shows the VAM dataset acquisition in perspective.
 
 \begin{table*}[ptb]
 \centering
-\rowcolors{1}{}{lightgray}
+%\rowcolors{1}{}{lightgray}
 \begin{tabular}{|l|rr|}
 \toprule
 Dataset & VAM dataset & NIRP dataset \\
@@ -449,7 +455,7 @@ artists at each phase of crawling and cleansing the dataset.}
 \label{tab:crawl}
 \end{table*}
 
-\section{Visual Arts Data Service - NICE Paintings (NIRP)}
+\section{VADS - NICE Paintings (NIRP)}
 
 NIRP is an agglomeration of public collections in the UK and it contains more
 than 9000 pre-1900 European \emph{oil paintings}.  Unfortunately the
@@ -575,11 +581,11 @@ and sampling 809 at random would likely produce different results.  Finally,
 deviantart focuses on digital art, which differs from classical paintings
 significantly.
 
-\end{multicols}
+%\end{multicols}
 
 \chapter{Approach}  % Why not "Methodology"?
 \label{chap:approach}
-\begin{multicols}{2}
+%\begin{multicols}{2}
 
 With the datasets downloaded and organised we join them to achieve the number
 of 1200 images of paintings by 56 artists, over which we can perform feature
@@ -619,10 +625,12 @@ ignored.
 
 \begin{equation}
 \begin{aligned}
-h'  &= \left\lfloor h \times
-                    \sqrt{ \frac{3 \times 10^5}{h \times w} } \right\rfloor \\
-w'  &= \left\lfloor w \times
-                    \sqrt{ \frac{3 \times 10^5}{h \times w} } \right\rfloor \\
+height'  &= \left\lfloor
+            height \times \sqrt{ \frac{3 \times 10^5}
+                                      {height \times width} } \right\rfloor \\
+width'   &= \left\lfloor
+            width  \times \sqrt{ \frac{3 \times 10^5}
+                                      {height \times width} } \right\rfloor \\
 \label{eq:size}
 \end{aligned}
 \end{equation}
@@ -1071,7 +1079,7 @@ warm or cold colours.
 
 \begin{table*}[pht]  % table* instead of table because of multicols
 \centering
-\rowcolors{2}{}{lightgray}
+%\rowcolors{2}{}{lightgray}
 \begin{tabular}{l|r|r|r|r|r|r}
 \toprule
 \multirow{2}{*}{Test ID}
@@ -1258,11 +1266,11 @@ the bottom is the \emph{Impressionist} painting "The Echo in the Woods" by
 \label{fig:styles}
 \end{figure*}
 
-\end{multicols}
+%\end{multicols}
 
 \chapter{Results}
 \label{chap:results}
-\begin{multicols}{2}
+%\begin{multicols}{2}
 
 All features extracted are joined together and joined to the metadata of each
 painting.  This creates a big dataset file over which classification can be
@@ -1323,7 +1331,7 @@ total accuracy of classifier.
 
 \begin{table*}[tpb]
 \centering
-\rowcolors{1}{}{lightgray}
+%\rowcolors{1}{}{lightgray}
 \begin{tabular}{|l|r||l|r||l|r|}
 \toprule
 artist & prec. & artist & prec. & artist & prec. \\
@@ -1406,7 +1414,7 @@ with k = 36.  The resulting accuracy of each classifier can be seen in Table
 
 \begin{table*}[ptb]
 \centering
-\rowcolors{5}{}{lightgray}
+%\rowcolors{5}{}{lightgray}
 \begin{tabular}{r||r|r|r|r|r}
 \toprule
 \input{sch-compm.tex}
@@ -1456,8 +1464,6 @@ added with the values ordered to form a line.}
 %\label{fig:class}
 %\end{figure*}
 
-\end{multicols}
-
 %\section{meeting: discussion on CBIR (Friday, 1st of July)}
 %
 %Amount of noise (by random sample) in the cleansed datasets.
@@ -1473,8 +1479,10 @@ added with the values ordered to form a line.}
 %R library to explore data: ggplot2 (use it?).
 %
 
+%\end{multicols}
+
 \chapter{Conclusions}
-\begin{multicols}{2}
+%\begin{multicols}{2}
 
 One of the reasons for the small number of works in the field of classifying
 art by the \emph{style} or \emph{aesthetics} could possibly be the difficulty
@@ -1494,7 +1502,7 @@ improved.  The features described are good measures of style, but a
 allow for a better understanding of the most important features for the style
 of paintings among all the features described.
 
-\end{multicols}
+%\end{multicols}
 
 \newpage
 \phantomsection
