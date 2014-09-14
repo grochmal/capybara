@@ -59,6 +59,7 @@
 %\renewcommand{\chaptername}{Section}  % Not needed
 \renewcommand{\bibname}{References}
 \titlespacing*{\chapter}{0pt}{60pt}{60pt}
+\setlength{\headheight}{14pt}
 
 \titleformat{\chapter}[display]{
   \normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
@@ -179,9 +180,9 @@ generally, between art schools (aka. art movements).  We will focus on
 as it is one of the purposes of art \cite{mach10clas}.
 
 CBIR systems for artwork \cite{cfsp12air,isv12mpeg,ymvz03tree} use \emph{only a
-handful} of the features described in this work, these systems can likely
-benefit from some of the other features described.  Museum collection can also
-benefit from \emph{better classification of art images}:  Several images in
+handful} of the features described in this work, and these systems can likely
+benefit from some of the other features described.  Museum collections can also
+benefit from \emph{better classification of art images}:  several images in
 these collections miss some or all metadata, by finding similar images we could
 fill in the missing metadata.
 
@@ -189,16 +190,18 @@ fill in the missing metadata.
 
 Features that are independent from the objects in the image (or at least as
 independent as possible) need to be used to evaluate the art style.  Work by
-Zirnhelt \cite{zirnhelt07art} present a limited number of such features in the
+Zirnhelt \cite{zirnhelt07art} presents a limited number of such features in the
 \emph{context of art}.  Works by Machaijdik \cite{mach10clas} and Romero
 \cite{rmc12ajs} present more features independent from objects, but most of the
 features tried in these works were tested on collections of photography only.
 Although in \cite{rmc12ajs}, Romero tests some of the features on a very
 limited number of art paintings.  Thanks to photo sharing websites
-(\texttt{photo.net}, \texttt{panoramio.com} or \texttt{flickr.com}) consistent
-datasets of photography are much easier to acquire than datasets of art, that
-is the major reason why the majority of works on the concept of style uses
-photography collections.
+(\href{http://photo.net}{\texttt{photo.net}},
+\href{http://panoramio.com}{\texttt{panoramio.com}} or
+\href{http://flickr.com}{\texttt{flickr.com}}) consistent datasets of
+photography are much easier to acquire than datasets of art, that is the major
+reason why the majority of works on the concept of style uses photography
+collections.
 
 A painting's style is evident to humans, Figures \ref{fig:diff} and
 \ref{fig:similar} show an example of this.  In Figure \ref{fig:diff} we see
@@ -288,36 +291,36 @@ extraction, classification and write up.
 The \emph{13 weeks} of the project were executed as follows: First 7 weeks were
 used for the dataset acquisition and cleansing, next 3 week for feature
 extraction, one week for holiday, 1 week for classification and 1 week for
-write up.  The dataset acquisition work can be subdivided into: \emph{1st
-week}: reading the VAM JSON API and building scripts for the VAM dataset
-crawlers; \emph{2nd week}: organisation of VAM data by removing inexistent,
-duplicated, misclassified paintings and unknown artists;  \emph{3rd week}:
-writing crawlers for the NIRP dataset, crawlers over artist indexes and
-painting indexes which are then compared against each other;  \emph{4th week}:
-Word count and manual selection of artists from the NIRP dataset;  \emph{5th
-week}: Recording of data from NIRP dataset, including manual intervention with
-encoding issues;  \emph{6th week}: writing unixjsons tools (see Appendix
-\ref{chap:unixjsons} to deal with data organisation;  \emph{7th week}: using
-unixjsons tools to filter only the images of artists that have a sizeable
-amount of paintings, also a manual check on the resulting images.
+write up.  The dataset acquisition work can be subdivided into: \emph{1st week}
+reading the VAM JSON API and building scripts for the VAM dataset crawlers;
+\emph{2nd week} organising VAM data by removing inexistent, duplicated or
+misclassified paintings and unknown artists;  \emph{3rd week} writing crawlers
+for the NIRP dataset, crawlers over artist indexes and painting indexes which
+were then compared against each other;  \emph{4th week} performing word count
+and manual selection of artists over the NIRP dataset;  \emph{5th week}
+recording of data from the NIRP dataset, including manual intervention because
+of encoding issues;  \emph{6th week} writing the unixjsons tools (see Appendix
+\ref{chap:unixjsons}) to deal with data organisation;  \emph{7th week} using
+the unixjsons tools to filter images of artists that have a sizeable amount of
+paintings and performing manual checks on the resulting images.
 
-Feature extraction can be subdivided into: \emph{8th week}: normalisation,
-separation and Kolmogorov complexity features;  \emph{9th week}: GLCM features,
-rule of thirds and image averages; \emph{10th week}: Watershed segmentation and
-Itten colours and contrasts.
+Feature extraction work can be subdivided into: \emph{8th week} spent on
+normalisation, separation and Kolmogorov complexity features;  \emph{9th week}
+on GLCM features, rule of thirds and image averages; and \emph{10th week} on
+watershed segmentation and Itten colours and contrasts.
 
-Remaining two weeks were used to link metadata to the features and run the
+Another week was used to \emph{link metadata} to the features and run the
 classifiers.  The last week was mostly used to finish the report write up.
 
 \section{Summary}
 
-Chapter \ref{chap:data} describes the process of dataset acquisition, for each
-of the two datasets used.  Chapter \ref{chap:approach} extensively describes
-the feature extraction process, dividing the features into related groups and
-explaining each.  Chapter \ref{chap:results} describes a crude classification
-process as an example of how these features can be used.  Appendices show how
-to use the code accompanying this report and show the most important parts of
-the data and code used.
+Chapter \ref{chap:data} describes the process of dataset acquisition, from the
+two collections used.  Chapter \ref{chap:approach} extensively describes the
+feature extraction process, it divides the features into related groups and
+explains each group.  Chapter \ref{chap:results} describes a crude
+classification process as an example of how these features can be used.
+Appendices explain how to use the code accompanying this report and show the
+most important parts of the data and code used.
 
 %\end{multicols}
 
@@ -325,99 +328,113 @@ the data and code used.
 \label{chap:data}
 %\begin{multicols}{2}
 
-We use online art collections as the datasets for our classification,
-unfortunately such art collections are far from being machine readable inputs
-of images and metadata.  Two such collections are used: the \emph{Victoria and
-Albert Museum (VAM)} collection\footnote{\href{http://www.vam.ac.uk/}
+We use \emph{online art collections} as the dataset to test the features
+presented.  Unfortunately such art collections are far from being machine
+readable, although the metadata is divided into meaningful parts (as "artist"
+or "title") the content of the metadata for the collection items is written in
+natural language.  Two such collections are used: the \emph{Victoria and Albert
+Museum (VAM)} collection\footnote{\href{http://www.vam.ac.uk/}
 {http://www.vam.ac.uk}}, which is freely available for academic use.  And the
 \emph{NICE paintings (NIRP)} collection available from the Visual Arts Data
 Service (VADS)\footnote{\href{http://vads.ac.uk/}{http://vads.ac.uk}} project.
-NIRP collection is an agglomeration of several collections of paintings
-including, among others, the CACHe project\footnote{
+The NIRP collection is an agglomeration of several public collections of
+paintings including, among others, paintings from the CACHe project\footnote{
 \href{http://www.bbk.ac.uk/hosted/cache/}{http://www.bbk.ac.uk/hosted/cache}}
 at the Birkbeck College.
 
 To produce a machine readable dataset we crawl the NIRP and VAM collections for
-paintings, then we filter them based on the completeness and \emph{consistency
-of the metadata} of the collection item.  This task often cannot be done
-automatically, e.g. we rejected a painting by Leonardo da Vinci painted in
-1856, 200 years after the painter's death.  In this case it is clear that the
-metadata of the item is incorrect and the painting cannot be used, but writing
-a piece of software that evaluates such metadata to be correct or incorrect is
-a project in it's own.  Therefore, a lot of the work on the acquisition of the
-collection items was done manually as item with wrong metadata would add extra
-complexity to the classification.
+collection items that are paintings, and filter them based on the completeness
+and \emph{consistency of the metadata} of the collection item.  This task often
+\emph{cannot be done automatically}, e.g. we rejected a painting by Leonardo da
+Vinci painted in 1856, more than 300 years after the painter's death.  In this
+case it is clear that the metadata of the item is incorrect and the painting
+cannot be used for our purposes, but writing a piece of software that evaluates
+such metadata to be correct or incorrect is a project on its own.  On the other
+hand, removing items with incorrect metadata is needed to correctly evaluate
+classification accuracy as items with wrong metadata would add extra complexity
+to the classification.  Therefore, a lot of the work on the acquisition of the
+collection items was done manually.
 
-Results of the crawl, the images, are assigned the surname of the artist and a
-unique identifier consisting of letters and numbers \texttt{<painter>\_<id>}.
-We use more than one dataset, therefore later the images are prefixed with the
-dataset name to generate globally unique identifiers:
-\texttt{<dataset>\_<painter>\_<id>} (e.g. \texttt{vam\_constable\_2006AP4487}
-or \texttt{nirp\_monticelli\_fa000286}).
+Results of the crawl, the metadata and the images of the paintings, are
+assigned the surname of the artist of the painting and a unique identifier
+consisting of letters and numbers: \texttt{<painter>\_<id>} (e.g.
+\texttt{constable\_2006AP4487} or \texttt{monticelli\_fa000286}).  We use two
+collections and a number of artists is present across both collections.  Both
+collections are written out as separate datasets (\texttt{vam-dataset} and
+\texttt{nirp-dataset}) and joined into a single dataset during the feature
+extraction process.  To keep track from which source a collection item is from
+when the datasets are joined, the images and the metadata are prefixed with the
+collection name to generate globally unique identifiers:
+\texttt{<collection>\_<painter>\_<id>} (e.g.
+\texttt{vam\_constable\_2006AP4487} or \texttt{nirp\_monticelli\_fa000286}).
 
 \section{Victoria and Albert Museum (VAM)}
 
-In the VAM collection we are interested in the collection objects classified as
-paintings.  The entire collection contains other objects that are not
-paintings: sculpture, clothing or manuscripts among others.  In the VAM
-collection there are 2000 items classified as paintings.  VAM exposes a JSON
-API\footnote{\href{http://www.vam.ac.uk/api/json/museumobject/}
+In the VAM collection we are only interested in the collection objects
+classified as paintings.  The full \emph{VAM collection contains other objects}
+that are not paintings: sculpture, clothing or manuscripts, among others.  In
+the VAM collection there are 2000 items classified as paintings.  VAM exposes a
+JSON API\footnote{\href{http://www.vam.ac.uk/api/json/museumobject/}
 {http://www.vam.ac.uk/api/json/museumobject/}} to retrieve metadata and image
 web locations, the metadata is organised as a small JSON structure for each
 museum item.
 
-The API do not allow to retrieve data for more than 45 items in one call,
-therefore we develop a crawling script (\texttt{vam-get-all.py}) that retrieves
-data about the 2000 paintings in order.  Instead of working with big JSONs by
-joining all JSON results into one agglomerated result we take the approach of
-Chen in \cite{chen09yahoo} and use a plain text file containing one small JSON
-per line.  Each line in this JSONS file is the JSON encoded data for one
-painting, as Chen \cite{chen09yahoo} describes, this approach reduces the
-memory needed to process each record and allows the processing of the entire
-dataset as a stream.
+The VAM JSON API do not allow to retrieve data for more than 45 collection
+items in one call, therefore we develop a crawler script
+(\texttt{vam-get-all.py}) that retrieves data about the 2000 paintings across
+several calls.  Instead of accumulating the call results into one big JSON
+structure by joining the data of each call in memory, we take the approach of
+Chen in \cite{chen09yahoo} and use a plain text file containing one small JSON,
+encoded as text, per line.  Each line in this \emph{JSONS} file is the JSON
+encoded data for one painting.  As Chen \cite{chen09yahoo} describes, this
+approach reduces the memory needed to process each record and allows the
+processing of the entire dataset as a stream.
 
-To easily work with files in the JSONS, format we developed implementations of
+To work with the data accumulated by the crawl, we developed implementations of
 the \texttt{grep}, \texttt{cut}, \texttt{sed}, \texttt{echo} and \texttt{join}
-commands over files and streams in the JSONS format.  This set of tools is
-described in Appendix \ref{chap:unixjsons}.
+commands that work over files and streams in the JSONS format.  This set of
+tools is described in Appendix \ref{chap:unixjsons}.
 
-Using \texttt{jgrep} we filtered out of the collection items classified as
-paintings all items that did not have and image.  This left us with 878 items
-with an image.  We then downloaded the images for these items using another
-crawling script (\texttt{vam-img-get.py}).  Some of the images did not depict
-paintings, therefore we manually went through each of the 876 downloaded images
-and removed items that were misclassified as paintings.  We found 4 images of
+Using \texttt{jgrep}, from the collection items classified as paintings we
+filtered out all items that did not contain an image of the painting.  This
+process left us with 878 items, all containing an image.  We then downloaded
+the images for these items using another crawling script
+(\texttt{vam-img-get.py}).  Some of the images did not depict paintings,
+therefore we manually went through each of the 876 downloaded images and
+removed items that were misclassified as paintings.  We found 4 images of
 vases, 3 images of sculptures and 3 references to a photo of three vials of
 paint (which also explained why we got 876 images for 878 items).  We removed
-all misclassified items from the set and 868 paintings remained.
+all the misclassified items from the set, after what 868 paintings remained in
+it.
 
 Several paintings had the "artist" metadata field set as: "Unknown", "unknown"
 or "" (empty).  We removed all these paintings from the set as we would not be
 able to evaluate the classification according to \emph{artist identification}
-if we do not know the artist in the first place.  303 were removed from the set
-for having the artist unknown, leaving 565 paintings with assigned artists.
+if we did not know the artist in the first place.  303 paintings were removed
+from the set because the artist of these paintings was unknown, leaving 565
+paintings with assigned artists.
 
-Next we needed to remove artists that have a number of paintings too little to
-be relevant.  A classifier that can assign the only painting of a certain
-artist to that artist is not a general classifier.  Yet first, the metadata in
-the "artist" field needed to be cleaned to find the names of artists and the
-paintings by each artist.  e.g. the name of Charles Robert Leslie is encoded in
-the VAM collection as both "Charles Robert Leslie" and "Leslie, Charles Robert
-(RA)" of the name of William Mulready is encoded as "Mulready, William (RA)"
-and as "Mulready, William".  A simple \texttt{jsed} script
-(\texttt{cleanse-artists.jsed}) was created to re-encode the artist's names in
-a consistent manner across the set of 565 paintings.
+Next we needed to count the number of paintings by each artist.  Artists that
+have only a small number of paintings, would not produce relevant results in
+the classification.  Yet first, the metadata in the "artist" field needed to be
+cleaned to find the names of the artists.  e.g. the name of Charles Robert
+Leslie is encoded in the VAM collection as both "Charles Robert Leslie" and
+"Leslie, Charles Robert (RA)" and the name of William Mulready is encoded as
+"Mulready, William (RA)" or as "Mulready, William".  A simple \texttt{jsed}
+script (\texttt{cleanse-artists.jsed}) was created to re-encode the artist's
+names in a consistent manner across the set of 565 paintings.
 
-After the cleaning of artist names we got a list of 281 artists, most of them
-with only one painting in the collection.  We filtered out all artists with 6
-paintings or less from the set and collected the paintings for all remaining
-artists.  This leaves the \emph{VAM dataset} with 193 paintings by 14 artists:
-John Constable (39 paintings), Thomas Gainsborough (13 paintings), Charles
-Robert Leslie (10 paintings), William Mulready (10 paintings), George Frederick
-Watts (10 paintings), William Carpenter (9 paintings), Abanindranath Tagore (7
-paintings), Basawan (11 paintings), Jagan (9 paintings), Kesav Kalan (15
-paintings), La'l (19 paintings), Miskin (15 paintings), Tulsi Kalan (10
-paintings) and Devi (16 paintings).
+After the cleaning of artist names we got a list of 281 artists, unfortunately
+most of them had only one painting in the collection.  From the set of 565
+paintings we filtered out all artists with 6 paintings or less and collected
+the paintings for all remaining artists.  This leaves the \emph{VAM dataset}
+with 193 paintings by 14 artists: John Constable (39 paintings), Thomas
+Gainsborough (13 paintings), Charles Robert Leslie (10 paintings), William
+Mulready (10 paintings), George Frederick Watts (10 paintings), William
+Carpenter (9 paintings), Abanindranath Tagore (7 paintings), Basawan (11
+paintings), Jagan (9 paintings), Kesav Kalan (15 paintings), La'l (19
+paintings), Miskin (15 paintings), Tulsi Kalan (10 paintings) and Devi (16
+paintings).
 
 Table \ref{tab:crawl} shows the VAM dataset acquisition in perspective.
 
@@ -442,7 +459,7 @@ Artist of painting was not known      &  303 &   144 \\
 \midrule
 Indexed artists                       &  281 &  3222 \\
 Missing artist index                  &    0 &     1 \\
-Not artist index entry                &    0 &     9 \\
+Index entry that was not an artist    &    0 &     9 \\
 Artists without paintings             &    0 &    23 \\
 Artists used for selection            &  281 &  3190 \\
 Selected artists                      &   14 &    42 \\
@@ -459,62 +476,71 @@ artists at each phase of crawling and cleansing the dataset.}
 
 NIRP is an agglomeration of public collections in the UK and it contains more
 than 9000 pre-1900 European \emph{oil paintings}.  Unfortunately the
-organisation of the collection is poor, and no API exists.  The crawlers
-collection the data from the NIRP collection are \emph{HTML crawlers}, yet to
-maintain consistency with the VAM dataset the final form of the metadata for
-the NIRP collection are plain files containing a JSON on each line.
+organisation of the collection is poor, and no API exists.  The crawlers that
+collect the data from the NIRP collection are \emph{HTML crawlers}, and they
+parse the VADS
+website\footnote{\href{http://www.vads.ac.uk/collections/NIRP/index.php}
+{http://www.vads.ac.uk/collections/NIRP/index.php}} for the metadata and images
+of paintings of the collection.  Yet to maintain consistency with the VAM
+dataset, the final form of the metadata for the NIRP collection are plain files
+containing a text encoded JSON on each line (files in JSONS format).
 
-Although no API exist for the NIRP dataset there is an alphabetical index of
+Although no API exist for the NIRP dataset, there is an alphabetical index of
 artist names.  With a script (\texttt{all-artists.py}) we crawled the index of
-artist names producing a list of all 3222 artists in the NIRP collection.
-A manual intervention was needed in the crawl as the index for the letter "x"
-exists although there is no artist name starting with the letter "x".  From the
-remaining index entries we manually removed 9 entries that were not artists but
-agglomerations of artists by country (e.g. "French Painters" under the letter F
-or "Italian Painters" under the letter I).
+artist names producing a list of all 3222 artists in the NIRP collection.  A
+\emph{manual intervention} was needed in the crawl as the index for the letter
+"x" exists although there is no artist name starting with the letter "x".  From
+the remaining index entries we manually removed 9 entries that were not artists
+but agglomerations of artists by country (e.g. "French Painters" under the
+letter F or "Italian Painters" under the letter I).
 
-Each index entry links the artist name to a query search string using the
-VADS's website\footnote{\href{http://www.vads.ac.uk/collections/NIRP/index.php}
-{http://www.vads.ac.uk/collections/NIRP/index.php}} search engine.  The search
-retrieves matches on all words of the query, therefore the index links of the
+Each index entry links the artist name to a \emph{search query} on the VADS
+website's search engine, querying the string in the index.  The search
+retrieves matches on all words of the query, therefore the index links for the
 three Italian artists: Francesco Bassano, Leandro Bassano, and Jacopo Bassano
-il vecchio result in the same list of paintings for each.  Whether an artist
-shares part of his name with another artist the result for both are displayed
-when following the index link for any of them, e.g. every John is assigned the
-paintings of all Johns in the NIRP collection.
+il vecchio result in the same list of collection items for each.  Whether an
+artist shares part of his name with another artist the result for both are
+displayed when following the index link for any of them.  e.g. every John is
+assigned the paintings of all Johns in the NIRP collection.
 
-The descriptions of paintings in the NIRP collection posses \emph{unique IDs},
-therefore we collected all painting descriptions from all artists in the artist
-name index including several duplicates.  With the duplicates we had 24 373
-painting descriptions, filtering them by the \emph{unique IDs} resulted in 9181
-unique painting descriptions.  Also, from the index of artist names we manually
-removed 23 artists for which the index did not return any paintings, duplicates
-of not.  This was checked using a combination of \texttt{curl} and
-\texttt{grep} calls.
+The description of collection items in the NIRP collection have a \emph{unique
+ID} in the URL, therefore we could use this unique ID to distinguish between
+the collection items without the need to assign them to artists.  We collected
+all collection item descriptions from all artists in the artist name index,
+including all duplicates resulting from the search quirk on artists that shared
+parts of their name.  With the duplicates we had 24 373 collection item
+descriptions, filtering them by the \emph{unique ID} resulted in 9181 unique
+collection items.  Also, from the index of artist names we manually
+\emph{removed 23 artists} for which the search query did not return any
+collection items, duplicates of not.  This was performed using a combination of
+\texttt{curl} and \texttt{grep} calls.
 
-From the 9181 descriptions of paintings only 2511 had available images, which
-we downloaded using a \texttt{get-painting.py} script.  The remaining 6641
-painting descriptions were removed from the set, as we need an image of the
-painting to extract features from.  A script (\texttt{by-artist.py}) was used
-to crawl the descriptions of the 2511 paintings with an image, yet it did not
-produce acceptable results.  The encoding of the HTML encoding used by VADS is
-\texttt{UTF-8} but several pieces of metadata are encoded in \texttt{ISO
-8859-1} character encoding, sometimes in \texttt{ISO 8859-2} character encoding
-and some (not all) quotes are encoded in \texttt{Windows-1252} character
-encoding.  The main piece of metadata which had mixed encodings across
-different painting descriptions was the artist field, the most important
-metadata field for this project.  The \texttt{by-artist.py} was extended to
-deal with mixed encoding of \texttt{UTF-8} and \texttt{ISO 8859-1}, but the
-cases where characters were encoded in \texttt{ISO 8859-2} or
-\texttt{Windows-1252} needed to be dealt with manually.  After all changes, all
-painting descriptions were converted to \texttt{UTF-8} character encoding and
-formatted in the same way as metadata from the VAM collection (a JSONS file).
+From the 9181 collection item descriptions only 2511 had available images,
+which we downloaded using the \texttt{get-painting.py} script.  The remaining
+6641 collection item descriptions were removed from the set, as we needed an
+image of the painting to extract features from.  A script
+(\texttt{by-artist.py}) was developed to extract metadata from the descriptions
+of the 2511 items with an image, yet it did not produce acceptable results.
+The encoding of the HTML used by VADS is \texttt{UTF-8} but several pieces of
+metadata are encoded in the \texttt{ISO 8859-1} character encoding, sometimes
+in the \texttt{ISO 8859-2} character encoding or even in the
+\texttt{Windows-1252} character encoding.  The piece of metadata which most
+often had a mixed encoding across different collection item descriptions was
+the "artist" field, the most important metadata field for this project.  The
+\texttt{by-artist.py} was extended to deal with mixed encoding of
+\texttt{UTF-8} and \texttt{ISO 8859-1}, but the cases where characters were
+encoded in \texttt{ISO 8859-2} or \texttt{Windows-1252} needed to be dealt with
+manually.  After all changes, all collection item descriptions were converted
+to \texttt{UTF-8} character encoding and formatted in the same way as metadata
+from the VAM collection (a JSONS file).
 
-In possession of 2511 paintings with descriptions there were 3190 artists to
-assign to them based on a messy artist name index.  The (now UTF-8 encoded)
-data for the "artist" field was not possible to clean with a \texttt{jsed}
-script as in case of the VAM collection.  Most of the data was encoded in
-natural language, for example:
+In possession of 2511 collection items with descriptions there were 3190
+artists (3222 minus 9 minus 23) to assign to them based on a messy artist name
+index.  The (now UTF-8 encoded) data for the "artist" field was not uniform and
+clean to identify the artist of the item either.  It was not possible to clean
+the data in the "artist" field using a \texttt{jsed} script as in case of the
+VAM collection.  Most of the data in the "artist" field was written in natural
+language, for example:
 
 \begin{quote}
 "artist": " Attributed to school of Masaccio (Italian painter, 1401-1428)
@@ -523,63 +549,68 @@ Previously attributed to Boccati, Giovanni di Piermatteo da Camerino (Italian
 painter, born ca.1420, active 1480) "
 \end{quote}
 
-Even unknown artists were not stated in a machine readable way:
+Even \emph{unknown artists} were not stated in a machine readable way (thanks
+to this the number of paintings of unknown artists for the NIRP collection in
+Table \ref{tab:crawl} is understated):
 
 \begin{quote}
 "artist": " Unknown  Previously attributed to Soldi, Andrea (Italian painter,
 ca.  1703-1771, active in Great Britain) "
 \end{quote}
 
-Therefore the number of paintings of unknown artists for the NIRP collection in
-Table \ref{tab:crawl} is smaller than the real number.
+A different way to assign the artist to the collection item needed to be
+developed.
 
-To find the actual artists of the 2511 paintings we concatenated together the
-data of the "artist" field for all and run a word count algorithm over the
+To find the actual artists of the 2511 items, we concatenated together the data
+of the "artist" field for all items and run a word count algorithm over the
 result.  The word count was just a combination of \texttt{jcut}, \texttt{cut},
 \texttt{sed}, \texttt{sort} and \texttt{uniq} commands.  From the result of the
 word count we removed stop words and removed any words appearing less than 10
 times (unless the word was clearly the surname of a well known painter).  The
-resulting ~2000 words were checked by hand, using \texttt{jgrep} to ensure that
-it is a surname or forename of an artist by checking the "artist" metadata
-field of each image that cntains that word.  It was a humongous manual work to
-organise the words into 42 artist names which had a considerable number of
-works in th NIRP collection.
+resulting 2093 words were checked by hand whether they were the surname or
+forename of an artist.  For each word, we used \texttt{jgrep} to bring up all
+"artist" fields that contained that word.  If the word was not an artist's name
+or it returned results scattered over distinct artists, it was rejected.  It
+was a \emph{humongous manual task} to organise the 2093 words into 42 artist
+names, each with a considerable number of collection items in the NIRP
+collection.
 
 For the selected 42 artist, a script (\texttt{filter-artists.sh}) was developed
-to pick the images of each artist (using regular expressions and
-\texttt{jgrep}) and to enhance the metadata with a machine readable "artist"
-field.  At the end of the process each artist had a metadata file in JSONS
-format and a directory of all images listed in the metadata file.  Finally, the
-image file names and IDs were all converted to lowercase, to make them more
-consistent.  The total of images for all the 42 artists was 1036.  The names of
-all artists are too long to list therefore are presented in Table
-\ref{tab:style}, together with the 14 artists from the VAM collection.
+to pick the metadata and images assigned to each artist (using regular
+expressions and \texttt{jgrep}) and to enhance the metadata with a machine
+readable "artist" field.  At the end of the process each artist had a metadata
+file in JSONS format and a directory containing all images listed in the
+metadata file.  The total of images for all the 42 artists was 1036.  The names
+of the selected artists is a long list therefore it is presented in Table
+\ref{tab:style} in Chapter \ref{chap:approach}, together with the 14 artists
+from the VAM collection.
 
-The 1036 paintings were checked for duplicates using a \texttt{SHA1} checksum,
-resulting in 8 corrupted files and 5 duplicate images (same painting, different
-description).  All 13 images were removed leaving 1023 paintings, which were
+The 1036 images were checked for duplicates using a \texttt{SHA1} checksum, 8
+corrupted files and 5 duplicate images (same image, different description) were
+found.  All 13 images were removed leaving 1023 collection items, which were
 then checked manually for duplicates.  There were 15 duplicates (almost
 identical image of the same painting) and 1 image of a sculpture, which were
-all removed from the dataset.  The final dataset from the NIRP collection had
-1007 images by 42 artists.  Table \ref{tab:crawl} also shows the perspective of
-the acquisition of the NIRP dataset.
+all removed from the dataset.  The final dataset based on the NIRP collection
+have \emph{1007 images by 42 artists}.  Table \ref{tab:crawl} also shows the
+perspective of the acquisition of the NIRP dataset.
 
 \section{Datasets in previous works}
 
 Two of Romeo's and Machado's works (\cite{jma12clas} and \cite{cmrc13fs})
-contain datasets of photos only, and these are classified into "good
-aesthetics" and "not good aesthetics".  This is not the kind of data we need
-for a classification of paintings.  Another of Romeo's works \cite{rmc12ajs}
-has a dataset of photos and a small dataset of paintings.  We tried to contact
-Romeo and Machado for the dataset, or at least the titles of the paintings they
-used, but we received no answer to the request.
+contain datasets of photography only, and these are classified into \emph{"good
+aesthetics"} and \emph{"not good aesthetics"}.  We need datasets of art to
+evaluate style in art, therefore we could not use them.  Another of Romeo's
+works \cite{rmc12ajs} has a dataset of photography and a small dataset of
+paintings.  We tried to contact Romeo and Machado for the dataset (or at least
+for the titles of the paintings they used, so we could reconstruct the dataset)
+but we received no answer to the request.
 
 Machajdik's work \cite{mach10clas} and \cite{mach10ua} uses images from the
-\texttt{deviantart.com} website, it does sepcify that 809 images were used but
-does not specify the images used.  \emph{Deviantart} has thousands of images
-and sampling 809 at random would likely produce different results.  Finally,
-deviantart focuses on digital art, which differs from classical paintings
-significantly.
+\href{http://deviantart.com}{\texttt{deviantart.com}} website, it does specify
+that 809 images were used but does not specify the IDs of the images used.
+\emph{Deviantart} has thousands of images and sampling 809 at random would
+likely produce different results.  Finally, deviantart focuses on digital art,
+which differs from classical paintings significantly.
 
 %\end{multicols}
 
@@ -590,14 +621,14 @@ significantly.
 With the datasets downloaded and organised we join them to achieve the number
 of 1200 images of paintings by 56 artists, over which we can perform feature
 extraction.  First we normalise all images to similar sizes and separate them
-into channels, then we run the feature extractors.  All features have been
-divided into related groups: \emph{Kolmogorov complexity}, \emph{grey level
-co-occurrence matrix}, \emph{amount of Itten colours}, \emph{rule of thirds},
-\emph{Itten contrasts} and \emph{image averages}.  A separate feature extractor
-for each group of features was built.
+into channels, then we run the feature extractors.  The features we explore
+have been divided into groups of related features: \emph{Kolmogorov
+complexity}, \emph{grey level co-occurrence matrix}, \emph{amounts of Itten
+colours}, \emph{rule of thirds}, \emph{Itten contrasts} and \emph{image
+averages}.  A separate feature extractor for each group of features was built.
 
-Later (in Chapter \ref{chap:results}) we join all features together and run the
-classifiers over the joined data.
+Later (in Chapter \ref{chap:results}), we join all features together and run
+the classifiers over the joined data.
 
 \section{Normalisation and separation}
 
@@ -1487,13 +1518,15 @@ added with the values ordered to form a line.}
 One of the reasons for the small number of works in the field of classifying
 art by the \emph{style} or \emph{aesthetics} could possibly be the difficulty
 in finding big and consistent datasets of visual art.  Whilst on photography
-there are several photo sharing websites e.g. \texttt{panoramio.com} or
-\texttt{flickr.com}, with powerful APIs, consistent sets of metadata and
-millions of images;  a consistent datasets of thousands of art images is hard
-to acquire.  The dataset we created for this work is made of images in public
-collections only, and the Copyright of the images is permissible given the
-reduced size and number of images.  All effort is being made to ensure the
-openness of Copyright rules for the dataset, and it shall then be published.
+there are several photo sharing websites e.g.
+\href{http://panoramio.com}{\texttt{panoramio.com}} or
+\href{http://flickr.com}{\texttt{flickr.com}}, with powerful APIs, consistent
+sets of metadata and millions of images;  a consistent datasets of thousands of
+art images is hard to acquire.  The dataset we created for this work is made of
+images in public collections only, and the Copyright of the images is
+permissible given the reduced size and number of images.  All effort is being
+made to ensure the openness of Copyright rules for the dataset, and it shall
+then be published.
 
 The dataset and the extracted features being available openly allow future
 works to compare against this work, as several parts of this work can be
