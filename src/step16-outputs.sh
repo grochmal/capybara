@@ -24,8 +24,8 @@ if [[ ! -d $OUT ]]; then
 fi
 
 rs table-avg.py      $DATASET  $DSINDEX  means-stds-top.tex  means-stds-bot.tex
-rs graph-corr.py     $DATASET  $DSINDEX  corr-graph.png
-rs graph-school.py   $DATASET  $DSINDEX  school-graph.png
+rs graph-corr.py     $DATASET  $DSINDEX  corr-graph.png      corr-dist.png
+rs graph-school.py   $DATASET  $DSINDEX  school-graph.png    school-sort.png
 rs graph-class.py    $CLASSAC  $CLINDEX  class-graph.png
 rs table-predict.py  $CLASSAC  $CLINDEX  art-predict.tex     sch-predict.tex
 

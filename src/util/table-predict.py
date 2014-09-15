@@ -30,6 +30,7 @@ def predict(dat, idx, outa, outs):
           ]
     art += ' & '.join(row) + ' \\\\\n'
     school = data[data.index == 'school-predict'].values
+    mughal = data[data.index == 'mughal'].values
     row    = [ '%-13s' % 'renaissance' , '%6.2f' % school[0,2]
              , '%-13s' % 'romanticism' , '%6.2f' % school[3,2]
              ]
@@ -38,11 +39,12 @@ def predict(dat, idx, outa, outs):
              , '%-13s' % 'impressionism' , '%6.2f' % school[4,2]
              ]
     sch += ' & '.join(row) + ' \\\\\n'
-    row    = [ '%-13s' % 'neoclassicism' , '%6.2f\n' % school[2,2]]
-    sch += ' & '.join(row)
-    mughal = data[data.index == 'mughal'].values
-    sch += '  & \cellcolor[gray]{0.9} mughal & \cellcolor[gray]{0.9} '
-    sch += str(mughal[0,2]) + ' \\\\\n'
+    row    = [ '%-13s' % 'neoclassicism' , '%6.2f' % school[2,2]
+             , '%-13s' % 'mughal       ' , '%6.2f' % mughal[0,2]
+             ]
+    sch += ' & '.join(row) + ' \\\\\n'
+    #sch += '  & \cellcolor[gray]{0.9} mughal & \cellcolor[gray]{0.9} '
+    #sch += str(mughal[0,2]) + ' \\\\\n'
     with open(outa, 'wb') as a:
         a.write(art)
     with open(outs, 'wb') as s:

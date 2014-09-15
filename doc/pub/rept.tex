@@ -84,7 +84,18 @@
 
 \begin{abstract}
 
-The abstract of the work, this will be written at the very end
+%\begin{center}
+A picture is worth a thousand words, therefore an image may mean something
+completely different depending on how we look at it.  This is even more
+apparent when we look at works of art, where the artist actively works to
+produce a meaning in his work.  One way to look at artistic drawings, paintings
+and illustrations is to consider the meaning of artistic style.  This work uses
+features extracted from images of art paintings to classify them by artistic
+style.  Such features are significantly distinct from features commonly used by
+CBIR systems for object or location identification.  In this work, we explore
+features based on the understanding of the concepts of art and colour, and
+evaluate whether these features are meaningful to represent artistic style.
+%\end{center}
 
 \begin{flushright}
 \emph{Ars longa, vita brevis -- Hippocrates}
@@ -156,6 +167,8 @@ time to spend with them during the execution of this project.
 \setcounter{page}{1}
 \pagenumbering{arabic}
 
+% clever trick to clear the pages before chapter openings
+\clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Introduction}
 %\begin{multicols}{2}
 
@@ -164,8 +177,8 @@ distinct classes by Content Based Image Retrieval systems (CBIR systems), based
 on \emph{several features}.  The features used depend on \emph{one} of the
 meanings (semantics) contained in the images: it can be one specific object
 present in the image, a combination of objects, a specific person or something
-even different.  One image often has more than one meaning.  e.g. we might
-query a collection of personal photos using a picture of our cousin holding a
+even different.  One image often has more than one meaning, e.g. we might query
+a collection of personal photos using a picture of our cousin holding a
 carnival mask in Venice.  For this query image we might ask: whether there are
 other photos of our cousin in the collection, or whether there are other photos
 of venetian carnival masks, or photos with a specific building or location in
@@ -199,11 +212,11 @@ limited number of art paintings.  Thanks to photo sharing websites
 (\href{http://photo.net}{\texttt{photo.net}},
 \href{http://panoramio.com}{\texttt{panoramio.com}} or
 \href{http://flickr.com}{\texttt{flickr.com}}) consistent datasets of
-photography are much easier to acquire than datasets of art, that is the major
+photography are much easier to acquire than datasets of art.  That is the major
 reason why the majority of works on the concept of style uses photography
 collections.
 
-A painting's style is evident to humans, Figures \ref{fig:diff} and
+A painting's style is evident to humans; Figures \ref{fig:diff} and
 \ref{fig:similar} show an example of this.  In Figure \ref{fig:diff} we see
 paintings by Francesco Granacci and by Francesco Pesellino, these paintings
 contain similar objects and depict a similar context yet their \emph{style is
@@ -216,7 +229,7 @@ is used as a dataset in this work.  See Chapter \ref{chap:data}.]
 
 To achieve the classification based on the artistic style we follow the works
 of Machaijdik \cite{mach10clas} and Romero \cite{rmc12ajs}.  These works detour
-from typical features used in image classification e.g.  corner detection or
+from typical features used in image classification, e.g.  corner detection or
 interest points for general object identification as SIFT or MSER techniques
 \cite{szel11book}.  Such features describe the content of the image instead of
 its style.
@@ -275,21 +288,21 @@ use Kolmogorov complexity features and image averages, from \emph{Machajdik's
 work} we use Itten colours, Itten contrasts, grey level co-occurrence matrix
 and the rule of thirds.  The most complex of these features to implement are
 the Itten contrasts.  The task of author classification is not the main focus
-in Romero's and Machajdik's work, we use their features on a much bigger
+in Romero's and Machajdik's works.  We use their features on a much bigger
 collection and try author classification as the main classification task.  We
 also extrapolate the \emph{feature extraction and classification} to classify
 on artistic schools.
 
 \section{Project execution}
 
-The effort to \emph{acquire the datasets} proved to be the most complicated
+The effort to \emph{acquire the datasets} has proved to be the most complicated
 part of the work.  It is not surprising that the number of works that explore
 art collections is small given that big and \emph{consistent datasets of art}
 are hard to acquire.  The remaining of the project time was spent on feature
 extraction, classification and write up.
 
-The \emph{13 weeks} of the project were executed as follows: First 7 weeks were
-used for the dataset acquisition and cleansing, next 3 week for feature
+The \emph{13 weeks} of the project were executed as follows: first 7 weeks were
+used for the dataset acquisition and cleansing, next 3 weeks for feature
 extraction, one week for holiday, 1 week for classification and 1 week for
 write up.  The dataset acquisition work can be subdivided into: \emph{1st week}
 reading the VAM JSON API and building scripts for the VAM dataset crawlers;
@@ -314,7 +327,7 @@ classifiers.  The last week was mostly used to finish the report write up.
 
 \section{Summary}
 
-Chapter \ref{chap:data} describes the process of dataset acquisition, from the
+Chapter \ref{chap:data} describes the process of dataset acquisition from the
 two collections used.  Chapter \ref{chap:approach} extensively describes the
 feature extraction process, it divides the features into related groups and
 explains each group.  Chapter \ref{chap:results} describes a crude
@@ -324,13 +337,14 @@ most important parts of the data and code used.
 
 %\end{multicols}
 
+\clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Data}
 \label{chap:data}
 %\begin{multicols}{2}
 
 We use \emph{online art collections} as the dataset to test the features
 presented.  Unfortunately such art collections are far from being machine
-readable, although the metadata is divided into meaningful parts (as "artist"
+readable.  Although the metadata is divided into meaningful parts (as "artist"
 or "title") the content of the metadata for the collection items is written in
 natural language.  Two such collections are used: the \emph{Victoria and Albert
 Museum (VAM)} collection\footnote{\href{http://www.vam.ac.uk/}
@@ -342,18 +356,18 @@ paintings including, among others, paintings from the CACHe project\footnote{
 \href{http://www.bbk.ac.uk/hosted/cache/}{http://www.bbk.ac.uk/hosted/cache}}
 at the Birkbeck College.
 
-To produce a machine readable dataset we crawl the NIRP and VAM collections for
-collection items that are paintings, and filter them based on the completeness
-and \emph{consistency of the metadata} of the collection item.  This task often
-\emph{cannot be done automatically}, e.g. we rejected a painting by Leonardo da
-Vinci painted in 1856, more than 300 years after the painter's death.  In this
-case it is clear that the metadata of the item is incorrect and the painting
-cannot be used for our purposes, but writing a piece of software that evaluates
-such metadata to be correct or incorrect is a project on its own.  On the other
-hand, removing items with incorrect metadata is needed to correctly evaluate
-classification accuracy as items with wrong metadata would add extra complexity
-to the classification.  Therefore, a lot of the work on the acquisition of the
-collection items was done manually.
+To produce a machine readable dataset, we crawl the NIRP and VAM collections
+for collection items that are paintings and filter them based on the
+completeness and \emph{consistency of the metadata} of the collection item.
+This task often \emph{cannot be done automatically}, e.g. we rejected a
+painting by Leonardo da Vinci painted in 1856, more than 300 years after the
+painter's death.  In this case, it is clear that the metadata of the item is
+incorrect and the painting cannot be used for our purposes, but writing a piece
+of software that evaluates such metadata to be correct or incorrect is a
+project on its own.  On the other hand, removing items with incorrect metadata
+is needed to correctly evaluate classification accuracy as items with wrong
+metadata would add extra complexity to the classification.  Therefore, a lot of
+the work on the acquisition of the collection items was done manually.
 
 Results of the crawl, the metadata and the images of the paintings, are
 assigned the surname of the artist of the painting and a unique identifier
@@ -379,7 +393,7 @@ JSON API\footnote{\href{http://www.vam.ac.uk/api/json/museumobject/}
 web locations, the metadata is organised as a small JSON structure for each
 museum item.
 
-The VAM JSON API do not allow to retrieve data for more than 45 collection
+The VAM JSON API does not allow to retrieve data for more than 45 collection
 items in one call, therefore we develop a crawler script
 (\texttt{vam-get-all.py}) that retrieves data about the 2000 paintings across
 several calls.  Instead of accumulating the call results into one big JSON
@@ -395,7 +409,7 @@ the \texttt{grep}, \texttt{cut}, \texttt{sed}, \texttt{echo} and \texttt{join}
 commands that work over files and streams in the JSONS format.  This set of
 tools is described in Appendix \ref{chap:unixjsons}.
 
-Using \texttt{jgrep}, from the collection items classified as paintings we
+Using \texttt{jgrep}, from the collection items classified as paintings, we
 filtered out all items that did not contain an image of the painting.  This
 process left us with 878 items, all containing an image.  We then downloaded
 the images for these items using another crawling script
@@ -404,7 +418,7 @@ therefore we manually went through each of the 876 downloaded images and
 removed items that were misclassified as paintings.  We found 4 images of
 vases, 3 images of sculptures and 3 references to a photo of three vials of
 paint (which also explained why we got 876 images for 878 items).  We removed
-all the misclassified items from the set, after what 868 paintings remained in
+all the misclassified items from the set, after that 868 paintings remained in
 it.
 
 Several paintings had the "artist" metadata field set as: "Unknown", "unknown"
@@ -414,10 +428,10 @@ if we did not know the artist in the first place.  303 paintings were removed
 from the set because the artist of these paintings was unknown, leaving 565
 paintings with assigned artists.
 
-Next we needed to count the number of paintings by each artist.  Artists that
-have only a small number of paintings, would not produce relevant results in
-the classification.  Yet first, the metadata in the "artist" field needed to be
-cleaned to find the names of the artists.  e.g. the name of Charles Robert
+Next, we needed to count the number of paintings by each artist.  Artists that
+had only a small number of paintings, would not produce relevant results in the
+classification.  Yet first, the metadata in the "artist" field needed to be
+cleaned to find the names of the artists; e.g. the name of Charles Robert
 Leslie is encoded in the VAM collection as both "Charles Robert Leslie" and
 "Leslie, Charles Robert (RA)" and the name of William Mulready is encoded as
 "Mulready, William (RA)" or as "Mulready, William".  A simple \texttt{jsed}
@@ -475,8 +489,8 @@ artists at each phase of crawling and cleansing the dataset.}
 \section{VADS - NICE Paintings (NIRP)}
 
 NIRP is an agglomeration of public collections in the UK and it contains more
-than 9000 pre-1900 European \emph{oil paintings}.  Unfortunately the
-organisation of the collection is poor, and no API exists.  The crawlers that
+than 9000 pre-1900 European \emph{oil paintings}.  Unfortunately, the
+organisation of the collection is poor and no API exists.  The crawlers that
 collect the data from the NIRP collection are \emph{HTML crawlers}, and they
 parse the VADS
 website\footnote{\href{http://www.vads.ac.uk/collections/NIRP/index.php}
@@ -500,7 +514,7 @@ retrieves matches on all words of the query, therefore the index links for the
 three Italian artists: Francesco Bassano, Leandro Bassano, and Jacopo Bassano
 il vecchio result in the same list of collection items for each.  Whether an
 artist shares part of his name with another artist the result for both are
-displayed when following the index link for any of them.  e.g. every John is
+displayed when following the index link for any of them, e.g. every John is
 assigned the paintings of all Johns in the NIRP collection.
 
 The description of collection items in the NIRP collection have a \emph{unique
@@ -511,8 +525,8 @@ including all duplicates resulting from the search quirk on artists that shared
 parts of their name.  With the duplicates we had 24 373 collection item
 descriptions, filtering them by the \emph{unique ID} resulted in 9181 unique
 collection items.  Also, from the index of artist names we manually
-\emph{removed 23 artists} for which the search query did not return any
-collection items, duplicates of not.  This was performed using a combination of
+\emph{removed 23 artists} for whom the search query did not return any
+collection items, duplicates or not.  This was performed using a combination of
 \texttt{curl} and \texttt{grep} calls.
 
 From the 9181 collection item descriptions only 2511 had available images,
@@ -578,11 +592,11 @@ collection.
 For the selected 42 artist, a script (\texttt{filter-artists.sh}) was developed
 to pick the metadata and images assigned to each artist (using regular
 expressions and \texttt{jgrep}) and to enhance the metadata with a machine
-readable "artist" field.  At the end of the process each artist had a metadata
+readable "artist" field.  At the end of the process, each artist had a metadata
 file in JSONS format and a directory containing all images listed in the
 metadata file.  The total of images for all the 42 artists was 1036.  The names
-of the selected artists is a long list therefore it is presented in Table
-\ref{tab:style} in Chapter \ref{chap:approach}, together with the 14 artists
+of the selected artists is a long list, therefore it is presented in Table
+\ref{tab:style} in Chapter \ref{chap:approach} together with the 14 artists
 from the VAM collection.
 
 The 1036 images were checked for duplicates using a \texttt{SHA1} checksum, 8
@@ -596,12 +610,12 @@ perspective of the acquisition of the NIRP dataset.
 
 \section{Datasets in previous works}
 
-Two of Romeo's and Machado's works (\cite{jma12clas} and \cite{cmrc13fs})
+Two of Romero's and Machado's works (\cite{jma12clas} and \cite{cmrc13fs})
 contain datasets of photography only, and these are classified into \emph{"good
 aesthetics"} and \emph{"not good aesthetics"}.  We need datasets of art to
-evaluate style in art, therefore we could not use them.  Another of Romeo's
+evaluate style in art, therefore we could not use them.  Another of Romero's
 works \cite{rmc12ajs} has a dataset of photography and a small dataset of
-paintings.  We tried to contact Romeo and Machado for the dataset (or at least
+paintings.  We tried to contact Romero and Machado for the dataset (or at least
 for the titles of the paintings they used, so we could reconstruct the dataset)
 but we received no answer to the request.
 
@@ -614,37 +628,37 @@ which differs from classical paintings significantly.
 
 %\end{multicols}
 
+\clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Approach}  % Why not "Methodology"?
 \label{chap:approach}
 %\begin{multicols}{2}
 
 With the datasets downloaded and organised we join them to achieve the number
 of 1200 images of paintings by 56 artists, over which we can perform feature
-extraction.  First we normalise all images to similar sizes and separate them
-into channels, then we run the feature extractors.  The features we explore
-have been divided into groups of related features: \emph{Kolmogorov
-complexity}, \emph{grey level co-occurrence matrix}, \emph{amounts of Itten
-colours}, \emph{rule of thirds}, \emph{Itten contrasts} and \emph{image
-averages}.  A separate feature extractor for each group of features was built.
+extraction.  First, we normalise all images to similar sizes and separate them
+into channels, then we run the feature extractors.  The features have been
+divided into groups of related features: \emph{Kolmogorov complexity},
+\emph{grey level co-occurrence matrix}, \emph{amounts of Itten colours},
+\emph{rule of thirds}, \emph{Itten contrasts} and \emph{image averages}.  A
+separate feature extractor for each group of features was built.
 
 Later (in Chapter \ref{chap:results}), we join all features together and run
 the classifiers over the joined data.
 
 \section{Normalisation and separation}
 
-First of all size normalisation, as most features depend on the number of
-pixels in the image.  We normalise each image to a size close as possible to
-300 000 pixels but without changing the aspect ration, this approach is adopted
-by Machajdik \cite{mach10clas}.  In \emph{golden ratio} 300 000 pixels is an
-image of 671x447 pixels, which maintains a good amount of detail without being
-too big.  Equation \ref{eq:size} shows how an image of arbitrary \emph{height}
-and \emph{width} can be resized to an image of 300 000 pixels.  A Perl script
-called \texttt{norm-size.pl} was developed to perform this task.  This
-technique do not ensure that an image will have the desired number of pixels
-but that it will be as close as possible to 300 000 pixels without changing the
-aspect ratio.  In our dataset, the image that deviated the most ended with 300
-515 pixels, that's an error of less than 0.172\% and, therefore, can be
-ignored.
+We normalise each image to a size as close as possible to 300 000 pixels, but
+without changing the aspect ratio.  This approach is adopted by Machajdik
+\cite{mach10clas}.  In \emph{golden ratio} 300 000 pixels is an image of 671
+pixels times 447 pixels, this size maintains a good amount of detail whilst is
+small enough for quick processing.  Equation \ref{eq:size} shows how an image
+of arbitrary \emph{height} and \emph{width} can be resized to an image of 300
+000 pixels.  A Perl script called \texttt{norm-size.pl} was developed to
+perform this task.  This technique does not ensure that an image will have
+exactly the desired number of pixels but that it will be as close as possible
+to 300 000 pixels without changing the aspect ratio.  In our dataset, the
+resized image that deviated the most from 300 000 pixels had 300 515 pixels,
+that is an error of less than 0.172\% and, therefore, it can be ignored.
 
 % from libsvm documentation
 %
@@ -672,22 +686,25 @@ width'   &= \left\lfloor
 \includegraphics[width=0.48\textwidth]{caravaggio_1962_139_1}
 \includegraphics[width=0.48\textwidth]{nirp_rembrandt_eu_464}
 \includegraphics[width=0.48\textwidth]{rembrandt_eu_464}
-\caption[Colour normalisation]{To the left are the original images, to the
-right normalised ones.  It can be seen that the normalised images are brighter
-to the human eye, this is because the darker and brighter colours are further
-apart in the normalised images.  The top image is the "The Betrayal of Christ"
-by \emph{Michelangelo da Caravaggio} and the image at the bottom is the "The
-Anatomy Lesson of Dr. Nicolaes Tulp" by \emph{Rembranidt van Rijn}.}
+\caption[Colour normalisation]{Colour normalisation.  To the left are the
+original images, to the right normalised ones.  It can be seen that the
+normalised images are brighter to the human eye, this is because the darker and
+brighter colours are further apart in the normalised images.  The top image is
+the "The Betrayal of Christ" by \emph{Michelangelo da Caravaggio} and the image
+at the bottom is the "The Anatomy Lesson of Dr. Nicolaes Tulp" by
+\emph{Rembrandt van Rijn}.}
 \label{fig:norm}
 \end{figure*}
 
-As done by Romero and Machado in  \cite{jma12clas}, \emph{colour normalisation}
-of the images is performed: for each channel, we subtract the minimum value
-from all pixels, then divide all pixels by the value of the maximum value and
-multiply by 255.  Different pictures of the same painting may have been taken
-under different illumination, colour normalisation removes this complexity
+As done by Romero and Machado in \cite{jma12clas}, \emph{colour normalisation}
+of the images is performed: for each channel, we subtract the minimum pixel
+value from all pixels, then divide all pixels by the maximum pixel value and
+multiply the result by 255.  Since the pictures of the paintings may have been
+taken under \emph{different illumination conditions}, colour normalisation
+removes this extra complexity.  Figure \ref{fig:norm} shows colour
+normalisation over two selected painting images.
 
-\begin{figure*}[!htb]
+\begin{figure*}[thb]
 \begin{equation}
 \begin{aligned}
 H_{HSV}  &= atan2\left(\frac{\sqrt{3}}{2}(G-B), \frac{1}{2}(2R-G-B)\right) \\
@@ -705,7 +722,7 @@ S_{HSV}  &= \left\{
 \end{equation}
 \end{figure*}
 
-\begin{figure*}[!htb]
+\begin{figure*}[thb]
 \begin{equation}
 \begin{aligned}
 H_{HSL}  &= atan2\left(\frac{\sqrt{3}}{2}(G-B), \frac{1}{2}(2R-G-B)\right) \\
@@ -723,48 +740,55 @@ S_{HSL}  &= \left\{
 \end{equation}
 \end{figure*}
 
-\begin{equation}
-CS_{HSV} = \frac{S_{HSV} \times V_{HSV}}{255}
-\label{eq:cs}
-\end{equation}
-
 The \emph{HSV colour space} was used by Romero \cite{jma12clas} in his work to
-extract the features, on the other hand Machajdik \cite{mach10clas} uses the
-\emph{HSL colour space} for the features in her work.  Both HSV and HSL colour
-spaces are closer to how we humans perceive an image rather than the \emph{RGB
-colour space}.  All images in the dataset are in RGB therefore we use
+extract the features, whilst Machajdik \cite{mach10clas} uses the \emph{HSL
+colour space} for the features in her work.  Both HSV and HSL colour spaces are
+closer to how we humans perceive an image rather than the \emph{RGB colour
+space}.  All images in the dataset are in RGB therefore we use
 ImageMagick\footnote{ \href{http://imagemagick.org/}{http://imagemagick.org/} }
-to convert the images into HSV and HSL colour spaces, the conversions are
+to convert the images into HSV and HSL colour spaces.  These conversions are
 depicted by Equation \ref{eq:hsv} and Equation \ref{eq:hsl}.  Each channel
 (\emph{Hue}, \emph{Saturation}, \emph{Value} and \emph{Lightness}) is stored as
 a Portable Graymap (PGM)\footnote{One of the \texttt{netpbm} formats for images
-(PPM, PGM and PBM)}.  This format stores the channel uncompressed, which is
-important for the calculation of the Kolmogorov complexity (one of the intended
-features).  From the Equations \ref{eq:hsv} and \ref{eq:hsl} we can see that
-the Hue is the same for both HSV and HSL colour spaces, yet the Saturation is
-different.  We, therefore, store 5 channels (each as a separate PGM) for each
-image: \emph{Hue}, \emph{Saturation$_{HSV}$}, \emph{Saturation$_{HSL}$},
-\emph{Value}, and \emph{Lightness}.  Each channel is separated from the
-original image as a single operation due to a limitation where ImageMagick
-concatenates all channels into the output image when extracting three channels
-at the same time.
+(the \texttt{netpbm} formats are: PPM, PGM and PBM)}.  This format stores the
+channel uncompressed, what is important for the calculation of the Kolmogorov
+complexity (one of the intended features to be extracted).  From the Equations
+\ref{eq:hsv} and \ref{eq:hsl} we can see that the Hue is the same for both HSV
+and HSL colour spaces, yet the Saturation is different.  The differences
+between the HSV and HSL colour spaces can also be seen in Figure
+\ref{fig:hsvl}; the \emph{Value} channel is slightly brighter then the
+\emph{Lightness} channel and this is reflected in the \emph{Saturation}.  We,
+therefore, store 5 channels (each as a separate PGM) for each image:
+\emph{Hue}, \emph{Saturation$_{HSV}$}, \emph{Saturation$_{HSL}$}, \emph{Value},
+and \emph{Lightness}.  Each channel is retrieved from the original image as a
+single operation due to a ImageMagik limitation where ImageMagick concatenates
+all three channels into the output image when separating three channels at the
+same time.
 
 In \cite{rmc12ajs} Romero defines an extra image channel from which he extracts
 features, the \emph{colourfulness of the image}.  The colourfulness is the hue
-of the image damped by the saturation, in the HSV colour space.  To achieve the
-colourfulness the hue and saturation are multiplied and scaled to a range
-between 0 and 255.  We developed a script (\texttt{sv2cs.py}) that performs the
-calculation of the colourfulness of the image from the hues and saturation
+of the image damped by the saturation, in the HSV colour space.  To calculate
+the colourfulness the hue and saturation are multiplied pixel by pixel and then
+scaled to a range between 0 and 255.  This calculation is depicted in Figure
+\ref{fig:cs}.  We developed a script (\texttt{sv2cs.py}) that performs the
+calculation of the colourfulness of the image from the hue and saturation
 according to the Equation \ref{eq:cs}.  Note that ImageMagick already scales
 the hue channel to values between 0 and 255 when separating the channels,
-therefore the Equation results in values in the range between 0 and 255.
+therefore Equation \ref{eq:cs} results in values in the range between 0 and
+255.
 
-Feature extractors then run on some or all of the six "channels" of the image:
-\emph{Hue}, \emph{Saturation$_{HSV}$}, \emph{Saturation$_{HSL}$}, \emph{Value},
-\emph{Lightness} and \emph{Colourfulness}.  Although these are not strictly
-image channels, because the combination of them do not form the original image,
-we will refer to these six representations as "image channels" throughout the
-rest of the document for simplicity.
+\begin{equation}
+CS_{HSV} = \frac{S_{HSV} \times H_{HSV}}{255}
+\label{eq:cs}
+\end{equation}
+
+Each of the feature extractors then runs on some or on all of the six
+"channels" of the image: \emph{Hue}, \emph{Saturation$_{HSV}$},
+\emph{Saturation$_{HSL}$}, \emph{Value}, \emph{Lightness} and
+\emph{Colourfulness}.  Although they are not strictly image channels, because
+the combination of them do not form the original image, for simplicity we will
+refer to these six representations as "image channels" throughout the rest of
+the document.
 
 \begin{figure*}[tbp]
 \centering
@@ -788,55 +812,58 @@ channel is different across the representations.}
 \includegraphics[width=0.30\textwidth]{H_caravaggio_1962_139_1}
 \includegraphics[width=0.30\textwidth]{SHSV_caravaggio_1962_139_1}
 \includegraphics[width=0.30\textwidth]{CS_caravaggio_1962_139_1}
-\caption[Colourfulness]{The \emph{Colourfulness} (right) of an image can be
-derived from it's \emph{Hue} channel (left) and it's \emph{Saturation} channel
-(centre), taken from the HSV representation.  Both channels are multiplied and
-scaled as seen in equation \ref{eq:cs}.}
+\caption[Colourfulness]{The \emph{Colourfulness} (right) of an image is derived
+from its \emph{Hue} channel (left) and its \emph{Saturation} channel (centre),
+in the HSV colour representation.  Both channels are multiplied and scaled as
+seen in equation \ref{eq:cs}.}
 \label{fig:cs}
 \end{figure*}
 
 \section{Basic Features}
 
-Some features shall be retrieved from each of the six image channels.  From
-Romero's work in \cite{rmc12ajs} we extract the features the are an
-approximation of \emph{Kolmogorov complexity} of each of the channels; used in
-Machajdik's work \cite{mach10clas} and Zirnhelt's work \cite{zirnhelt07art} the
-features based on texture are calculated on the \emph{Grey Level Co-occurrence
-Matrix} of each channel.  The \emph{average and standard deviation of all
-pixels} in each of the channels is a common feature used across all three works
-\cite{jma12clas,zirnhelt07art,mach10clas}.  Machajdik \cite{mach10clas} also
-proposes to use the average and standard deviation of the pixels in the central
-rectangle of the image when it is divided into three parts on its width and
-three parts on its height, a \emph{Rule of thirds} of the image framing.
+This section describes the features that are retrieved from each of the six
+image channels.  Based on Romero's work in \cite{rmc12ajs}, we extract features
+that are an approximation of the \emph{Kolmogorov complexity}.  Texture
+features are used in Machajdik's work \cite{mach10clas} and Zirnhelt's work
+\cite{zirnhelt07art}, and are calculated on the \emph{Grey Level Co-occurrence
+Matrix}.  Another set of features are the \emph{average and standard deviation
+of all pixels} in each of the channels, these features are used across all
+three works \cite{jma12clas,zirnhelt07art,mach10clas}.  Machajdik
+\cite{mach10clas} also proposes to calculate the average and standard deviation
+of the pixels in the central region of the image only.  The central region is
+the central rectangle when the image is divided into three parts on its width
+and three parts on its height.  This \emph{Rule of thirds} is used to extract
+these Machajdik's features.
 
-For each of these groups of features a feature extractor was built and run over
-all images in the dataset.
+For each of these groups of features a feature extractor was built, and run
+over all images in the dataset.
 
 \subsection{Kolmogorov complexity}
 
-To estimate the Kolmogorov complexity of each channel we follow Romero's
-procedure \cite{jma12clas} in finding the ratio between the file size of
-uncompressed and compressed, using lossy compression, images.  The PGM format,
-in which all channels of the image are stored, is an uncompressed format.  To
-produce compressed images we use \emph{JPEG compression}, which is a lossy
-compression format.
+To estimate the Kolmogorov complexity of each channel, we follow Romero's
+procedure \cite{jma12clas} and find the ratio between the file size of
+uncompressed images, and compressed ones using lossy compression.  The PGM
+format, in which all channels of the image are stored, is an uncompressed
+format.  To produce compressed images we use \emph{JPEG compression}, which is
+a lossy compression format.
 
-Following Romero in \cite{jma12clas} we produce the estimates of complexity not
-only for each channel but for the edges that can be found in the channel.  We
-use two edge detector filters: the \emph{Sobel} filter and the \emph{Canny}
-filter, both provided by the \texttt{skimage.filter} python library.  For each
-channel we produce a Sobel filtered uncompressed channel (in PGM format) and a
-Canny filtered uncompressed channel (also in PGM format).  This totals for 18
-PGM images for each image in the dataset.
-
-Next, we compress each of the 18 images with JPEG compression with different
-quality values.  We use the \emph{JPEG quality} of 60, 40 and 20, following the
-same quality values used by Romero \cite{jma12clas}.  This produces 3 JPEG
-images for each of the 18 PGM images, giving a total of 54 JPEG compressed
-images for each image in the dataset.
+Following Romero in \cite{jma12clas}, we produce the estimates of complexity
+not only for each channel but also for the edges that can be found in the
+channel.  We use two edge detector filters: the \emph{Sobel} filter and the
+\emph{Canny} filter, both provided by the \texttt{skimage.filter} python
+library.  Figure \ref{fig:cannysobell} and Figure \ref{fig:cannysobelcs}
+illustrate the Sobel and Canny filters, and the difference in the amount of
+detected edges between different channels.  For each channel we produce a Sobel
+filtered uncompressed channel (in PGM format) and a Canny filtered uncompressed
+channel (also in PGM format).  After this procedure, we have 18 PGM images for
+each image in the dataset.  Next, we compress each of the 18 images with JPEG
+compression with different quality values.  We use the \emph{JPEG quality} of
+60, 40 and 20, which are the same quality values used by Romero
+\cite{jma12clas}.  This produces 3 JPEG images for each of the 18 PGM images,
+giving a total of 54 JPEG compressed images for each image in the dataset.
 
 The Kolmogorov complexity is estimated by dividing the size (in bytes) of the
-PGM image by each of it's correspondent JPEG compressed images.  This procedure
+PGM image by each of its correspondent JPEG compressed images.  This procedure
 generates \emph{54 features} for each image in the dataset.
 
 % We did not use any form of fractal compression.
@@ -849,11 +876,11 @@ of an image, used by Machajdik \cite{mach10clas} and Zirnhelt
 subroutines from the \texttt{skimage.feature} python library we produce three
 GLCMs for each channel: using the neighbouring pixel on the right of each
 pixel, using the 6th pixel to the right and using 20th pixel to the right.  For
-each of these GLCMs we calculate the contrast, the energy, the homogeneity and
-the correlation of the texture.  Correlation is not always possible to
-calculate, in such cases we consider the texture correlation as 1.0.  The
-texture features using the GLCM result in a total of \emph{72 features} (6
-channels times 3 GLCMs times 4 features).
+each of these GLCMs we calculate the \emph{contrast}, the \emph{energy}, the
+\emph{homogeneity} and the \emph{correlation} of the texture.  Correlation is
+not always possible to calculate, in such cases we consider the texture
+correlation as 1.0.  The texture features using the GLCM result in a total of
+\emph{72 features} (6 channels times 3 GLCMs times 4 features).
 
 \begin{figure*}[tbp]
 \centering
@@ -888,7 +915,7 @@ applied.}
 \subsection{Image Averages}
 
 A simple set of features is the \emph{pixel value average} of each channel of
-the image, and the \emph{standard deviation of the value of each pixel} of each
+the image and the \emph{standard deviation of the value of each pixel} of each
 channel.  Both Romero \cite{jma12clas} and Machajdik \cite{mach10clas} use
 these measures as features.  The average and standard deviation of each channel
 produces \emph{12 features} for each image.
@@ -899,9 +926,10 @@ Enhancing the basic image averages Machajdik \cite{mach10clas} uses features of
 the framing of the image.  The image is divided in three parts on width and
 height to produce \emph{nine rectangles of equal sizes}.  The value of the
 average of the value of each pixel and the standard deviation of the value of
-each pixel from the central rectangle only is taken as a feature.  These are
-calculated for the central rectangle on each of the channels of the image,
-resulting in \emph{12 features} per image.
+each pixel from the central rectangle is taken as the feature value.  The rule
+of thirds is applied to each of the channels of the image, resulting in
+\emph{12 features} per image.  Figure \ref{fig:r3} shows how the image is
+divided when applying the rule of thirds.
 
 \begin{figure*}[tbp]
 \centering
@@ -912,34 +940,34 @@ into three equal parts on each axis, as seen on the image on the left.  It is
 common that the colours and objects in the central region are the most
 important for the scene painted.  A rule of \emph{sevenths}, figure on the
 right, was also used in the segmentation process.  Dividing into seven equal
-parts on each axis produce smaller regions than the rule of thirds but big
-enough to be noticeable for the contrast of the image.}
+parts on each axis produce regions much smaller than the rule of thirds but big
+enough to be noticeable as a contrast in the image.}
 \label{fig:r3}
 \end{figure*}
 
 \section{Itten Colours}
 
-Johannes Itten cited in \cite{mach10clas} studied colours int the context of
+Johannes Itten, cited in \cite{mach10clas}, studied colours in the context of
 art and their emotional effects on a person looking at a piece of art.  He
-defined several \emph{contrasts and combination of colours} that produced
-harmonious or other emotional effects when looked upon.  Itten used Hue,
-Saturation and Luminance to describe colours in his study, yet Machajdik
-\cite{mach10clas} simplified some of the work to use Hue, Saturation and
-Lightness.
+defined several \emph{contrasts and combination of colours} that produced a
+harmonious feeling or other emotional effects when looked upon.  Itten used
+Hue, Saturation and \emph{Luminance} to describe colours in his study, yet
+Machajdik \cite{mach10clas} simplified some of his work and used Hue,
+Saturation and \emph{Lightness}.
 
 Features derived from the Itten colours are used in Affective Image retrieval
-\cite{mach10clas}.  Yet art is closely related to the affective effect of
-images, therefore it does make sense to use affective features to distinguish
-art.  We use aggregation of colours to \emph{Itten colours} as features of the
-image, and we also use several of the contrasts defined by Itten: contrast of
+\cite{mach10clas}.  Since art is closely related to the affective effect of
+images, it does make sense to use affective features to distinguish art.  We
+use the total amounts of \emph{Itten colours} as features of the image, and we
+also use several of the contrasts defined by Itten: contrast of
 \emph{Saturation}, contrast of \emph{Light and Dark}, contrast of \emph{Hue},
 contrast of \emph{Warm and Cold}, contrast of \emph{Complements}.
 
 \subsection{Amount of each colour}
 
 There are 12 Itten colours.  Considering the hue channel as a circle
-with $360^{\circ}$ we can say that each $30^{\circ}$ we have an Itten colour,
-starting from the red colour at $0^{\circ}$.  The Itten colours are therefore:
+with $360^{\circ}$ we say that we have an Itten colour each $30^{\circ}$.
+Starting from the red colour at $0^{\circ}$, the Itten colours are therefore:
 \emph{red}    ($0^{\circ}$),   \emph{orange red}    ($30^{\circ}$),
 \emph{orange} ($60^{\circ}$),  \emph{orange yellow} ($90^{\circ}$),
 \emph{yellow} ($120^{\circ}$), \emph{green yellow}  ($150^{\circ}$),
@@ -947,81 +975,82 @@ starting from the red colour at $0^{\circ}$.  The Itten colours are therefore:
 \emph{blue}   ($240^{\circ}$), \emph{purple blue}   ($270^{\circ}$),
 \emph{purple} ($300^{\circ}$) and \emph{purple red} ($330^{\circ}$).
 
-To get the amount of each colour we count the number of pixels $15^{\circ}$ in
+To get the amount of each colour, we count the number of pixels $15^{\circ}$ in
 each direction (clockwise and counterclockwise) from the Itten colour.  We
-scale the \emph{hue channel} of the image to the range 0 to 360 and add 15 to
-all pixels and take modulus 360 from the result, this ensures that all pixels
-$15^{\circ}$ from the \emph{red colour} are in the range 0 to 30.  Then we
-construct a histogram with 12 bins, spamming $30^{\circ}$ each, from all pixels
-in the hue channel.
+scale the \emph{hue channel} of the image to the range 0 to 360, add 15 to all
+pixels and take modulus 360 from the result.  This ensures that all pixels
+$15^{\circ}$ in both directions from the \emph{red colour} are in the range 0
+to 30.  Then, we construct a histogram with 12 bins, spamming $30^{\circ}$
+each, over all pixels in the modified hue channel.
 
-To generate the features we take only the most prominent colours.  From each of
-the 12 bins we subtract the average of all the bins, then every bin with a
-positive value is taken as a feature and every bin with a value of zero or a
-negative value is left and a 0 is written out as the feature value for that
-colour.  A total of \emph{12 features} is generated for each image, one for
-each Itten colour.
+We generate the features taking into consideration only the most prominent
+colours.  From each of the 12 histogram bins we subtract the average of all the
+bins, then every bin with a negative value is changed to zero.  The values of
+the 12 modified bins are written out as a total of \emph{12 features} for each
+image, one for each Itten colour.
 
 \subsection{Segmentation}
 
-To measure contrasts (Itten contrasts) we need two different areas of the image
-to measure the contrast between them.  i.e. we need to divide the image into
-different areas, it is know as \emph{segmenting the image}.  A simple way of
-segmenting the image is to use Machajdik's rule of thirds \cite{mach10clas} and
-consider each of the nine rectangles as areas we calculate contrast between.
-We, therefore, use the \emph{rule of thirds} as one of the segmentations of the
-image.  Yet the rule of thirds can be extended to a \emph{rule of sevenths} in
-which the image is divided into seven pieces on its width nd height producing
-49 equal size rectangles, we use this rule as another segmentation technique.
+A contrast can only be measured between things, therefore the contrasts within
+an image can only be measured between regions within this image.  For the
+features based on Itten contrasts, we need to divide the image into different
+areas, this is know as \emph{segmenting the image}.  A simple way of segmenting
+the image is to use Machajdik's rule of thirds \cite{mach10clas} and consider
+each of the nine rectangles as the areas to calculate contrasts between.  We,
+therefore, use the \emph{rule of thirds} as one of the segmentations of the
+image.  The rule of thirds can be extended to a \emph{rule of sevenths}, in
+which the image is divided into seven pieces on its width and height producing
+49 equal size rectangles.  We use the rule of sevenths as another segmentation
+technique.
 
-A more elaborate segmentation of the image is the \emph{watershed
-segmentation}, in which we divide the image based on the continuous regions and
-the edges between the regions.  The \texttt{skimage.morph} python library was
-used to perform watershed segmentation on the channels of the images.
-Watershed segmentation produces several regions of different sizes and shapes
-over the image channel.  Several of the regions are very small and irrelevant
-to a contrast that shall be \emph{perceived by the human eye}, we eliminate
-these small regions by removing from the result of the watershed segmentation
-all regions smaller than 548 pixels (548 is the square root of 300 000, which
-is the number of pixels we normalised all images to).  An example of watershed
-segmentation is shown in Figure \ref{fig:segm}.
+A more elaborate segmentation of an image is the \emph{watershed segmentation},
+in which we divide the image based on the continuous regions and the edges
+between the regions.  The \texttt{skimage.morph} python library was used to
+perform watershed segmentation on the image channels.  Watershed segmentation
+produces several regions of different sizes and shapes.  An example of
+watershed segmentation is illustrated in Figure \ref{fig:segm}.  Several of the
+regions are very small and irrelevant to a contrast that shall be
+\emph{perceived by the human eye}.  Thus, we eliminate these small regions by
+removing from the result of the watershed segmentation all regions smaller than
+548 pixels (548 is the square root of 300 000, which is the number of pixels we
+normalised all images to).
 
 Segmented regions are assumed to be homogeneous and have the value of the mean
 of all pixels of the region.  The regions segmented have the same sizes in the
 rule of thirds and rule of sevenths techniques, but in the watershed
 segmentation the resulting regions are of \emph{different sizes}.  To make for
-the difference in sizes the contrast value calculated from a region is scaled
+the difference in sizes, the contrast value calculated from a region is scaled
 by the region's size.
 
 To calculate each of the Itten contrasts across the regions resulting from
 either the segmentation by rule of thirds, rule of sevenths or watershed
 segmentation, we apply a contrast function between \emph{all regions} or
-between all \emph{combinations of two regions} (e.g. a total of $9^2$
-combinations for the rule of thirds) depending of the type of contrast.  The
-result of applying the contrast function to each combination produces a set of
-contrast results which need to be processed further.  The scaling by the size
-of the region used when calculating the contrast is done on \emph{individual
-regions} when the contrast is calculated over all regions, or is done on the
-result of the contrast function applied to two regions and scaled on the
-\emph{sum of both regions size}.
+between all \emph{combinations of two regions} (e.g. a total of $8!$
+combinations for the rule of thirds) depending on the type of contrast.  The
+result of applying the contrast function to each combination of two regions
+produces a set of contrast results which need to be processed further.  The
+scaling by the size of the region used when calculating the contrast is done on
+\emph{individual regions} when the contrast is calculated over all regions, or
+is done on the result of the contrast function applied to two regions and
+scaled on the \emph{sum of both region's size}.
 
-A contrast over all regions result in a single value, the standard deviation
-between all regions, and is taken as a feature.  But contrast between pairs of
-regions result in a \emph{set of contrasts}, these are evaluated using a
-threshold or a maximum function depending on the Itten contrast to produxe a
-feature value.
+A contrast over all regions results in a single value: the standard deviation
+between all regions, and is taken as a feature.  But contrasts between pairs of
+regions result in a \emph{set of contrasts}, which are evaluated using a
+threshold or a maximum function to produce a single value.  Whether we use the
+maximum function or a threshold depends on the Itten contrast being calculated.
 
 \begin{sidewaysfigure*}[p]
 \centering
 \includegraphics[width=0.9\textwidth]{segm_rembrandt_eu_464}
 \caption[Watershed segmentation example]{Watershed segmentation example.  The
-images at the top show the steps for the segmentation of the image.  The
-original image, a denoised image on which the segmentation is actually made,
-the gradient magnitude, and the original places of the markers.  Next the
-markers \emph{flow as water} filling the regions, this is shown on the next
-image.  Finally, the last image in the first row shows how the found regions
-are distributed over the original image.  The second row show the five biggest
-regions found as a mask over the image.  The last row show the mask generated
+images at the top show the steps of the segmentation of the image.  The
+original image, a denoised image on which the segmentation is actually
+performed, the gradient magnitude, and the original places of the markers.
+Next image shows the markers, that \emph{flow as water} filling the regions.
+Finally, the last image in the first row shows how the found regions are
+distributed over the original image.  The second row shows the five biggest
+regions found as a mask over the image.  The last row shows the mask generated
 by each of the five biggest regions applied to the image and cropped.}
 \label{fig:segm}
 \end{sidewaysfigure*}
@@ -1029,18 +1058,18 @@ by each of the five biggest regions applied to the image and cropped.}
 \subsection{Itten Contrasts}
 
 Each Itten contrast is evaluated in each of the three segmentations, and over
-two channels of the original image.  We perform the contrast of \emph{Light and
-Dark} over the value and lightness channels, the contras of \emph{Saturation}
-over the HSV saturation channel and over the HSL saturation channel, and
-perform the contrasts of \emph{Hue}, \emph{Warm and Cold} and
+two of the channels of the original image.  We perform the contrast of
+\emph{Light and Dark} over the value and lightness channels, the contras of
+\emph{Saturation} over the HSV saturation channel and over the HSL saturation
+channel, and perform the contrasts of \emph{Hue}, \emph{Warm and Cold} and
 \emph{Complements} over the hue and colourfulness channels.  In total we
 extract \emph{30 features} (3 segmentations times 5 contrasts times 2
 channels).
 
 Contrast of \emph{Light and Dark} is applied to the \emph{Lightness} channel
-and to the \emph{Value} channel. The value of the contrast is the standard
-deviation between the homogeneous regions in the channel (the contribution of
-each region is also scaled by the regions size).
+and to the \emph{Value} channel.  The value of the contrast is the standard
+deviation between all the regions in the channel (the contribution of each
+region is also scaled by the region size).
 
 Contrast of \emph{Saturation} is applied to the \emph{Saturation} channel,
 separately to the saturation from the HSV colour space and to the saturation
@@ -1048,12 +1077,12 @@ from the HSL colour space.  Just like the contrast of Light and Dark, the value
 of the contrast of Saturation is the standard deviation between the regions.
 
 Contrast of \emph{Hue} is applied to the \emph{Hue} channel and also to the
-\emph{Colourfulness} channel as it is a Hue damped by Saturation.  It is again
-similar to the contrast of Light and Dark and to the contrast of Saturation as
-it takes the standard deviation between the regions.  Yet, the Hue and
-Colourfulness channels are scaled to the range of 0 to 360 before calculating
-the contrast (instead of the range 0 to 255, which is used in Light and Dark
-and Saturation contrasts).
+\emph{Colourfulness} channel, as the former is a Saturation damped Hue.  The
+contrast calculation is again similar to the contrast of Light and Dark and to
+the contrast of Saturation, as it takes the standard deviation between the
+regions.  Yet, the Hue and Colourfulness channels are scaled to the range of 0
+to 360 before calculating the contrast (instead of the range 0 to 255, which is
+used in Light and Dark and Saturation contrasts).
 
 \begin{figure*}[!htb]
 \begin{equation}
@@ -1099,12 +1128,13 @@ Contrast of \emph{Warm and Cold} is a combination of the ratio of warm colours
 pixels of the region containing warm colours divided by the total number of
 pixels of the region, coldness is the total number of pixels of the region
 containing cold colours divided by the total number of pixels of the region and
-colour neutrality is 1 minus warmth and coldness.  Therefore values for warmth,
-coldness and neutrality are always between 0 and 1 for any given region.
+colour neutrality is 1 minus warmth and coldness.  Therefore, values for
+warmth, coldness and neutrality are always between 0 and 1 for any given
+region.
 
 \emph{Warm colours} and \emph{Cold colours} are defined as part of the Itten
-colours.  Warm colours are: red, range red, orange and orange yellow; cold
-colours are: green, green blue, blue and purple blue.  Not that the Itten
+colours.  Warm colours are: red, orange red, orange and orange yellow; cold
+colours are: green, green blue, blue and purple blue.  Note that the Itten
 colours yellow, green yellow, purple and purple red are not included in neither
 warm or cold colours.
 
@@ -1139,49 +1169,49 @@ does not happen when using Equation \ref{eq:coldwarm}.  From tests 2, 3 and 4
 we see that Equation \ref{eq:mach} is not consistent when only one parameter
 change, although the difference between the warmths of the regions reduces the
 contrast value produced increases.  Test 5, 6 and 7 show that Equation
-\ref{eq:coldwarm} produces high values for contrast when regions are very
-different and small values for contrast when regions are similar.}
+\ref{eq:coldwarm} correctly produces high values for contrast when regions are
+very different and small values for contrast when regions are similar.}
 \label{tab:cweq}
 \end{table*}
 
 Machajdik \cite{mach10clas} proposes an equation for the contrast of Warm and
-Cold that results in a high value for contrast when the \emph{amount of warm an
-cold colours vary} between the regions contrasted, Equation \ref{eq:mach} show
-Machajidik's approach to the contrast of Warm and Cold.  Yet, Machajidik's
-equation performs poorly as a measure of contrast because of it's inconsistency
-when only one of the four factors (warmth of region 1, coldness of region 1,
-warmth of region 2, coldness of region 2) changes when the other three factors
-remain the same.  To work around this issue we developed a \emph{different
-equation} for the contrast of Warm and Cold, Equation \ref{eq:coldwarm}.  The
-contrast by this equation scales up when one region is highly warm and the
-other highly cold, also there is a hard limit for the neutrality of a region
-which cannot be come less than 0.1.  A simple comparison between the two
-equations can be seen in Table \ref{tab:cweq}.
+Cold that shall result in a high value for contrast when the \emph{amount of
+warm an cold colours vary} between the regions contrasted, Equation
+\ref{eq:mach} show Machajidik's approach to the contrast of Warm and Cold.  Yet
+Machajidik's equation performs poorly as a measure of contrast, because of its
+inconsistency when only one of the four factors (warmth of region 1, coldness
+of region 1, warmth of region 2, coldness of region 2) changes when the other
+three factors remain the same.  To work around this issue, we developed a
+\emph{different equation} for the contrast of Warm and Cold, Equation
+\ref{eq:coldwarm}.  The contrast by our equation scales up when one region is
+highly warm and the other highly cold, there also is a hard limit for the
+neutrality of a region and it cannot become less than 0.1.  A simple comparison
+between the two equations can be seen in Table \ref{tab:cweq}.
 
 Finally, we apply Equation \ref{eq:coldwarm} between all combinations of
-regions to retrieve a set of \emph{contrast values}.  The value for the feature
-of contrast of Warm and Cold is the \emph{maximum} contrast value from that
-set.  Contrast of Warm and Cold is applied to the \emph{Hue} channel and to the
-\emph{Colourfulness} channel, similar to the contrast of Hue.
+regions into pairs to retrieve a set of \emph{contrast values}.  The value for
+the feature of contrast of Warm and Cold is the \emph{maximum} contrast value
+from that set.  Contrast of Warm and Cold is applied to the \emph{Hue} channel
+and to the \emph{Colourfulness} channel, similar to the contrast of Hue.
 
 Contrast of \emph{Complements} is also applied to the \emph{Hue} channel and
 the \emph{Colourfulness} channel, it searches for contrast between
 complementary colours.  \emph{Complementary colours} are colour on opposite
 side of the Hue wheel.  We scale the channel to the range 0 to 360 and apply
 the contrast function described in Equation \ref{eq:wheel} between all
-combinations of two regions resulting is a set of contrasts.  Equation
-\ref{eq:wheel} account for the \emph{hue wheel problem} and finds the closest
-distance between the colours of two regions, each resulting contrast in the
-contrast set is in th range 0 to 180.
+combinations of two regions, resulting in a set of contrasts.  Equation
+\ref{eq:wheel} accounts for the \emph{hue wheel problem} and finds the closest
+distance between the colours of two regions, therefore each resulting contrast
+in the contrast set is in the range 0 to 180.
 
-For segmentation with the rule of thirds and rule of sevenths we take the value
-of the contrast of Complements to be the \emph{number of contrasts from the
-contrast set above a threshold}.  The threshold is 160 for the Hue channel and
+For segmentation with the rule of thirds and rule of sevenths, we take the
+value of the contrast of Complements to be the \emph{number of contrasts above
+a threshold in the contrast set}.  The threshold is 160 for the Hue channel and
 125 for the Colourfulness channel (as this channel is damped).  On the
-watershed segmentation we take the contrast of Complements to be the
+watershed segmentation, we take the contrast of Complements to be the
 \emph{maximum contrast value} in the set (remember that in the watershed
 segmentation the value of the contrast is scaled by the size of the regions,
-therefore a fixed threshold would not work for any image).
+therefore a fixed threshold would not work for all images).
 
 For reference, all features are named and numbered in Table \ref{tab:glossary}
 in Appendix \ref{chap:glossary}.
@@ -1246,13 +1276,14 @@ miniature painting style}) or using different materials (\emph{Watercolour}).}
 \section{Extra Metadata}
 
 For the extrapolation of artist classification into \emph{art school} (or art
-movement) extra metadata is needed.  Each image must link to an art school
-apart from linking to an artist.  To make this possible we classified each
-artist into a specific art school.  This is a big simplification of the reality
-as artists moved between art schools/movements during their lifetimes, yet the
-assignment was made based on the majority of the work by the artist.  Most of
-the information needed to assign an art school to an artist could be collected
-directly from the VAM and NIRP collections, yet it was a manual process.
+movement) classification extra metadata is needed.  Each image must link to an
+art school apart from linking to an artist.  To make this possible, we
+classified each artist into a specific art school.  This is a big
+simplification of the reality since artists moved between art schools/movements
+during their lifetimes.  Therefore the assignment was made based on the
+majority of the work by the artist.  Most of the information needed to assign
+an art school to an artist could be collected directly from the VAM and NIRP
+collections, yet it was a manual process.
 
 Art classification into schools or movements is always \emph{subjective}
 \cite{dimaggio87art}, therefore VAM classification and NIRP classification do
@@ -1260,17 +1291,22 @@ not match each other.  We added several simplifications to make the assignment
 of an art school to an artist easier and to make the number of art schools in
 the dataset smaller.  The general \emph{Italian Renaissance} and the
 \emph{Venetian school} were both put under the same banner: \emph{Renaissance}.
-\emph{Mannerism}, the \emph{Dutch golden age} of paintings were both put under
-the banner of \emph{Baroque}.  \emph{Realism}, \emph{Symbolism}, the
+\emph{Mannerism} and the \emph{Dutch golden age} of painting were both put
+under the banner of \emph{Baroque}.  \emph{Realism}, \emph{Symbolism} and the
 \emph{Barbizon school} were all put under \emph{Romanticism}.  And both
 \emph{Post-Impressionism} and \emph{Neo-Impressionism} were assigned simply to
 \emph{Impressionism}.  Table \ref{tab:style} shows all art schools and the
-artists assigned to them after all simplifications.
+artists assigned to them after all simplifications.  The table is organised to
+depict the art schools that are closer to each other, schools that occur close
+to each other in time (e.g. Renaissance and Baroque) are more similar to each
+other in term of style than schools that are far apart (e.g. Renaissance and
+Impressionism).
 
 With each artist assigned to an art school, we added to the extracted features
-the metadata containing the artist's surname, the art school and the country in
-which the artist was active.  The country is not used in this work, yet it is
-an interesting piece of metadata that might be used in future work.
+for each image the metadata containing the artist's surname, the art school and
+the country in which the artist was active.  The country is not used in this
+work, yet it is an interesting piece of metadata that might be used in future
+work.
 
 \begin{figure*}[tbp]
 \centering
@@ -1281,47 +1317,49 @@ an interesting piece of metadata that might be used in future work.
 \includegraphics[width=0.33\textwidth]{loutherbourg_k264}
 \includegraphics[width=0.26\textwidth]{monticelli_300}
 \caption[Examples of paintings in art movements/schools]{Examples of paintings
-in the movements/schools used.  Upper left is an example of Mughal miniature
-paintings, it is the painting "Mu'nim Khan and Khwaja Jahan" by \emph{Basawan},
-it is the only example of non-european style.  All following paintings in the
-example depict the historical evolution of art movements in Europe: at the top
-in the centre is the \emph{Renaissance} period painting "Virgin and Child with
-Saint Catherine" by \emph{Titian};  top right it the \emph{Baroque} painting
-"Vision of St Anthony of Padua" by \emph{Bartolom\'e Esteb\`an Murillo};  in
-the middle to the left is the painting from the \emph{Neoclassicism} school "A
-Sleeping Nymph Watched by a Shepherd" by \emph{Angelica Kauffmann}; in the
-middle to the right is the \emph{Romantic} painting "The Cutting Out of the
-French Corvette 'La Chevrette'" by \emph{Philip James de Loutherbourg}; and at
-the bottom is the \emph{Impressionist} painting "The Echo in the Woods" by
-\emph{Adolphe Joseph Thomas Monticelli}.}
+in the art movements/schools used in this work.  Upper left is an example of
+Mughal miniature painting, it is the painting "Mu'nim Khan and Khwaja Jahan" by
+\emph{Basawan}, it is the only example of non-european style.  All following
+paintings in the example depict the historical evolution of art movements in
+Europe: at the top in the centre is the \emph{Renaissance} period painting
+"Virgin and Child with Saint Catherine" by \emph{Titian};  top right it the
+\emph{Baroque} painting "Vision of St. Anthony of Padua" by \emph{Bartolom\'e
+Esteb\`an Murillo}; at the bottom to the left is the painting from the
+\emph{Neoclassicist} school "A Sleeping Nymph Watched by a Shepherd" by
+\emph{Angelica Kauffmann}; bottom centre is the \emph{Romantic} painting "The
+Cutting Out of the French Corvette 'La Chevrette'" by \emph{Philip James de
+Loutherbourg}; at the bottom right is the \emph{Impressionist} painting "The
+Echo in the Woods" by \emph{Adolphe Joseph Thomas Monticelli}.}
 \label{fig:styles}
 \end{figure*}
 
 %\end{multicols}
 
+\clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Results}
 \label{chap:results}
 %\begin{multicols}{2}
 
 All features extracted are joined together and joined to the metadata of each
 painting.  This creates a big dataset file over which classification can be
-performed.  In this chapter we perform a \emph{crude classification attempt}
+performed.  In this chapter, we perform a \emph{crude classification attempt}
 over the features extracted to evaluate whether the features are \emph{good
-measures of style}. 
+measures of style}.
 
-We first evaluate the \emph{correlation} between the extracted features, then
-use the \emph{libsvm}\footnote{\href{http://www.csie.ntu.edu.tw/~cjlin/libsvm/}
+We first evaluate the \emph{correlation} between the extracted features and
+then use the
+\emph{libsvm}\footnote{\href{http://www.csie.ntu.edu.tw/~cjlin/libsvm/}
 {http://www.csie.ntu.edu.tw/~cjlin/libsvm/}} set of tools to perform the
 classification.  Before attempting classification, we needed to translate the
-data file with the features into a format understood by \emph{libsvm}
-classifiers.  We developed a script (\texttt{mksvmf.pl}) to transform the
-numerical data of features into the format read by libsvm, and to translate the
-painting metadata from its string values (e.g. "romantincism") into different
-numerical integers values.  For the classification of artists we use each
-artist from Table \ref{tab:style} as a class, but for the art school
-classification we ignore the "Watercolour" school as has too few paintings and
-we ignore the artist "Devi" as he's art is different from any other artist and
-cannot be assigned to any one of the art schools.
+data file with the features into a format understood by the \emph{libsvm}
+classifiers.  We developed a script (\texttt{mksvmf.pl}) to transform the raw
+numerical data of the features into the format read by libsvm, and to translate
+the painting metadata from its string values (e.g. "romanticism") into
+different numerical integers values.  For the classification of artists, we use
+each artist from Table \ref{tab:style} as a class.  But for the art school
+classification we ignore the "Watercolour" school as it has too few paintings
+and the artist "Devi" as his art is different from any other artist and cannot
+be assigned to any of the art schools.
 
 % No PCA was done, it would be great if there was time to do though.
 
@@ -1335,30 +1373,34 @@ cannot be assigned to any one of the art schools.
 
 \begin{figure*}[tbp]
 \centering
-\includegraphics[width=\textwidth]{corr-graph}
-\caption[Correlation]{Correlation Coefficient, here a second graph showing the
-distribution of all coefficients will be added.}
+\includegraphics[width=0.8\textwidth]{corr-graph}
+\includegraphics[width=0.8\textwidth]{corr-dist}
+\caption[Correlation]{Correlation coefficients between features.  On the top is
+a scatter plot of the correlation coefficient of six selected features to all
+features extracted.  At the bottom is a graph of the density distribution of
+the correlation coefficient in all combinations between all features.  In both
+graphs the absolute value of the correlation coefficient is used.}
 \label{fig:corr}
 \end{figure*}
 
-\emph{Correlation coefficient} between all combinations of features is
-calculated, this is possible because all features are numerical in nature.
-Figure \ref{fig:corr} shows the distribution of the absolute value of the
-correlation coefficient between features.  Although there are few values above
-correlation 0.7 depicting that few features are \emph{strongly correlated},
-there are several values between 0.5 and 0.7 telling us that a good number of
-features is \emph{weakly correlated}.
+As all features are numerical in nature, it is possible to calculate a
+\emph{correlation coefficient} between all combinations of features.  Figure
+\ref{fig:corr} shows the distribution of the absolute value of the correlation
+coefficient between features.  Although there are few values above correlation
+0.7 depicting that very few features are \emph{strongly correlated}, there are
+several values around 0.5 telling us that a good number of features is
+\emph{weakly correlated}.
 
 \section{Classification}
 
-Multi-class classification of the paintings to artists was performed using a
-\emph{C-SVM} set of classifiers, using an \emph{RBF} kernel.  As suggested by
-Hsu in \cite{hcl03svm}, the best cost (C) and gamma ($\gamma$) parameters were
-searched on a grid.  The \emph{cost} parameter ranging from $2^{-5}$ to $2^2$
-and the $\gamma$ parameter ranging from $2^3$ to $2^{-2}$.  The SVM was tested
-using \emph{k-fold cross validation} with k = 12.  The precision of the
-classification for each artist is shown in Table \ref{tab:predart}.  TODO:
-total accuracy of classifier.
+Multi-class classification, to guess the artist of each paintings, was
+performed using a \emph{C-SVM} set of classifiers with an \emph{RBF} kernel.
+As suggested by Hsu in \cite{hcl03svm}, the best cost (C) and gamma ($\gamma$)
+parameters were searched on a grid.  The \emph{cost} parameter ranging from
+$2^{-5}$ to $2^2$ and the $\gamma$ parameter ranging from $2^3$ to $2^{-2}$.
+The SVM was tested using \emph{k-fold cross validation} with k = 12.  The total
+accuracy of this classifier was 28\% and the precision of the classification
+for each artist is shown in Table \ref{tab:predart}.
 
 \begin{table*}[tpb]
 \centering
@@ -1370,19 +1412,22 @@ artist & prec. & artist & prec. & artist & prec. \\
 \input{art-predict.tex}
 \bottomrule
 \end{tabular}
-\caption[Multi-class artist classification]{Multi-class artist classification}
+\caption[Multi-class artist classification]{Multi-class artist classification.
+The precision for each artist in the classification of paintings to their
+respective artists.  Whilst some artists have high precision others have low
+precision.  We can argue that the classification is not consistent because a
+painting of one artist has a significantly different probability of being
+classified correctly than a painting from another artist.}
 \label{tab:predart}
 \end{table*}
 
-A similar classification was made for the art schools: using multi-class C-SVMs
-with an RDF kernel we classified the images across art schools they belonged
-to.  A grid search with the \emph{same parameters} was performed to find the
-best \emph{cost} and $\gamma$ parameters for the kernel, and the SVM was tested
-using k-fold cross validation.  For the art school classification we used k =
-36 in the k-fold cross validation as the number of classes is smaller and the
-number of \emph{items in each class bigger}.  The precision of the
-classification for each art school is shown in Table \ref{tab:predsch}.  TODO:
-transform this into a confusion matrix; TODO: total accuracy of classifier.
+A similar classification was made to guess the art school of each painting:
+again using multi-class C-SVMs with an RDF kernel.  A grid search with the
+\emph{same parameters} was performed to find the best \emph{cost} and $\gamma$
+parameters for the kernel.  The SVM was tested using k-fold cross validation
+with k = 36.  The total accuracy of this classifier was 60.24\% and the
+precision of the classification for each art school is shown in Table
+\ref{tab:predsch}.
 
 \begin{table*}[ptb]
 \centering
@@ -1393,38 +1438,44 @@ school & prec. & school & prec. \\
 \input{sch-predict.tex}
 \bottomrule
 \end{tabular}
-\caption[Multi-class school classification]{Multi-class school classification;
-this will become a confusion matrix.}
+\caption[Multi-class school classification]{Multi-class school classification.
+The precision for each art school in the classification of paintings to their
+respective art school.  In the same fashion as seen in Table \ref{tab:predart},
+we can argue that the classification is not consistent because there is a big
+variance in the precision between different art schools.}
 \label{tab:predsch}
 \end{table*}
 
-The classification of artists was \emph{not consistent}: although some artists
-can be found with high precision others fare poorly by the classifier.  The
-classification of art school is \emph{not consistent} as well, although the
-sample size for the art schools is bigger the classification performance is not
-better.  One interesting fact about the classification is that the \emph{Mughal
-miniature painting} could be classified perfectly from other art schools in the
-art school classifier, yet the \emph{artists of that school} (Basawan, Jagan,
-Kesav, La'l, Miskin and Tulsi) are poorly classified in the artist
-classification.  This might be explained by the fact that the Mughal miniature
-painting is a \emph{non-European form of art} whilst works on features for art,
-including Itten's work, are based almost exclusively on European art.  Mughal
-miniature painting can be told apart from European art well because its feature
-values are different from European art, but artist within the Mughal miniature
-painting cannot be told apart because there little variance on the features
-within the school.
+The classification of the paintings into their artists had poor accuracy and
+was \emph{not consistent}: although some artists can be found with high
+precision, others are classified poorly.  The classification of the paintings
+into their art schools was \emph{not consistent} as well.  Although the
+classification performance is better than the artist classification, the better
+accuracy can be the result of the fact that the number of classes is much
+smaller and the sample size for each class bigger.  One interesting fact about
+the classification is that the \emph{Mughal miniature painting} was perfectly
+distinguished from other art schools in the art school classifier, yet the
+\emph{artists of that school} (Basawan, Jagan, Kesav, La'l, Miskin and Tulsi)
+were poorly classified in the artist classification.  This might be explained
+by the fact that the Mughal miniature painting is a \emph{non-European form of
+art} but works on features for art, including Itten's work, are based almost
+exclusively on European art.  Mughal miniature painting can be told apart from
+European art well because its feature values are different from European art,
+but artist within the Mughal miniature painting cannot be told apart because
+there is little variance between the artists within the school.
 
 \section{Binary Classification}
 
-We perform several classifications using binary SVMs, the results from these
-classifications is more \emph{consistent} than the multi-class classification.
-Six artists are selected (Titian, Murillo, Rembrandt, Canaletto, Constable and
-Monticelli) and binary SVMs are used to classify \emph{each possible pair}.
-The binary SVM uses the RBF kernel, and a grid search is performed with the
-\emph{same parameters} to find the best cost and $\gamma$ parameters for the
-kernel.  k-fold cross validation with k = 12 is used, as previously for the
-artist classification, to evaluate the classifiers.  The accuracy of each
-classifier is shown in Table \ref{tab:foldart}.
+We perform several classifications using \emph{binary SVMs}.  The results from
+these classifications are more \emph{consistent} than the ones from the
+multi-class classification.  Six artists are selected (Titian, Murillo,
+Rembrandt, Canaletto, Constable and Monticelli) and binary SVMs are used to
+classify \emph{each possible pair}.  Each binary SVM uses the RBF kernel, and a
+grid search is performed with the \emph{same parameters} to find the best cost
+and $\gamma$ parameters for the kernel.  k-fold cross validation with k = 12 is
+used to evaluate the classifiers, as previously for the artist multi-class
+classification.  The accuracy of each classifier is shown in Table
+\ref{tab:foldart}.
 
 \begin{table*}[ptb]
 \centering
@@ -1433,15 +1484,18 @@ classifier is shown in Table \ref{tab:foldart}.
 \input{art-compm.tex}
 \bottomrule
 \end{tabular}
-\caption[Two class artist classification]{Two class artist classification}
+\caption[Binary artist classification]{Binary artist classification.  The
+accuracy of a binary classifier run over all combinations of six artists is
+shown.  Artists that painted in close periods (close art schools) are more
+difficult to distinguish than artists that painted in completely different
+periods.}
 \label{tab:foldart}
 \end{table*}
 
 An identical binary classification was performed between the art schools:
-binary SVM, RBF kernel, grid search.  As the multi-class classification, this
-\emph{art school classification} was evaluated with k-fold cross validation
-with k = 36.  The resulting accuracy of each classifier can be seen in Table
-\ref{tab:foldsch}.
+binary SVM, RBF kernel and grid search.  The \emph{art school classification}
+was evaluated with k-fold cross validation with k = 36.  The resulting accuracy
+of each classifier can be seen in Table \ref{tab:foldsch}.
 
 \begin{table*}[ptb]
 \centering
@@ -1451,40 +1505,51 @@ with k = 36.  The resulting accuracy of each classifier can be seen in Table
 \input{sch-compm.tex}
 \bottomrule
 \end{tabular}
-\caption[Two class school classification]{Two class school classification}
+\caption[Binary art school classification]{Binary art school classification.
+The accuracy of a binary classifier run over all combinations of the art
+schools is shown.  Art movements that were popular in different centuries are
+easier to tell apart than art movements that followed one another.}
 \label{tab:foldsch}
 \end{table*}
 
-Art evolved with time therefore styles that are \emph{closer to each other in
+Art evolves with time, therefore styles that are \emph{closer to each other in
 time} show more similarities.  We see from the binary school classification
-that art school that are closer to each other (Renaissance and Baroque, Baroque
+that art schools that are close to each other (Renaissance and Baroque, Baroque
 and Neoclassicism, Neoclassicism and Romanticism, Romanticism and
 Impressionism) are harder to tell apart than \emph{schools that are distant}.
-Moreover, in the binary artist classification we see that we can tell apart
-most artists with \emph{80-95\% accuracy}, but we cannot tell apart so well
-Titian, Rembrandt and Murillo.  Whilst all other artists are from different art
-schools Rembrandt and Murillo are both \emph{Baroque} painters, Titian is a
-late \emph{Renaissance} painter and many of his works can be considered part of
-the \emph{Baroque} school.
+In the binary artist classification, we can tell apart most of the artists with
+\emph{80-95\% accuracy}, however, we cannot tell apart paintings by Titan,
+Rembrandt and Murillo with the same accuracy.  This can be explained by the
+fact that all other artists are from different school, whilst Rembrandt and
+Murillo are both \emph{Baroque painters}.  Regarding Titian's paintings, he is
+a late \emph{Renaissance} painter and many of his works can be considered part
+of the \emph{Baroque} school.
 
-Therefore we can tell apart easily artists that have very \emph{different
-styles}, but we struggle to tell apart artists with \emph{similar styles}.
-This means that the features extracted do convey the \emph{style of a
-painting}.
+These results show that we can tell apart easily artists that have very
+\emph{different styles}, but we struggle to tell apart artists with
+\emph{similar styles}.  This means that the extracted features do convey the
+\emph{style of a painting}.
 
 \section{Feature evaluation}
 
 The features capture the \emph{style of the paintings}, although work is still
 needed to tell which of them capture more of it.  Principal Component Analysis
 (PCA) or other \emph{feature selection} technique shall be a next logical step
-to continue this work.  Depicting the differences between art schools Figure
+to continue this work.  Depicting the differences between art schools, Figure
 \ref{fig:school} shows the means of each feature for each art school.
 
 \begin{figure*}[tbp]
 \centering
-\includegraphics[width=\textwidth]{school-graph}
-\caption[Feature Values]{Feature values per School. Here another graph will be
-added with the values ordered to form a line.}
+\includegraphics[width=0.8\textwidth]{school-graph}
+\includegraphics[width=0.8\textwidth]{school-sort}
+\caption[Feature Values]{Feature values per School.  Both graphs show the mean
+values of all features aggregated by art schools.  Tables containing these
+values can be found in Appendix \ref{chap:glossary}.  The top graph shows the
+values in order of Table \ref{tab:glossary}, whilst the bottom graph shows the
+values sorted.  There is a big difference in the feature values from the Mughal
+miniature painting to other art schools, whilst other art schools have smaller
+differences between themselves.  This is consistent with the classification
+results obtained.}
 \label{fig:school}
 \end{figure*}
 
@@ -1512,45 +1577,55 @@ added with the values ordered to form a line.}
 
 %\end{multicols}
 
+\clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Conclusions}
 %\begin{multicols}{2}
 
-One of the reasons for the small number of works in the field of classifying
-art by the \emph{style} or \emph{aesthetics} could possibly be the difficulty
-in finding big and consistent datasets of visual art.  Whilst on photography
-there are several photo sharing websites e.g.
+One of the reasons for the small number of works in the field of art
+classification by the \emph{style} or by \emph{aesthetics} is possibly the
+difficulty in finding big and consistent datasets of visual art.  Whilst on
+photography there are several photo sharing websites e.g.
 \href{http://panoramio.com}{\texttt{panoramio.com}} or
 \href{http://flickr.com}{\texttt{flickr.com}}, with powerful APIs, consistent
-sets of metadata and millions of images;  a consistent datasets of thousands of
+sets of metadata and millions of images;  a consistent dataset of thousands of
 art images is hard to acquire.  The dataset we created for this work is made of
 images in public collections only, and the Copyright of the images is
-permissible given the reduced size and number of images.  All effort is being
-made to ensure the openness of Copyright rules for the dataset, and it shall
-then be published.
+permissible given the reduced size and number of images.  Effort was made to
+ensure the openness of Copyright rules for the dataset, and the dataset is
+publicly available from the code repository.
 
-The dataset and the extracted features being available openly allow future
-works to compare against this work, as several parts of this work can be
-improved.  The features described are good measures of style, but a
-\emph{feature selection} process will certainly improve the classification and
-allow for a better understanding of the most important features for the style
-of paintings among all the features described.
+Since the dataset and the extracted features are available openly, it allows
+for future works to compare against this work.  And several parts of this work
+can be improved in this way.  The features described are good measures of
+style, but a \emph{feature selection} process will certainly improve the
+classification performance and allow for a better understanding of the most
+significant features for the style of paintings.
 
 %\end{multicols}
 
 \newpage
 \phantomsection
 \addcontentsline{toc}{chapter}{\bibname}
+
+% clever trick to clear the pages before chapter openings
+\clearpage{\pagestyle{empty}\cleardoublepage}
 \bibliographystyle{plain}
 \bibliography{capybara}
 
 \appendix
 
+\clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Requirements to run the code}
 \label{chap:requirements}
 
-Describe each library installed, there are some.
+To run the code provided with the report several pieces of software are needed,
+all of them are available under a Copyleft or an Open Source Licence.  The code
+shall be run in an LSB compatible system\footnote{
+\href{http://www.linuxfoundation.org/collaborate/workgroups/lsb}
+{http://www.linuxfoundation.org/collaborate/workgroups/lsb}}.
 
-Compiled software (often available as software packages as .rpm or .deb)
+In an LSB system the following software shall be available from the OS
+repositories (e.g. using \texttt{yum}, \texttt{apt-get} or \texttt{pacman})
 \begin{itemize}
 \item[]\emph{ImageMagick} 6.5.4-7 or later, \\
 available at \href{http://www.imagemagick.org/}{http://www.imagemagick.org/}
@@ -1560,7 +1635,8 @@ available at \href{http://csie.ntu.edu.tw/~cjlin/libsvm/index}
 {http://csie.ntu.edu.tw/~cjlin/libsvm/index}
 \end{itemize}
 
-Provided by LSB:
+The following software shall be available on any LSB system, yet the version
+shall not be lower than what is shown:
 \begin{itemize}
 \item[]\emph{python} 2.6.6 or later (but not python 3), \\
 available at \href{http://www.python.org/}{http://www.python.org/}
@@ -1573,7 +1649,8 @@ available at \href{http://www.gnu.org/software/bash/index.html}
 {http://www.gnu.org/software/bash/index.html}
 \end{itemize}
 
-Python packages:
+Several packages for the Python programming language are needed, these can be
+installed from either the OS repositories or Python repositories:
 \begin{itemize}
 \item[]\emph{numpy} 1.8.1 or later, \\
 available at \href{http://www.numpy.org/}{http://www.numpy.org/}
@@ -1602,7 +1679,9 @@ available at \href{http://ipython.org/}{http://ipython.org/}
 available at \href{http://pandas.pydata.org/}{http://pandas.pydata.org/}
 \end{itemize}
 
-For dataset acquisition
+The dataset acquisition phase of the work is not an automated process, yet
+several scripts were developed during that phase.  The dependencies of those
+scripts are described here, shall one wish to try them:
 \begin{itemize}
 \item[]\emph{beautifulsoup4} 4.3.2 or later, \\
 available at \href{http://www.crummy.com/software/BeautifulSoup/}
@@ -1619,25 +1698,26 @@ available at \href{https://github.com/grochmal/unixjsons}
 {https://github.com/grochmal/unixjsons}
 \end{itemize}
 
+\clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{How to run the code}
 \label{chap:runthecode}
 
 Before running the code make sure you are in an LSB compatible system\footnote{
 \href{http://www.linuxfoundation.org/collaborate/workgroups/lsb}
 {http://www.linuxfoundation.org/collaborate/workgroups/lsb}} and install the
-libraries described in Appendix \ref{chap:requirements}.  Copy the code into a
-directory\footnote{If git and an internet connection are available you can
+dependencies described in Appendix \ref{chap:requirements}.  Copy the code into
+a directory\footnote{If git and an internet connection are available you can
 clone the code directly from its repository with
-\verb|git clone https://github.com/grochmal/capybara.git|.}
-and go to \texttt{src/}.
+\verb|git clone https://github.com/grochmal/capybara.git|.} on a file system
+that has at least 15GB of free space, and go to \texttt{src/}.
 
 Acquisition and cleansing of the datasets is not covered because that process
-is not automated.  To browse the code used to acquire the datasets go to
-\texttt{dataset-acquisition/vam} and \texttt{dataset-acquisition/nirp} for the
-VAM and NIRP datasets respectively.
+is not automated.  To browse the code used to acquire the datasets go to the
+directories \texttt{dataset-acquisition/vam} and
+\texttt{dataset-acquisition/nirp} for the VAM and NIRP datasets respectively.
 
 In \texttt{src/} run the scripts that normalise, separate and filter the images
-before the extraction of features:
+before the extraction of features.
 
 \begin{Verbatim}[frame=leftline]
 ./step01-normalise.sh      # normalise to ~300 000 pixels
@@ -1648,9 +1728,9 @@ before the extraction of features:
 ./step06-jpeg.sh           # compress the images
 \end{Verbatim}
 
-Next run the feature extractors.  These scripts print the calculated features
-to the \emph{standard output stream} and logging to the \emph{standard error
-stream}, therefore redirect the standard output to files:
+Next, run the feature extractors.  These scripts print the calculated features
+to the \emph{standard output stream} and log messages to the \emph{standard
+error stream}, therefore redirect the standard output to files.
 
 \begin{Verbatim}[frame=leftline]
 ./step07-kolmogorov.sh     > fe/kolmogorov.dat
@@ -1661,14 +1741,14 @@ stream}, therefore redirect the standard output to files:
 ./step12-img-averages.sh   > fe/img-averages.dat
 \end{Verbatim}
 
-A last feature script generating the metadata (artist, school and contry) of
-the image shall then be run.  This metadata is what we classify against:
+A last feature script that generates the metadata (artist, school and country)
+of the image shall then be run.  This metadata is what we classify against.
 
 \begin{Verbatim}[frame=leftline]
 ./step13-metadata.sh > fe/meta.dat
 \end{Verbatim}
 
-Format the features to a format compatible with LIBSVM and run the classifiers
+Map the features to a format compatible with LIBSVM and run the classifiers
 using the following scripts.  The results of the classifiers are printed to the
 file \texttt{cls/output.dat}.
 
@@ -1677,15 +1757,16 @@ file \texttt{cls/output.dat}.
 ./step15-classify.sh
 \end{Verbatim}
 
-The last script combines the results from the classifiers and the full dataset
-of features (the horizontal concatenation of all \texttt{.dat} files) to
-produce the graphs and tables present in Chapter \ref{chap:results} and
-Appendix \ref{chap:glossary}.
+The last script combines the results from the classifiers with the file
+containing the feature values for all images (the horizontal concatenation of
+all \texttt{.dat} files) to produce the graphs and tables present in Chapter
+\ref{chap:results} and Appendix \ref{chap:glossary}.
 
 \begin{Verbatim}[frame=leftline]
 ./step16-outputs.sh
 \end{Verbatim}
 
+\clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{unixjsons}
 \label{chap:unixjsons}
 
@@ -1702,12 +1783,11 @@ from the \emph{unixjsons} repository at github, and can be retrieved with
 git clone https://github.com/grochmal/unixjsons.git
 \end{verbatim}
 
-
 \section{jgrep}
 
 An implementation of \texttt{grep} (and \texttt{egrep}) that works on a JSONS
-stream.  Instead of a single regular expression to search for in a stream it
-uses two separate regular expressions one to match against the \emph{key} in
+stream.  Instead of a single regular expression to search for in a stream, it
+uses two separate regular expressions: one to match against the \emph{key} in
 the JSONS stream and one to match against the \emph{value} of matched keys.
 The usage of \emph{jgrep} follows:
 
@@ -1738,8 +1818,8 @@ Usage: jgrep [-n key] [-hVqviIHR] <key re> <value re> [<file> ...]
 
 An implementation of \texttt{cut} that works on a JSONS stream.  Contrary to
 the \texttt{cut} command the \texttt{-f} flag receives the names of the
-\emph{keys} in the stream, instead of numbers of the fields as in the normal
-\texttt{cut}.  The usage of \texttt{jcut} follows:
+\emph{keys} in the stream, instead of numbers of the fields.  The usage of
+\texttt{jcut} follows:
 
 {\small
 \begin{Verbatim}[samepage=true]
@@ -1769,11 +1849,11 @@ Usage: jcut [-chrlV] [-f field,field,...] [<file> ...]
 
 \section{jsed}
 
-A simplified implementation of \texttt{sed} command that works on a JSONS
-stream.  It implements the \texttt{s///} substitution command for several
-combinations of key and value pair combinations.  Both keys and values can be
-matched and/or changed using substitution regular expressions.  The usage of
-\texttt{jsed}, including some examples follows:
+A simplified implementation of the \texttt{sed} command that works on a JSONS
+stream.  It implements the \texttt{s///} substitution command for several key
+and value pair combinations.  Both keys and values can be matched and/or
+changed using substitution regular expressions.  The usage of \texttt{jsed},
+including some examples follows:
 
 {\small
 \begin{verbatim}
@@ -1913,8 +1993,8 @@ Usage: jecho [-hV] -f k:v [-f k:v -f k:v ...] [<file> ...]
 
 A combination of the \texttt{join} and \texttt{paste} commands that work on
 JSONS streams.  It works as \texttt{paste} if the \emph{keys} in the two
-streams are all different, but is a certain \emph{key} is found in both streams
-the \emph{values} for that key in both streams are joined (this is behaviour
+streams are all different, but if a \emph{key} is found in both streams the
+\emph{values} for that key from both streams are joined (this is behaviour
 similar to \texttt{join}).  The usage for \texttt{jjoin} follows:
 
 {\small
@@ -1935,6 +2015,7 @@ Usage: jjoin [-hVq] file1 file2
 \end{Verbatim}
 }
 
+\clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Resources on the CD}
 \label{chap:resources}
 
@@ -1943,8 +2024,8 @@ a directory called \texttt{capybara}.  That directory also contains a README.md
 file which mentions the Copyright (Copyleft) of the code and explains how to
 run it, in the same way as Appendix \ref{chap:runthecode}.  The CD also
 contains a copy of the code of \emph{unixjsons}, which is needed to browse the
-intermediate files in acquiring the datasets.  \emph{unixjsons} is mentioned in
-Appendix \ref{chap:unixjsons}.
+intermediate files and run the scripts in the datasets acquisition section.
+\emph{unixjsons} is mentioned in Appendix \ref{chap:unixjsons}.
 
 If the CD is not available the code for the experiments can be retrieved using
 \emph{git}:
@@ -1953,19 +2034,20 @@ If the CD is not available the code for the experiments can be retrieved using
 git clone https://github.com/grochmal/capybara.git
 \end{verbatim}
 
-Also, a mentioned in Appendix \ref{chap:unixjsons}, the code for
-\emph{unixjsons} can be retrieved using \emph{git} too:
+As mentioned in Appendix \ref{chap:unixjsons}, the code for \emph{unixjsons}
+can also be retrieved using \emph{git}:
 
 \begin{verbatim}
 git clone https://github.com/grochmal/unixjsons.git
 \end{verbatim}
 
+\clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Feature Values}
 \label{chap:glossary}
 
-Table \ref{tab:glossary} present a glossary of all features used, this shall be
-used as a reference for reading the legends and graphs.  Tables
-\ref{tab:bigtop} and \ref{tab:bigbot} show mean values of each feature
+Table \ref{tab:glossary} presents a glossary of all features used, this shall
+be used as a reference for reading the legends and graphs.  Tables
+\ref{tab:bigtop} and \ref{tab:bigbot} show the averages of each feature
 aggregated by the art school.
 
 \begin{center}
@@ -1984,8 +2066,8 @@ aggregated by the art school.
 
 \bottomrule
 \caption[Feature glossary]{Glossary of all features, divided into the feature
-groups described.  For each feature the short name used in legends and tables
-is shown, as well as the id (number) of the feature used in graphs.}
+groups described.  For each feature, the short name used in legends and tables
+is shown as well as the id (number) used in graphs.}
 \label{tab:glossary}
 \endlastfoot
 
@@ -2269,8 +2351,8 @@ The features are identified by the short names from table \ref{tab:glossary}.}
 \bottomrule
 \caption[Feature values (second half)]{Mean and standard deviation of all
 features grouped by the art schools of romanticism and impressionism.  It also
-shows the values for mughal miniature paintings.  The features are identified
-by the short names from table \ref{tab:glossary}.}
+shows the same features grouped by the mughal miniature paintings.  The
+features are identified by the short names from table \ref{tab:glossary}.}
 \label{tab:bigbot}
 \endlastfoot
 
@@ -2279,13 +2361,14 @@ by the short names from table \ref{tab:glossary}.}
 \end{longtable}
 \end{center}
 
+\clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Code}
 
-The electronic version of this report contains below the most important pieces
-of the code used to perform the experiments.  The hard copy of the report
-contains a CD with the full code for the experiments and for this document.
-Appendix \ref{chap:resources} also explains how to acquire the resources on the
-CD if the CD is lost.
+Only the most important pieces of the code used to perform the experiments are
+shown below.  The hard copy of the report contains a CD with the full code used
+for the experiments and for the data acquisition.  Appendix
+\ref{chap:resources} also explains how to acquire the resources on the CD if
+the CD is lost.
 
 {\footnotesize
 \centerline{\fbox{\large \texttt{step01-normalise.sh: size normalises images}}}
